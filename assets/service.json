@@ -1,0 +1,72 @@
+{
+  "success": true,
+  "code": 200,
+  "message": "",
+  "meta": "",
+  "data": [
+    {
+      "t251": {
+        "lang": "vi",
+        "tv251": "Phục vụ giặt ủi - xà bông",
+        "tv252": "mô tả",
+        "id": "5efecf23bc502605cc9e71d8",
+        "dl146": "2020-07-03T06:24:35.158+00:00",
+        "dl147": "0772687321",
+        "dl148": "2021-11-08T02:59:25.554+00:00",
+        "dl149": "zero@gmail.com"
+      },
+      "tv253": "codeService",
+      "tv254": "body_icon",
+      "tv255": "Flapy",
+      "tn256": 0,
+      "id": "5efecf23bc502605cc9e71d7"
+    },
+    {
+      "t251": {
+        "lang": "vi",
+        "tv251": "Phục vụ giặt ủi - sấy",
+        "id": "5efed379bc502605cc9e71dd",
+        "dl146": "2020-07-03T06:43:05.198+00:00",
+        "dl147": "0772687321"
+      },
+      "tv253": "Service003",
+      "tv254": "body",
+      "tv255": "Flapy",
+      "tn256": 0,
+      "id": "5efed379bc502605cc9e71dc"
+    },
+    {
+      "t251": {
+        "lang": "vi",
+        "tv251": "Nước uống",
+        "id": "5e85fe35bc502604483d8a6f",
+        "dl146": "2020-04-02T15:01:09.036+00:00",
+        "dl147": "zero@gmail.com",
+        "dl148": "2021-04-02T04:38:25.188+00:00",
+        "dl149": "zero@gmail.com"
+      },
+      "tv253": "Ea1",
+      "tv254": "local_drink ",
+      "tv255": "Eat1",
+      "tn256": 0,
+      "id": "5e85fe35bc502604483d8a6e"
+    },
+    {
+      "t251": {
+        "lang": "en",
+        "tv251": "Service breakfast - coffee",
+        "tv252": "none",
+        "id": "5f1e7c6bbc502605cc069e0c",
+        "dl146": "2020-07-27T07:04:11.024+00:00",
+        "dl147": "zero@gmail.com",
+        "dl148": "2020-07-29T06:25:19.945+00:00",
+        "dl149": "phuong_001@gmail.com"
+      },
+      "tv253": "Service004",
+      "tv254": "brunch_dining",
+      "tv255": "Gbreakfast",
+      "tn256": 0,
+      "id": "5f1e7c4ebc502605cc069e0a"
+    }
+  ]
+}

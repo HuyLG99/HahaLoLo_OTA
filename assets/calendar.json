@@ -1,0 +1,34 @@
+{
+  "success": true,
+  "code": 200,
+  "message": "",
+  "meta": {
+    "availability": 1
+  },
+  "data": [
+    {
+      "dateStart": "2022-10-11",
+      "dateEnd": "2022-10-19",
+      "promPerc": 10,
+      "rateProm": 3548911.8,
+      "total": 31940206,
+      "totalBase": 35489118,
+      "maxSlot": 10,
+      "remainSlot": 10,
+      "maxSlotBooking": 1,
+      "bookNow": 0
+    },
+    {
+      "dateStart": "2022-10-12",
+      "dateEnd": "2022-10-20",
+      "promPerc": 10,
+      "rateProm": 3548911.8,
+      "total": 31940206,
+      "totalBase": 35489118,
+      "maxSlot": 10,
+      "remainSlot": 10,
+      "maxSlotBooking": 1,
+      "bookNow": 0
+    }
+  ]
+}

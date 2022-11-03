@@ -1,0 +1,104 @@
+{
+  "success": true,
+  "code": 200,
+  "message": "",
+  "meta": "",
+  "data": [
+    {
+      "currency": "vnd",
+      "pt100": "5f2bd4a6bc502605ccb9a101",
+      "pn100": "5f0d2f01bc502605cc043ca3",
+      "pp100": "5f2bbc45bc502605cc73513d",
+      "pt250": "5f2bb9f3bc502605ccb99d82",
+      "tv451": "Phu-thu",
+      "tn452": 4719600,
+      "t250": {
+        "t251": {
+          "lang": "en",
+          "tv251": "Single Room"
+        },
+        "tv253": "icon",
+        "tv254": "icon",
+        "pt150": "5f2bb982bc502605ccb99d7f",
+        "tv255": "Phu-thu",
+        "tn256": 1,
+        "id": "5f2bb9f3bc502605ccb99d82"
+      },
+      "id": "5f2bd891bc502605ccb9a1cc",
+      "dl146": "2020-08-06T10:16:49.167+00:00",
+      "dl147": "0348707077"
+    },
+    {
+      "currency": "vnd",
+      "pt100": "5f2bd4a6bc502605ccb9a101",
+      "pn100": "5f0d2f01bc502605cc043ca3",
+      "pp100": "5f2bbc45bc502605cc73513d",
+      "pt250": "5f2bba48bc502605ccb99d85",
+      "tv451": "Phu-thu",
+      "tn452": 1422090,
+      "t250": {
+        "t251": {
+          "lang": "en",
+          "tv251": "Room on board"
+        },
+        "tv253": "phong-tren-tau",
+        "tv254": "Icon",
+        "pt150": "5f2bb982bc502605ccb99d7f",
+        "tv255": "Phu-thu",
+        "tn256": 1,
+        "id": "5f2bba48bc502605ccb99d85"
+      },
+      "id": "5f2bd89ebc502605ccb9a1cd",
+      "dl146": "2020-08-06T10:17:02.846+00:00",
+      "dl147": "0348707077"
+    },
+    {
+      "currency": "vnd",
+      "pt100": "5f2bd4a6bc502605ccb9a101",
+      "pn100": "5f0d2f01bc502605cc043ca3",
+      "pp100": "5f2bbc45bc502605cc73513d",
+      "pt250": "5f2bba48bc502605ccb99d85",
+      "tv451": "Phu-thu",
+      "tn452": 1422090,
+      "t250": {
+        "t251": {
+          "lang": "en",
+          "tv251": "Room on board2"
+        },
+        "tv253": "phong-tren-tau2",
+        "tv254": "Icon",
+        "pt150": "5f2bb982bc502605ccb99d7f",
+        "tv255": "Phu-thu",
+        "tn256": 1,
+        "id": "5f2bba48bc502605ccb99d85"
+      },
+      "id": "5f2bd89ebc502605ccb9a1le",
+      "dl146": "2020-08-06T10:17:02.846+00:00",
+      "dl147": "0348707077"
+    },
+    {
+      "currency": "vnd",
+      "pt100": "5f2bd4a6bc502605ccb9a101",
+      "pn100": "5f0d2f01bc502605cc043ca3",
+      "pp100": "5f2bbc45bc502605cc73513d",
+      "pt250": "5f2bba48bc502605ccb99d85",
+      "tv451": "Phu-thu",
+      "tn452": 1422090,
+      "t250": {
+        "t251": {
+          "lang": "en",
+          "tv251": "Room on board1"
+        },
+        "tv253": "phong-tren-tau1",
+        "tv254": "Icon",
+        "pt150": "5f2bb982bc502605ccb99d7f",
+        "tv255": "Phu-thu",
+        "tn256": 1,
+        "id": "5f2bba48bc502605ccb99d85"
+      },
+      "id": "5f2bd89ebc502605ccb9a1or",
+      "dl146": "2020-08-06T10:17:02.846+00:00",
+      "dl147": "0348707077"
+    }
+  ]
+}

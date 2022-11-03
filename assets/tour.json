@@ -1,0 +1,35 @@
+{
+  "success": true,
+  "code": 200,
+  "message": "",
+  "meta": "",
+  "data": [
+    {
+      "pt100": "5f2bd4a6bc502605ccb9a101",
+      "pp100": "5f2bbc45bc502605cc73513d",
+      "path": "https://test-media.hahalolo.com/2022/02/23/09/33/e7d8ccccfffd2d18e5f7f4e04087a403-1645608821.jpg",
+      "thumb": "https://test-media.hahalolo.com/2022/02/23/09/33/e7d8ccccfffd2d18e5f7f4e04087a403-1645608821_640xauto_high.jpg",
+      "width": 4972,
+      "height": 3315,
+      "id": "6215ff7ca707fd0cd38ed936"
+    },
+    {
+      "pt100": "5f2bd4a6bc502605ccb9a101",
+      "pp100": "5f2bbc45bc502605cc73513d",
+      "path": "https://test-media.hahalolo.com/2022/02/23/09/33/95d6dd48bc32c0fc15c47a0707833707-1645608821.jpg",
+      "thumb": "https://test-media.hahalolo.com/2022/02/23/09/33/95d6dd48bc32c0fc15c47a0707833707-1645608821_640xauto_high.jpg",
+      "width": 5502,
+      "height": 3668,
+      "id": "6215ff7ca707fd0cd38ed937"
+    },
+    {
+      "pt100": "5f2bd4a6bc502605ccb9a101",
+      "pp100": "5f2bbc45bc502605cc73513d",
+      "path": "https://test-media.hahalolo.com/2022/02/23/09/33/77312c8b9a9e45e731e23b8d50047cae-1645608821.jpg",
+      "thumb": "https://test-media.hahalolo.com/2022/02/23/09/33/77312c8b9a9e45e731e23b8d50047cae-1645608821_640xauto_high.jpg",
+      "width": 5303,
+      "height": 3535,
+      "id": "6215ff7ca707fd0cd38ed938"
+    }
+  ]
+}

@@ -1,0 +1,262 @@
+{
+  "success": true,
+  "code": 200,
+  "message": "",
+  "meta": {
+    "total": 12
+  },
+  "data": [
+    {
+      "language": "en",
+      "currency": "VND",
+      "id": "5f2bd4a6bc502605ccb9a101",
+      "pp100": "5f2bbc45bc502605cc73513d",
+      "pb100": "5f0d2f7fbc502605cc734bd6",
+      "tv101": "T-050006060820-VSNPZ0",
+      "tv102": null,
+      "t550": {
+        "pp100": "5f2bbc45bc502605cc73513d",
+        "t551": {
+          "lang": "vi",
+          "tv552": "CHƯƠNG TRÌNH Đeo Khẩu Trang Xứ Lạ",
+          "id": "5f2bbdf5bc502605ccb99d88"
+        },
+        "id": "5f2bbdf5bc502605ccb99d89"
+      },
+      "tv118": "https://test-media.hahalolo.com/2022/02/23/10/10/e0b3ea2f51bb3e34b0f9b47cfce7ee9c-1645611002.jpg",
+      "tn120": 0,
+      "tn130": 0,
+      "tn131": 0,
+      "tn123": 9,
+      "t101": {
+        "lang": "vi",
+        "tv151": "Ha Noi - Sa Pa - Ninh Binh - Ha Long 9 Days 8 Nights",
+        "tv152": "<p>Travel in Northern Vietnam</p>",
+        "tv153": "<p><strong>CHILDREN POLICY:</strong> - Children from 11 year’s old: same price with adult. - Children from 5 year’s old to under 11 year’s old: 50% price with adult, includes: personal seat on bus, meal and ticket entrance fee as adult, but the children sleeps in the bed with parents. - Children under 5 year’s old is allowed to travel free with relatives, seat on seat-bus of relatives, relatives take care of the cost of visiting, eating and sleeping for the children. Two adults can only accompany 01 children under 05 years old, the second children or more is charged 50% of adult fare.</p>",
+        "tv154": "<p>Travel in Northern Vietnam</p>",
+        "tv159": "Travel in Northern Vietnam",
+        "id": "5f2bd4a6bc502605ccb9a100"
+      },
+      "ft300": [
+        {
+          "tv301": null,
+          "tn305": 1,
+          "tv306": "06:00",
+          "tv308": "AM",
+          "id": "5f2bd5bfbc502605ccb9a110",
+          "dl146": null,
+          "dl148": null,
+          "t301": {
+            "lang": "vi",
+            "tv302": "HANOI ARRIVAL (Dinner)",
+            "tv303": "- Tour guide welcomes guest at Noi Bai airport. Transfer to Hanoi city, check in hotel.\n- Leisure time &amp; overnight in Hanoi.",
+            "tv304": [
+              "car",
+              "plane"
+            ],
+            "dl146": "2020-08-06T10:04:47.379+00:00",
+            "dl148": "2020-08-06T10:18:23.555+00:00",
+            "id": "5f2bd5bfbc502605ccb9a111"
+          }
+        },
+        {
+          "tv301": null,
+          "tn305": 2,
+          "tv306": "06:00",
+          "tv308": "AM",
+          "id": "5f2bd5eebc502605ccb9a113",
+          "dl146": null,
+          "dl148": null,
+          "t301": {
+            "lang": "vi",
+            "tv302": "SAPA TOWN (Breakfast, lunch, dinner)",
+            "tv303": "<strong>Morning</strong>: Depart for to Sapa town.\n<strong>Afternoon</strong>: Arrive at Sapa, visit:\n- <strong>Stone church and Love market: </strong>Located in the heart of Sapa town, Sapa church is<strong> </strong>an antique beautiful French - influenced site that attracts many tourist to this beautiful foggy town.\n<em>- </em><strong><em>Silver waterfall</em></strong>: One of the most beautiful waterfall in Vietnam that look like a<strong><em> </em></strong>nature&rsquo;s painting featuring a white dragon looking down from the sky.\n<strong>Evening</strong>: Free time to explore Sapa, have a cup of hot coffee and enjoy traditional<strong> </strong>grilled skewers. Overnight in Sapa",
+            "tv304": [
+              "car"
+            ],
+            "dl146": "2020-08-06T10:05:34.174+00:00",
+            "dl148": "2020-08-06T10:08:04.510+00:00",
+            "id": "5f2bd5eebc502605ccb9a114"
+          }
+        },
+        {
+          "tv301": null,
+          "tn305": 3,
+          "tv306": "06:00",
+          "tv308": "AM",
+          "id": "5f2bd61bbc502605ccb9a115",
+          "dl146": null,
+          "dl148": null,
+          "t301": {
+            "lang": "vi",
+            "tv302": "TREKKING IN TA VAN VILLAGE (Breakfast, Lunch, Dinner)",
+            "tv303": "<strong>Morning</strong>: Begin trekking to Ta Van, a traditional village of<strong> </strong>H&rsquo;Mong<strong> </strong>minority. Admire the<strong> </strong>beauty of cascading terraced fields, which are adorned by the green of corn and rice on both sides of the road. Listening to the sound of small stream and bird singing.\n<strong>Afternoon: </strong>Have lunch at local restaurant. Explore the<strong> </strong>local&rsquo;s<strong> </strong>stilt house, experience<strong> </strong>their daily life and listen to their stories.\n<strong>Evening: </strong>Back to Sapa. Leisure time and<strong> </strong>overnight in Sapa.",
+            "tv304": [
+              "car"
+            ],
+            "dl146": "2020-08-06T10:06:19.029+00:00",
+            "id": "5f2bd61bbc502605ccb9a116"
+          }
+        },
+        {
+          "tv301": null,
+          "tn305": 4,
+          "tv306": "06:00",
+          "tv308": "AM",
+          "id": "5f2bd665bc502605ccb9a117",
+          "dl146": null,
+          "dl148": null,
+          "t301": {
+            "lang": "vi",
+            "tv302": "HANOI CITY (Breakfast, lunch, dinner)",
+            "tv303": "<strong>Morning: </strong>Visit:\n<em>- </em><strong><em>Fansipan peak</em></strong>: Get on cable car to reach the highest mountain peak of Indochina,<strong><em> </em></strong>3143m above sea level with stunning view down to Muong Hoa alley. Visit Bich van pagoda, the highest spiritual cultural complex in Viet Nam.\n<em>- </em><strong><em>Sapa market: </em></strong>a local market selling many<strong><em> </em></strong>of handcrafted products made by ethnic<strong><em> </em></strong>groups. You can buy fruits and local food here as well.\n<strong>Afternoon</strong>: Lunch Salmon Hotpot. Back to Ha Noi.\n<strong>Evening</strong>: Leisure time and<strong> </strong>overnight in Ha Noi",
+            "tv304": [
+              "car",
+              "cablecar"
+            ],
+            "dl146": "2020-08-06T10:07:33.608+00:00",
+            "id": "5f2bd665bc502605ccb9a118"
+          }
+        },
+        {
+          "tv301": null,
+          "tn305": 5,
+          "tv306": "06:00",
+          "tv308": "AM",
+          "id": "5f2bd6b2bc502605ccb9a11b",
+          "dl146": null,
+          "dl148": null,
+          "t301": {
+            "lang": "vi",
+            "tv302": "HANOI – NINH BINH (Breakfast, lunch, dinner)",
+            "tv303": "<strong>Morning: </strong>Transfer to Ninh Binh. Visit:\n- <strong>Bai Dinh pagoda: </strong>Southeast<strong> </strong>Asia&rsquo;s<strong> </strong>largest Buddhist complex, consist of several temples<strong> </strong>and more than 500 Buddha statues.\n<strong>Afternoon: </strong>Visit:\n- <strong>Trang An complex</strong>: a spectacular landscape of limestone karst peaks permeated with<strong> </strong>valleys, get on rowing boat and go through epic scenery and traverses a number of water caves.\n- 1 hour cycling around Ninh Binh, admire the majestic scenery, pass by history monuments and religious sites&hellip;\n- Back to Hanoi.\n<strong>Evening</strong>: Leisure time &amp;<strong> </strong>overnight in Hanoi",
+            "tv304": [
+              "car",
+              "ship"
+            ],
+            "dl146": "2020-08-06T10:08:50.549+00:00",
+            "dl148": "2020-08-06T10:20:43.160+00:00",
+            "id": "5f2bd6b2bc502605ccb9a11c"
+          }
+        },
+        {
+          "tv301": null,
+          "tn305": 6,
+          "tv306": "06:00",
+          "tv308": "AM",
+          "id": "5f2bd6e0bc502605ccb9a11f",
+          "dl146": null,
+          "dl148": null,
+          "t301": {
+            "lang": "vi",
+            "tv302": "HANOI - HA LONG BAY (Breakfast, lunch, dinner)",
+            "tv303": "<strong>Morning: </strong>Transfer for 3 hours to Ha Long city . Embark on Lavender Cruise for a 2-day trip to<strong> </strong>discover the magnificent Ha Long Bay .\n<strong>Afternoon: </strong>Enjoy various activities on cruise such as:\n- Lunch with sampling regional fresh seafood while cruising on exquisite water, passing Incense Burner Island, Fighting Cock islet, Stone Dog&hellip; Lavender Cruise will bring you to explore Ha Long Bay on the most wonderful route where just a few cruises go through.\n- Do kayaking through the magnificent landscape with Limestone Mountains in Luon Cave, visit Titop Island and swimming or just relaxing on the sun-deck for fantastic views at The Bay .\n- Join our Cooking Class in the restaurant. Let&rsquo;s see how to make the fresh/fried spring rolls and mix fish-sauce.\n<strong>Evening: </strong>Join squid fishing on boat and enjoy the squid cooked with assistance from the<strong> </strong>cruise&rsquo;s chef, playing card, karaoke&hellip;. overnight on Cruise.",
+            "tv304": [
+              "car",
+              "ship"
+            ],
+            "dl146": "2020-08-06T10:09:36.230+00:00",
+            "dl148": "2020-08-06T10:20:58.863+00:00",
+            "id": "5f2bd6e0bc502605ccb9a120"
+          }
+        },
+        {
+          "tv301": null,
+          "tn305": 7,
+          "tv306": "06:00",
+          "tv308": "AM",
+          "id": "5f2bd718bc502605ccb9a123",
+          "dl146": null,
+          "dl148": null,
+          "t301": {
+            "lang": "vi",
+            "tv302": "HA LONG – HANOI (Breakfast, lunch, dinner)",
+            "tv303": "<strong>Morning</strong>: Visit:\n-<strong> Surprising Cave </strong>(Hang Sung Sot) discovered by the French in 1901. Opened for<strong> </strong>tourists since 1936, now it is a must-to-see and a symbol for geology value of Halong.\n<strong>Afternoon: </strong>Disembark and transfer back to Hanoi city .\n<strong>Evening: </strong>Having dinner of<strong> </strong>Hanoi&rsquo;s<strong> </strong>most iconic dish<strong> </strong>&ldquo;Cha<strong> </strong>Ca La Vong&rdquo;<strong> </strong>. Leisure time to<strong> </strong>explore Hanoi at night.\n- Overnight in HanoiLeisure time &amp; overnight in Hanoi.",
+            "tv304": [
+              "car",
+              "ship"
+            ],
+            "dl146": "2020-08-06T10:10:32.775+00:00",
+            "dl148": "2020-08-06T10:21:23.411+00:00",
+            "id": "5f2bd718bc502605ccb9a124"
+          }
+        },
+        {
+          "tv301": null,
+          "tn305": 8,
+          "tv306": "06:00",
+          "tv308": "AM",
+          "id": "5f2bd73ebc502605ccb9a125",
+          "dl146": null,
+          "dl148": null,
+          "t301": {
+            "lang": "vi",
+            "tv302": "HANOI CITY (Breakfast, lunch, dinner)",
+            "tv303": "<strong>Morning</strong>: Visit:\n- <strong>Bat Trang village: </strong>a 500 years old traditional ceramic village. You will visit traditional<strong> </strong>workshops, learn about ceramic product making method, and experience making pottery souvenir by yourself.\n<strong>Afternoon:</strong>\n- <strong>Ho Chi Minh complex</strong>: We will first visit<strong> Ba Dinh square, </strong>a historical venue where<strong> </strong>president Ho Chi Minh read the Vietnam Independence Declaration, combined with <strong>Ho Chi Minh Mausoleum</strong>, an imposing monument of marble and granite built to house the preserved body of Uncle Ho. Move to <strong>One Pillar Pagoda</strong>, a Buddhist temple built in 1049 of wood in the shape of a lotus blossom and set on a single stone pillar. Then finish with a short tour to <strong>Uncle</strong> <strong>Ho&rsquo;s</strong> <strong>stilt house</strong>, a small wooden house where Ho Chi Minh spent his life as Vietnam&rsquo;s president.\n- <strong>Hoan Kiem lake and Ngoc Son Shrine: </strong>the most famous lake in Hanoi, well-known<strong> </strong>for the &ldquo;returning sword for the king&rdquo; legend.\n<strong>Evening</strong>: Leisure time &amp;<strong> </strong>overnight in Hanoi",
+            "tv304": [
+              "car"
+            ],
+            "dl146": "2020-08-06T10:11:10.367+00:00",
+            "dl148": "2020-08-06T10:21:42.855+00:00",
+            "id": "5f2bd73ebc502605ccb9a126"
+          }
+        },
+        {
+          "tv301": null,
+          "tn305": 9,
+          "tv306": "06:00",
+          "tv308": "AM",
+          "id": "5f2bd76abc502605ccb9a129",
+          "dl146": null,
+          "dl148": null,
+          "t301": {
+            "lang": "vi",
+            "tv302": "HANOI DEPARTURE (Breakfast)",
+            "tv303": "<strong>Morning</strong>: Breakfast at hotel, continue to explore the beauty of Hanoi by visit:\n- <strong>Temple of Literature: </strong>Originally built as a university in 1070 dedicated to Confucius,<strong> </strong>scholars and sages, best for its traditional Vietnamese architecture.\n- <strong>Shopping Vietnam specialties at 36-old street or Dong Xuan Market.</strong>\n<strong>Afternoon: </strong>Transfer to Noi Bai airport for flight back. Tour guide says<strong> </strong>goodbye and hope to continue serving in next trip.",
+            "tv304": [
+              "plane",
+              "car"
+            ],
+            "dl146": "2020-08-06T10:11:54.281+00:00",
+            "dl148": "2020-09-01T09:47:53.322+00:00",
+            "id": "5f2bd76abc502605ccb9a12a"
+          }
+        }
+      ],
+      "insInf": {
+        "bv501": "Chương trình của QC",
+        "bd502": "2022-03-31T00:00:00.000+00:00",
+        "bd503": "2023-07-31T00:00:00.000+00:00",
+        "bn504": 20,
+        "bn505": 80,
+        "fbn506": [
+          3,
+          6,
+          9,
+          12
+        ],
+        "bn509": 1,
+        "b503": {
+          "lang": "vi",
+          "bv501": "<p style=\"margin-left: 0px!important;\">Chính sách trả góp</p>",
+          "id": "6245125583f20120824aa1cf"
+        },
+        "id": "6245125583f20120824aa1ce"
+      },
+      "tn134": 1,
+      "promsNumb": 1,
+      "rates": {
+        "adultRate": 35452760,
+        "childRate": 17726380,
+        "kidRate": 11945000,
+        "promPerc": 10,
+        "rateProm": 3545276,
+        "total": 31907484,
+        "totalBase": 35452760,
+        "currency": "VND"
+      },
+      "maxSlotBooking": 0,
+      "remainSlot": 8
+    }
+  ]
+}
