@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hahaloloapp/bloc/accompanied_service_bloc/accompanied_bloc.dart';
+import 'package:hahaloloapp/bloc/counter_cubit/counter_cubit.dart';
 import 'package:hahaloloapp/models/accompanied_service_model.dart';
 
-import '../../screen/book_tour/amount_book_tour_view.dart';
+import 'amount_accompanied_widget.dart';
 
 class AccompaniedService extends StatefulWidget {
   AccompaniedService({
     Key? key,
     this.onDeleteClicked,
+    this.id,
   }) : super(key: key);
   final VoidCallback? onDeleteClicked;
-
+  String? id;
   @override
   State<AccompaniedService> createState() => _AccompaniedServiceState();
 }
 
 class _AccompaniedServiceState extends State<AccompaniedService> {
   AccompaniedServiceData? selectedMenuItem;
-  List<AccompaniedServiceData> selectedList = [];
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<AccompaniedServiceBloc>(context).data;
   }
 
   @override
@@ -57,7 +57,7 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                                 ),
                               )
                             : Text(
-                                '${selectedMenuItem?.t250?.t251?.tv251}',
+                                '${selectedMenuItem?.t250.t251.tv251}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
@@ -80,13 +80,13 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                         },
                         //value: selectedMenuItem!,
 
-                        items: state.remainList!
+                        items: state.remainList
                             .map(
                               (selected) => DropdownMenuItem(
                                 // enabled: selectedMenuItem != selected,
                                 value: selected, // you must provide a value
                                 child: Text(
-                                  selected.t250?.t251?.tv251 ?? '',
+                                  selected.t250.t251.tv251,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,
@@ -112,10 +112,26 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                   indent: 10,
                   endIndent: 10,
                 ),
-                const AmountCounterWidget(
-                  typePeople: 'Số khách hàng',
-                  colorText: Colors.grey,
-                ),
+                BlocBuilder<CounterCubit, CounterState>(
+                    builder: (context, stateAmount) {
+                  return CounterAccompaniedWidget(
+                    typePeople: 'Số khách hàng',
+                    colorText: Colors.grey,
+                    // lay tu trong state thang accom
+                    onTapIncrement:
+                        0 <= stateAmount.amountCustomer.totalCustomer
+                            ? () {
+                                // van cho tang
+                              }
+                            : () {},
+                    onTapDecrement:
+                        99 <= stateAmount.amountCustomer.totalCustomer
+                            ? () {
+                                // van cho giam
+                              }
+                            : () {},
+                  );
+                }),
               ],
             ),
           ),

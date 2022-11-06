@@ -14,9 +14,9 @@ class AccompaniedServiceView extends StatefulWidget {
 class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
   List<Widget> widgetList = [];
 
-  void deleteWidget() {
+  void deleteWidget(int i) {
     setState(() {
-      widgetList.removeLast();
+      widgetList.removeAt(i);
     });
   }
 
@@ -24,10 +24,7 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
   void initState() {
     super.initState();
     widgetList.add(AccompaniedService(
-      // key: UniqueKey(),
-      onDeleteClicked: () {
-        deleteWidget();
-      },
+      id: '1',
     ));
     context
         .read<AccompaniedServiceBloc>()
@@ -38,9 +35,6 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
   Widget build(BuildContext context) {
     return BlocBuilder<AccompaniedServiceBloc, AccompaniedServiceState>(
         builder: (context, state) {
-      // if (state.remainList!.isEmpty) {
-      //   //state.remainList = state.listAccompaniedService.toList();
-      // }
       return Column(
         children: [
           ListView.builder(
@@ -49,25 +43,24 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
               itemCount: widgetList.length,
               itemBuilder: (BuildContext context, int index) {
                 return AccompaniedService(
-                  // key: UniqueKey(),
+                  id: '${state.remainData}',
                   onDeleteClicked: () {
-                    deleteWidget();
+                    context
+                        .read<AccompaniedServiceBloc>()
+                        .add(AccompaniedServiceDeleted());
+                    deleteWidget(index);
                   },
                 );
               }),
           widgetList.isNotEmpty &&
-                      state.listAccompaniedService!.length >
-                          widgetList.length ||
+                      state.listAccompaniedService.length > widgetList.length ||
                   widgetList.isEmpty &&
-                      state.listAccompaniedService!.length > widgetList.length
+                      state.listAccompaniedService.length > widgetList.length
               ? TextButton(
                   onPressed: () {
                     setState(() {
                       widgetList.add(AccompaniedService(
-                        // key: UniqueKey(),
-                        onDeleteClicked: () {
-                          deleteWidget();
-                        },
+                        id: state.remainData?.id,
                       ));
                     });
                   },
@@ -81,20 +74,6 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                   ),
                 )
               : const SizedBox(),
-
-          // TextButton(
-          //     onPressed: () {
-          //       setState(() {
-          //         widgetList.removeLast();
-          //       });
-          //     },
-          //     child: const Text(
-          //       'Delete dịch vụ',
-          //       style: TextStyle(
-          //           fontWeight: FontWeight.w400,
-          //           color: Colors.lightBlueAccent,
-          //           fontSize: 20),
-          //     ))
         ],
       );
     });

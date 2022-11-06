@@ -10,28 +10,67 @@ class AmountBookTourWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CounterCubit, int>(builder: (context, state) {
+    return BlocBuilder<CounterCubit, CounterState>(builder: (context, state) {
       return Column(
         children: [
           AmountCounterWidget(
-            typePeople: 'Người lớn',
-            typeAge: 'Từ 12 tuổi',
-            count: state + 1,
-          ),
+              typePeople: 'Người lớn',
+              typeAge: 'Từ 12 tuổi',
+              count: state.amountCustomer.adult + 1,
+              onTapDecrement: () {
+                context
+                    .read<CounterCubit>()
+                    .decrementAdult(state.amountCustomer.adult - 1);
+              },
+              onTapIncrement: () {
+                context
+                    .read<CounterCubit>()
+                    .incrementAdult(state.amountCustomer.adult + 1);
+              }),
           AmountCounterWidget(
             typePeople: 'Trẻ em',
             typeAge: '11 tuổi - dưới 12 tuổi',
-            count: state,
+            count: state.amountCustomer.child,
+            onTapIncrement: () {
+              context
+                  .read<CounterCubit>()
+                  .incrementChild(state.amountCustomer.child + 1);
+            },
+            onTapDecrement: () {
+              context
+                  .read<CounterCubit>()
+                  .decrementChild(state.amountCustomer.child - 1);
+            },
           ),
           AmountCounterWidget(
             typePeople: 'Trẻ nhỏ',
             typeAge: '6 tuổi dưới - dưới 11 tuổi',
-            count: state,
+            count: state.amountCustomer.littleChild,
+            onTapIncrement: () {
+              context
+                  .read<CounterCubit>()
+                  .incrementLittleChild(state.amountCustomer.littleChild + 1);
+            },
+            onTapDecrement: () {
+              context
+                  .read<CounterCubit>()
+                  .decrementLittleChild(state.amountCustomer.littleChild - 1);
+            },
           ),
           AmountCounterWidget(
             typePeople: 'Em bé',
             typeAge: 'Dưới 6 tuổi',
-            count: state,
+            count: state.amountCustomer.baby,
+            onTapIncrement: () {
+              context
+                  .read<CounterCubit>()
+                  .incrementBaby(state.amountCustomer.baby + 1);
+            },
+            onTapDecrement: () {
+              context
+                  .read<CounterCubit>()
+                  .decrementBaby(state.amountCustomer.baby - 1);
+            },
           ),
           const RadioOptionWidget(),
         ],
@@ -41,13 +80,22 @@ class AmountBookTourWidget extends StatelessWidget {
 }
 
 class AmountCounterWidget extends StatefulWidget {
-  const AmountCounterWidget(
-      {Key? key, this.count, this.typePeople, this.typeAge, this.colorText})
-      : super(key: key);
-  final int? count;
+  const AmountCounterWidget({
+    Key? key,
+    required this.count,
+    this.typePeople,
+    this.typeAge,
+    this.colorText,
+    required this.onTapIncrement,
+    required this.onTapDecrement,
+  }) : super(key: key);
+  final int count;
   final String? typePeople;
   final String? typeAge;
   final Color? colorText;
+  final VoidCallback onTapIncrement;
+  final VoidCallback onTapDecrement;
+
   @override
   State<AmountCounterWidget> createState() => _AmountCounterWidgetState();
 }
@@ -56,108 +104,96 @@ class _AmountCounterWidgetState extends State<AmountCounterWidget> {
   late Timer timer;
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (_) => CounterCubit(),
-        child: BlocBuilder<CounterCubit, int>(
-          builder: (context, count) => Padding(
-            padding: const EdgeInsets.fromLTRB(12, 5, 12, 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    widget.typePeople != null
-                        ? Text(
-                            '${widget.typePeople}',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                              color: widget.colorText,
-                            ),
-                          )
-                        : const SizedBox(),
-                    widget.typeAge != null
-                        ? Text(
-                            '${widget.typeAge}',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey,
-                              fontSize: 16,
-                            ),
-                          )
-                        : const SizedBox(),
-                  ],
-                ),
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTapDown: (TapDownDetails details) {
-                        timer = Timer.periodic(
-                            const Duration(milliseconds: 300), (t) {
-                          count <= 1
-                              ? null
-                              : context.read<CounterCubit>().decrement();
-                        });
-                      },
-                      onTapUp: (TapUpDetails details) {
-                        timer.cancel();
-                      },
-                      onTapCancel: () {
-                        timer.cancel();
-                      },
-                      onTap: () {
-                        count < 1
-                            ? null
-                            : context.read<CounterCubit>().decrement();
-                      },
-                      child: Icon(
-                        Icons.remove_circle_outline,
-                        color: count > 0 ? Colors.blue : Colors.grey,
-                        size: 30,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 5, 12, 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              widget.typePeople != null
+                  ? Text(
+                      '${widget.typePeople}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: widget.colorText,
                       ),
-                    ),
-                    SizedBox(
-                      width: 60,
-                      child: Center(
-                          child: Text(
-                        '$count',
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 15),
-                      )),
-                    ),
-                    GestureDetector(
-                      onTapDown: (TapDownDetails details) {
-                        timer = Timer.periodic(
-                            const Duration(milliseconds: 200), (t) {
-                          count > 98
-                              ? null
-                              : context.read<CounterCubit>().increment();
-                        });
-                      },
-                      onTapUp: (TapUpDetails details) {
-                        timer.cancel();
-                      },
-                      onTapCancel: () {
-                        timer.cancel();
-                      },
-                      onTap: () {
-                        count > 98
-                            ? null
-                            : context.read<CounterCubit>().increment();
-                      },
-                      child: Icon(
-                        Icons.add_circle_outline,
-                        color: count < 99 ? Colors.blue : Colors.grey,
-                        size: 30,
+                    )
+                  : const SizedBox(),
+              widget.typeAge != null
+                  ? Text(
+                      '${widget.typeAge}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w400,
+                        color: Colors.grey,
+                        fontSize: 16,
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                    )
+                  : const SizedBox(),
+            ],
           ),
-        ));
+          Row(
+            children: [
+              GestureDetector(
+                onTapDown: (TapDownDetails details) {
+                  timer =
+                      Timer.periodic(const Duration(milliseconds: 300), (t) {
+                    widget.count <= 1 ? null : widget.onTapDecrement();
+                  });
+                },
+                onTapUp: (TapUpDetails details) {
+                  timer.cancel();
+                },
+                onTapCancel: () {
+                  timer.cancel();
+                },
+                onTap: () {
+                  widget.count < 1 ? null : widget.onTapDecrement();
+                },
+                child: Icon(
+                  Icons.remove_circle_outline,
+                  color: widget.count > 0 ? Colors.blue : Colors.grey,
+                  size: 30,
+                ),
+              ),
+              SizedBox(
+                width: 60,
+                child: Center(
+                    child: Text(
+                  '${widget.count}',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 15),
+                )),
+              ),
+              GestureDetector(
+                onTapDown: (TapDownDetails details) {
+                  timer =
+                      Timer.periodic(const Duration(milliseconds: 200), (t) {
+                    widget.count > 98 ? null : widget.onTapIncrement();
+                  });
+                },
+                onTapUp: (TapUpDetails details) {
+                  timer.cancel();
+                },
+                onTapCancel: () {
+                  timer.cancel();
+                },
+                onTap: () {
+                  widget.count > 98 ? null : widget.onTapIncrement();
+                },
+                child: Icon(
+                  Icons.add_circle_outline,
+                  color: widget.count < 99 ? Colors.blue : Colors.grey,
+                  size: 30,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
 

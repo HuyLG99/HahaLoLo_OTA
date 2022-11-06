@@ -5,6 +5,7 @@ enum AccompaniedServiceStatus {
   loading,
   selected,
   remaining,
+  deleted,
   success,
   failure
 }
@@ -14,16 +15,18 @@ class AccompaniedServiceState extends Equatable {
   List<AccompaniedServiceData> listAccompaniedService;
   List<AccompaniedServiceData> selectedList;
   List<AccompaniedServiceData> remainList;
-  // final AccompaniedServiceData serviceData;
-  final bool hasReachedMax;
+  final AccompaniedServiceData? selectedData;
+  final AccompaniedServiceData? remainData;
+  final AccompaniedServiceData? selectedMenuItem;
 
   AccompaniedServiceState({
     this.status = AccompaniedServiceStatus.initial,
     required this.listAccompaniedService,
     required this.selectedList,
     required this.remainList,
-    this.hasReachedMax = false,
-    // required this.serviceData,
+    this.remainData,
+    this.selectedData,
+    this.selectedMenuItem,
   });
 
   AccompaniedServiceState copyWith({
@@ -32,7 +35,9 @@ class AccompaniedServiceState extends Equatable {
     selectedList,
     remainList,
     hasReachedMax,
-    serviceData,
+    selectedData,
+    remainData,
+    selectedMenuItem,
   }) {
     return AccompaniedServiceState(
       status: status ?? this.status,
@@ -40,8 +45,9 @@ class AccompaniedServiceState extends Equatable {
           listAccompaniedService ?? this.listAccompaniedService,
       selectedList: selectedList ?? this.selectedList,
       remainList: remainList ?? this.remainList,
-      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
-      // serviceData: serviceData ?? this.serviceData,
+      remainData: remainData ?? remainData,
+      selectedData: selectedData ?? this.selectedData,
+      selectedMenuItem: selectedMenuItem ?? this.selectedMenuItem,
     );
   }
 
@@ -51,6 +57,8 @@ class AccompaniedServiceState extends Equatable {
         listAccompaniedService,
         remainList,
         selectedList,
-        hasReachedMax,
+        selectedData,
+        remainData,
+        selectedMenuItem,
       ];
 }

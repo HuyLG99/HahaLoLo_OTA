@@ -7,10 +7,6 @@ abstract class AccompaniedServiceEvent {
 
 class AccompaniedServiceInitial extends AccompaniedServiceEvent {}
 
-// class AccompaniedServiceFetch extends AccompaniedServiceEvent {
-//   AccompaniedServiceFetch();
-// }
-
 class AccompaniedServiceCompareSelected extends AccompaniedServiceEvent {
   AccompaniedServiceCompareSelected();
 }
@@ -20,4 +16,8 @@ class AccompaniedServiceSelected extends AccompaniedServiceEvent {
   final AccompaniedServiceData? accompaniedServiceDataPrevious;
   AccompaniedServiceSelected(
       this.accompaniedServiceDataSelected, this.accompaniedServiceDataPrevious);
+}
+
+class AccompaniedServiceDeleted extends AccompaniedServiceEvent {
+  AccompaniedServiceDeleted();
 }

@@ -46,30 +46,30 @@ class AccompaniedServiceModel {
 
 class AccompaniedServiceData {
   AccompaniedServiceData({
-    this.currency,
-    this.pt100,
-    this.pn100,
-    this.pp100,
-    this.pt250,
-    this.tv451,
-    this.tn452,
-    this.t250,
-    this.id,
-    this.dl146,
-    this.dl147,
+    required this.currency,
+    required this.pt100,
+    required this.pn100,
+    required this.pp100,
+    required this.pt250,
+    required this.tv451,
+    required this.tn452,
+    required this.t250,
+    required this.id,
+    required this.dl146,
+    required this.dl147,
   });
 
-  String? currency;
-  String? pt100;
-  String? pn100;
-  String? pp100;
-  String? pt250;
-  String? tv451;
-  int? tn452;
-  T250? t250;
-  String? id;
-  DateTime? dl146;
-  String? dl147;
+  String currency;
+  String pt100;
+  String pn100;
+  String pp100;
+  String pt250;
+  String tv451;
+  int tn452;
+  T250 t250;
+  String id;
+  DateTime dl146;
+  String dl147;
 
   factory AccompaniedServiceData.fromJson(Map<String, dynamic> json) =>
       AccompaniedServiceData(
@@ -94,31 +94,31 @@ class AccompaniedServiceData {
         "pt250": pt250,
         "tv451": tv451,
         "tn452": tn452,
-        "t250": t250?.toJson(),
+        "t250": t250.toJson(),
         "id": id,
-        "dl146": dl146?.toIso8601String(),
+        "dl146": dl146.toIso8601String(),
         "dl147": dl147,
       };
 }
 
 class T250 {
   T250({
-    this.t251,
-    this.tv253,
-    this.tv254,
-    this.pt150,
-    this.tv255,
-    this.tn256,
-    this.id,
+    required this.t251,
+    required this.tv253,
+    required this.tv254,
+    required this.pt150,
+    required this.tv255,
+    required this.tn256,
+    required this.id,
   });
 
-  T251? t251;
-  String? tv253;
-  String? tv254;
-  String? pt150;
-  String? tv255;
-  int? tn256;
-  String? id;
+  T251 t251;
+  String tv253;
+  String tv254;
+  String pt150;
+  String tv255;
+  int tn256;
+  String id;
 
   factory T250.fromJson(Map<String, dynamic> json) => T250(
         t251: T251.fromJson(json["t251"]),
@@ -131,7 +131,7 @@ class T250 {
       );
 
   Map<String, dynamic> toJson() => {
-        "t251": t251?.toJson(),
+        "t251": t251.toJson(),
         "tv253": tv253,
         "tv254": tv254,
         "pt150": pt150,
@@ -143,12 +143,12 @@ class T250 {
 
 class T251 {
   T251({
-    this.lang,
-    this.tv251,
+    required this.lang,
+    required this.tv251,
   });
 
-  String? lang;
-  String? tv251;
+  String lang;
+  String tv251;
 
   factory T251.fromJson(Map<String, dynamic> json) => T251(
         lang: json["lang"],
