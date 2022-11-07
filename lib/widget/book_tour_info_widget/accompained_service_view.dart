@@ -14,12 +14,6 @@ class AccompaniedServiceView extends StatefulWidget {
 class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
   List<Widget> widgetList = [];
 
-  void deleteWidget(int i) {
-    setState(() {
-      widgetList.removeAt(i);
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -35,6 +29,12 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
   Widget build(BuildContext context) {
     return BlocBuilder<AccompaniedServiceBloc, AccompaniedServiceState>(
         builder: (context, state) {
+      void deleteWidget(int i) {
+        setState(() {
+          widgetList.removeAt(i);
+        });
+      }
+
       return Column(
         children: [
           ListView.builder(
@@ -43,7 +43,7 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
               itemCount: widgetList.length,
               itemBuilder: (BuildContext context, int index) {
                 return AccompaniedService(
-                  id: '${state.remainData}',
+                  id: '${state.selectedData}',
                   onDeleteClicked: () {
                     context
                         .read<AccompaniedServiceBloc>()
@@ -60,7 +60,7 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                   onPressed: () {
                     setState(() {
                       widgetList.add(AccompaniedService(
-                        id: state.remainData?.id,
+                        id: state.selectedData?.id,
                       ));
                     });
                   },

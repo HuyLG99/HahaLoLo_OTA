@@ -117,19 +117,7 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                   return CounterAccompaniedWidget(
                     typePeople: 'Số khách hàng',
                     colorText: Colors.grey,
-                    // lay tu trong state thang accom
-                    onTapIncrement:
-                        0 <= stateAmount.amountCustomer.totalCustomer
-                            ? () {
-                                // van cho tang
-                              }
-                            : () {},
-                    onTapDecrement:
-                        99 <= stateAmount.amountCustomer.totalCustomer
-                            ? () {
-                                // van cho giam
-                              }
-                            : () {},
+                    maxCount: stateAmount.amountCustomer.totalCustomer,
                   );
                 }),
               ],

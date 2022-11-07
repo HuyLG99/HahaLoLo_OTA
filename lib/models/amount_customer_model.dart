@@ -7,7 +7,7 @@ class AmountCustomerModel extends Equatable {
   final int baby;
 
   const AmountCustomerModel({
-    this.adult = 0,
+    this.adult = 1,
     this.child = 0,
     this.littleChild = 0,
     this.baby = 0,

@@ -5,6 +5,7 @@ import 'package:hahaloloapp/widget/book_tour_info_widget/accompained_service_vie
 import 'package:hahaloloapp/widget/core_widget.dart';
 import '../../bloc/accompanied_service_bloc/accompanied_bloc.dart';
 import '../../bloc/accompanied_service_bloc/accompanied_repository.dart';
+import '../../bloc/counter_accompanied_cubit/counter_cubit.dart';
 import '../../bloc/counter_cubit/counter_cubit.dart';
 import '../../widget/book_tour_info_widget/appbar_payment_widget.dart';
 import '../../widget/book_tour_info_widget/book_tour_widget.dart';
