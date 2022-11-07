@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class ServiceAccompaniedModel extends Equatable {
+class MoreServiceModel extends Equatable {
   String? idSelectedMenuItem;
   String? id;
   String? currency;
@@ -13,7 +13,7 @@ class ServiceAccompaniedModel extends Equatable {
   T250? t250;
   DateTime? dl146;
   String? dl147;
-  ServiceAccompaniedModel({
+  MoreServiceModel({
     this.idSelectedMenuItem,
     this.id = '',
     this.pn100 = '',
@@ -31,7 +31,7 @@ class ServiceAccompaniedModel extends Equatable {
   @override
   List<Object?> get props => [];
 
-  ServiceAccompaniedModel copyWith({
+  MoreServiceModel copyWith({
     String? idSelectedMenuItem,
     String? currency,
     String? pt100,
@@ -44,7 +44,7 @@ class ServiceAccompaniedModel extends Equatable {
     DateTime? dl146,
     String? dl147,
   }) {
-    return ServiceAccompaniedModel(
+    return MoreServiceModel(
       idSelectedMenuItem: idSelectedMenuItem ?? this.idSelectedMenuItem,
       currency: currency ?? this.currency,
       pt250: pt250 ?? this.pt250,
