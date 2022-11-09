@@ -6,7 +6,7 @@ import 'package:hahaloloapp/models/accompanied_service_model.dart';
 import 'amount_accompanied_widget.dart';
 
 class AccompaniedService extends StatefulWidget {
-  const AccompaniedService({
+  AccompaniedService({
     Key? key,
     this.id,
     required this.name,
@@ -14,6 +14,7 @@ class AccompaniedService extends StatefulWidget {
     required this.accompaniedServiceData,
     this.onSelected,
     this.onDeleted,
+    this.currentID,
   }) : super(key: key);
 
   final String? id;
@@ -22,7 +23,7 @@ class AccompaniedService extends StatefulWidget {
   final List<AccompaniedServiceData> accompaniedServiceData;
   final ValueChanged<AccompaniedServiceData?>? onSelected;
   final ValueChanged<AccompaniedServiceData?>? onDeleted;
-
+  final ValueChanged<String?>? currentID;
   @override
   State<AccompaniedService> createState() => _AccompaniedServiceState();
 }
@@ -55,7 +56,11 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                     padding: const EdgeInsets.all(8.0),
                     child: DropdownButton<AccompaniedServiceData>(
                       elevation: 1,
-
+                      onTap: () {
+                        setState(() {
+                          widget.currentID?.call(widget.name);
+                        });
+                      },
                       hint: Text(
                         widget.name ?? "Dịch vụ đính kèm",
                         style: const TextStyle(
@@ -69,11 +74,10 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                         color: Colors.white24,
                       ),
                       // values should match
-
                       onChanged: (selected) async {
-                        widget.onSelected?.call(selected);
                         setState(() {
                           selectedMenuItem = selected;
+                          widget.onSelected?.call(selected);
                         });
                       },
                       items: widget.accompaniedServiceData
@@ -91,14 +95,18 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                           )
                           .toList(),
 
-                      //value: selectedMenuItem,
+                      // value: selectedMenuItem,
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: IconButton(
-                      onPressed: () async {
-                        widget.onDeleted?.call(selectedMenuItem);
+                      onPressed: () {
+                        setState(() {
+                          // selectedMenuItem = widget.currentID;
+                          widget.onDeleted?.call(selectedMenuItem);
+                          selectedMenuItem = null;
+                        });
                       },
                       icon: Icon(
                         Icons.delete,

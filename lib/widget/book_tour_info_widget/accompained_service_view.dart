@@ -17,6 +17,8 @@ class AccompaniedServiceView extends StatefulWidget {
 class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
   List<AccompaniedServiceData> accompaniedList = [];
   List<AccompaniedServiceData> selectedList = [];
+  List<AccompaniedServiceData> remainList = [];
+  String? currentID;
   List<MoreServiceModel> moreServiceList = [];
   bool check = true;
   @override
@@ -30,6 +32,7 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
     if (widget.accompaniedList.isNotEmpty) {
       if (check == true) {
         accompaniedList = widget.accompaniedList;
+        // remainList = widget.accompaniedList;
       }
       setState(() {});
       check = false;
@@ -43,9 +46,14 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
             itemCount: moreServiceList.length,
             itemBuilder: (BuildContext context, int index) {
               return AccompaniedService(
+                currentID: (valueCurrentID) {
+                  setState(() {
+                    currentID = valueCurrentID;
+                    print(currentID);
+                  });
+                },
                 onSelected: (value) {
                   setState(() {});
-
                   if (selectedList.isEmpty) {
                     moreServiceList[index].name = value?.t250.t251.tv251;
                     moreServiceList[index].idSelectedMenuItem = value?.id;
@@ -55,16 +63,21 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                         .difference(selectedList.toSet())
                         .toList();
                   }
-
                   selectedList.removeWhere((element) =>
                       element.id == moreServiceList[index].idSelectedMenuItem);
-
                   selectedList.add(value!);
-
                   accompaniedList = widget.accompaniedList
                       .toSet()
                       .difference(selectedList.toSet())
                       .toList();
+                  if (value.t250.t251.tv251 != currentID) {
+                    remainList.removeWhere(
+                        (element) => element.t250.t251.tv251 == currentID);
+                  }
+
+                  remainList.add(value);
+
+                  print(remainList);
                   moreServiceList[index].name = value.t250.t251.tv251;
                   moreServiceList[index].idSelectedMenuItem = value.id;
                 },
@@ -73,34 +86,70 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
 
                 /// Delete
                 onDeleted: (value) {
+                  // setState(() {});
+                  // value?.t250.t251.tv251 = currentID!;
+                  // if (moreServiceList[index].name == null) {
+                  //   moreServiceList.removeAt(index);
+                  // } else if (moreServiceList[index].name != null &&
+                  //     selectedList[index].id != value?.id) {
+                  //   moreServiceList.removeWhere((element) =>
+                  //       element.idSelectedMenuItem == selectedList[index].id);
+                  //   selectedList.removeWhere(
+                  //       (element) => element.id == remainList[index].id);
+                  //   print(selectedList);
+                  //   accompaniedList = widget.accompaniedList
+                  //       .toSet()
+                  //       .difference(selectedList.toSet())
+                  //       .toList();
+                  //   // remainList = widget.accompaniedList
+                  //   //     .toSet()
+                  //   //     .difference(accompaniedList.toSet())
+                  //   //     .toList();
+                  //   print(remainList);
+                  // } else if (moreServiceList[index].idSelectedMenuItem ==
+                  //     value?.id) {
+                  //   moreServiceList.removeWhere((element) =>
+                  //       element.idSelectedMenuItem == selectedList[index].id);
+                  //   selectedList
+                  //       .removeWhere((element) => element.id == value?.id);
+                  //   accompaniedList = widget.accompaniedList
+                  //       .toSet()
+                  //       .difference(selectedList.toSet())
+                  //       .toList();
+                  //   remainList.remove(value!);
+                  //   print(remainList);
+                  // }
+
                   setState(() {});
+                  print(value?.id);
                   if (moreServiceList[index].name == null) {
                     moreServiceList.removeAt(index);
-                  } else if (moreServiceList[index].name != null &&
-                      moreServiceList[index].idSelectedMenuItem !=
-                          selectedList[index].id) {
-                    moreServiceList.removeWhere((element) =>
-                        element.idSelectedMenuItem == selectedList[index].id);
-
-                    selectedList.add(value!);
-                    // selectedList.remove(value!);
-
                   } else if (moreServiceList[index].idSelectedMenuItem ==
-                      selectedList[index].id) {
+                      value?.id) {
                     moreServiceList.removeWhere((element) =>
                         element.idSelectedMenuItem == selectedList[index].id);
-                    selectedList.remove(value);
+                    selectedList
+                        .removeWhere((element) => element.id == value?.id);
                     accompaniedList = widget.accompaniedList
                         .toSet()
                         .difference(selectedList.toSet())
                         .toList();
-                    print(accompaniedList);
+
+                    remainList.removeWhere(
+                        (element) => element.t250.t251.tv251 == currentID);
+                    print(remainList);
+                  } else if (moreServiceList[index].name != null &&
+                      selectedList[index].id != value?.id) {
+                    moreServiceList.removeWhere((element) =>
+                        element.idSelectedMenuItem == selectedList[index].id);
+                    selectedList.removeWhere(
+                        (element) => element.t250.t251.tv251 == currentID);
+
+                    accompaniedList = widget.accompaniedList
+                        .toSet()
+                        .difference(selectedList.toSet())
+                        .toList();
                   }
-                  accompaniedList = widget.accompaniedList
-                      .toSet()
-                      .difference(selectedList.toSet())
-                      .toList();
-                  print(accompaniedList);
                 },
               );
             }),
