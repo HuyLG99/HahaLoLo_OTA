@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hahaloloapp/screen/book_tour/book_tour_page.dart';
 
+import '../bloc/accompanied_service_bloc/accompanied_bloc.dart';
+import '../bloc/accompanied_service_bloc/accompanied_repository.dart';
 import '../bloc/calendar_blocs/calendar.bloc.dart';
 import '../bloc/calendar_blocs/calendar_repository.dart';
 import '../bloc/datetime_blocs/datetime_bloc.dart';
@@ -61,14 +63,6 @@ class BookDateTimePageState extends State<BookDateTimePage> {
             checkActive: widget.checkActive,
           )),
     );
-    //   BlocProvider(
-    //     create: (context) => DatetimeBloc(context.read<DateTimeRepository>()),
-    //     child: BlocProvider(
-    //         create: (context) =>
-    //             CalendarBloc(context.read<CalendarRepository>()),
-    //         child: const BookDatetimeBody()),
-    //   ),
-    // );
   }
 }
 
@@ -107,6 +101,7 @@ class BookDatetimeBodyState extends State<BookDatetimeBody> {
   @override
   void initState() {
     super.initState();
+
     Timer.periodic(const Duration(seconds: 1), (timer) {
       checkUserConnection();
       // print('Check2');
@@ -530,116 +525,118 @@ class UpcomingCalendarWidget extends StatelessWidget {
   final int? total;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const BookTourPage(),
+    return Container(
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const BookTourPage(),
+            ),
+          );
+        },
+        child: Container(
+          width: 350,
+          height: 100,
+          margin: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.white70,
           ),
-        );
-      },
-      child: Container(
-        width: 350,
-        height: 100,
-        margin: const EdgeInsets.all(10),
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.white70,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Expanded(
-              flex: 2,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    children: [
-                      const Text(
-                        'Khởi hành',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.grey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Expanded(
+                flex: 2,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        const Text(
+                          'Khởi hành',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Th $weekDayStart, $dayStart/$monthStart/$yearStart',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
+                        Text(
+                          'Th $weekDayStart, $dayStart/$monthStart/$yearStart',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(12, 5, 12, 20),
-                    child: Icon(
-                      Icons.keyboard_double_arrow_right_rounded,
-                      size: 20,
-                      color: Colors.grey,
+                      ],
                     ),
-                  ),
-                  Column(
-                    children: [
-                      const Text(
-                        'Kết thúc',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.grey,
-                        ),
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(12, 5, 12, 20),
+                      child: Icon(
+                        Icons.keyboard_double_arrow_right_rounded,
+                        size: 20,
+                        color: Colors.grey,
                       ),
-                      Text(
-                        'Th $weekDayEnd, $dayEnd/$monthEnd/$yearEnd',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
+                    ),
+                    Column(
+                      children: [
+                        const Text(
+                          'Kết thúc',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                        Text(
+                          'Th $weekDayEnd, $dayEnd/$monthEnd/$yearEnd',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '$total đ',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.red,
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const BookTourPage(),
-                        ),
-                      );
-                    },
-                    child: const Text(
-                      'Đặt ngay',
-                      style: TextStyle(
+              Expanded(
+                flex: 1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '$total đ',
+                      style: const TextStyle(
                         fontSize: 20,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.lightBlueAccent,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.red,
                       ),
                     ),
-                  ),
-                ],
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const BookTourPage(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'Đặt ngay',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.lightBlueAccent,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

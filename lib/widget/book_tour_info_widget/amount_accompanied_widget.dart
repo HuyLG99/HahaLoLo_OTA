@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/counter_accompanied_cubit/counter_cubit.dart';
 
 class CounterAccompaniedWidget extends StatefulWidget {
-  const CounterAccompaniedWidget({
+  CounterAccompaniedWidget({
     Key? key,
     this.count,
     this.typePeople,
@@ -14,7 +14,7 @@ class CounterAccompaniedWidget extends StatefulWidget {
     this.colorText,
     required this.maxCount,
   }) : super(key: key);
-  final int? count;
+  num? count;
   final String? typePeople;
   final String? typeAge;
   final Color? colorText;
@@ -68,6 +68,10 @@ class _CounterAccompaniedWidgetState extends State<CounterAccompaniedWidget> {
                       count < 1
                           ? null
                           : context.read<CounterAccompaniedCubit>().decrement();
+                      setState(() {
+                        widget.count = count;
+                        print(widget.count);
+                      });
                     },
                     child: Icon(
                       Icons.remove_circle_outline,
@@ -89,6 +93,10 @@ class _CounterAccompaniedWidgetState extends State<CounterAccompaniedWidget> {
                       count > 98 || count >= widget.maxCount
                           ? null
                           : context.read<CounterAccompaniedCubit>().increment();
+                      setState(() {
+                        widget.count = count;
+                        print(widget.count);
+                      });
                     },
                     child: Icon(
                       Icons.add_circle_outline,
