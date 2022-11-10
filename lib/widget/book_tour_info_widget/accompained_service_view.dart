@@ -32,7 +32,6 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
     if (widget.accompaniedList.isNotEmpty) {
       if (check == true) {
         accompaniedList = widget.accompaniedList;
-        // remainList = widget.accompaniedList;
       }
       setState(() {});
       check = false;
@@ -47,13 +46,15 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
             itemBuilder: (BuildContext context, int index) {
               return AccompaniedService(
                 currentID: (valueCurrentID) {
-                  setState(() {
-                    currentID = valueCurrentID;
-                    print(currentID);
-                  });
+                  if (moreServiceList[index].name != null) {
+                    setState(() {
+                      currentID = valueCurrentID;
+                    });
+                  }
                 },
                 onSelected: (value) {
                   setState(() {});
+
                   if (selectedList.isEmpty) {
                     moreServiceList[index].name = value?.t250.t251.tv251;
                     moreServiceList[index].idSelectedMenuItem = value?.id;
@@ -71,13 +72,11 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                       .difference(selectedList.toSet())
                       .toList();
                   if (value.t250.t251.tv251 != currentID) {
-                    remainList.removeWhere(
+                    selectedList.removeWhere(
                         (element) => element.t250.t251.tv251 == currentID);
                   }
 
-                  remainList.add(value);
-
-                  print(remainList);
+                  print(selectedList);
                   moreServiceList[index].name = value.t250.t251.tv251;
                   moreServiceList[index].idSelectedMenuItem = value.id;
                 },
@@ -86,62 +85,28 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
 
                 /// Delete
                 onDeleted: (value) {
-                  // setState(() {});
-                  // value?.t250.t251.tv251 = currentID!;
-                  // if (moreServiceList[index].name == null) {
-                  //   moreServiceList.removeAt(index);
-                  // } else if (moreServiceList[index].name != null &&
-                  //     selectedList[index].id != value?.id) {
-                  //   moreServiceList.removeWhere((element) =>
-                  //       element.idSelectedMenuItem == selectedList[index].id);
-                  //   selectedList.removeWhere(
-                  //       (element) => element.id == remainList[index].id);
-                  //   print(selectedList);
-                  //   accompaniedList = widget.accompaniedList
-                  //       .toSet()
-                  //       .difference(selectedList.toSet())
-                  //       .toList();
-                  //   // remainList = widget.accompaniedList
-                  //   //     .toSet()
-                  //   //     .difference(accompaniedList.toSet())
-                  //   //     .toList();
-                  //   print(remainList);
-                  // } else if (moreServiceList[index].idSelectedMenuItem ==
-                  //     value?.id) {
-                  //   moreServiceList.removeWhere((element) =>
-                  //       element.idSelectedMenuItem == selectedList[index].id);
-                  //   selectedList
-                  //       .removeWhere((element) => element.id == value?.id);
-                  //   accompaniedList = widget.accompaniedList
-                  //       .toSet()
-                  //       .difference(selectedList.toSet())
-                  //       .toList();
-                  //   remainList.remove(value!);
-                  //   print(remainList);
-                  // }
-
                   setState(() {});
-                  print(value?.id);
-                  if (moreServiceList[index].name == null) {
+                  if (moreServiceList[index].name == null &&
+                          currentID == null ||
+                      value == null && currentID == null ||
+                      moreServiceList[index].name == null &&
+                          currentID != null) {
                     moreServiceList.removeAt(index);
-                  } else if (moreServiceList[index].idSelectedMenuItem ==
-                      value?.id) {
-                    moreServiceList.removeWhere((element) =>
-                        element.idSelectedMenuItem == selectedList[index].id);
+                  } else if (moreServiceList[index].name != null &&
+                      moreServiceList[index].idSelectedMenuItem == value?.id) {
+                    moreServiceList
+                        .removeWhere((element) => element.name == currentID);
+
                     selectedList
                         .removeWhere((element) => element.id == value?.id);
                     accompaniedList = widget.accompaniedList
                         .toSet()
                         .difference(selectedList.toSet())
                         .toList();
-
-                    remainList.removeWhere(
-                        (element) => element.t250.t251.tv251 == currentID);
-                    print(remainList);
-                  } else if (moreServiceList[index].name != null &&
-                      selectedList[index].id != value?.id) {
-                    moreServiceList.removeWhere((element) =>
-                        element.idSelectedMenuItem == selectedList[index].id);
+                  } else if (moreServiceList[index].name != null ||
+                      selectedList[index].id != currentID) {
+                    moreServiceList
+                        .removeWhere((element) => element.name == currentID);
                     selectedList.removeWhere(
                         (element) => element.t250.t251.tv251 == currentID);
 
@@ -158,6 +123,7 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                 onPressed: () {
                   setState(() {
                     moreServiceList.add(MoreServiceModel());
+                    currentID = null;
                   });
                 },
                 child: const Text(

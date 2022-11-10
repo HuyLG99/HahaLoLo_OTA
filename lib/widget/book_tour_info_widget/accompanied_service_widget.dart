@@ -23,7 +23,7 @@ class AccompaniedService extends StatefulWidget {
   final List<AccompaniedServiceData> accompaniedServiceData;
   final ValueChanged<AccompaniedServiceData?>? onSelected;
   final ValueChanged<AccompaniedServiceData?>? onDeleted;
-  final ValueChanged<String?>? currentID;
+  ValueChanged<String?>? currentID;
   @override
   State<AccompaniedService> createState() => _AccompaniedServiceState();
 }
@@ -78,11 +78,17 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                         setState(() {
                           selectedMenuItem = selected;
                           widget.onSelected?.call(selected);
+                          widget.currentID?.call(widget.name);
                         });
                       },
                       items: widget.accompaniedServiceData
                           .map(
                             (selected) => DropdownMenuItem(
+                              onTap: () {
+                                setState(() {
+                                  widget.currentID?.call(widget.name);
+                                });
+                              },
                               value: selected, // you must provide a value
                               child: Text(
                                 selected.t250.t251.tv251,
@@ -103,7 +109,7 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                     child: IconButton(
                       onPressed: () {
                         setState(() {
-                          // selectedMenuItem = widget.currentID;
+                          widget.currentID?.call(widget.name);
                           widget.onDeleted?.call(selectedMenuItem);
                           selectedMenuItem = null;
                         });
