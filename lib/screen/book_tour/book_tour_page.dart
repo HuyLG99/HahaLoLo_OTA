@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hahaloloapp/models/accompanied_service_model.dart';
 import 'package:hahaloloapp/screen/book_tour/amount_book_tour_view.dart';
 import 'package:hahaloloapp/widget/book_tour_info_widget/accompained_service_view.dart';
+import 'package:hahaloloapp/widget/book_tour_info_widget/bottomSheetDetail.dart';
 import 'package:hahaloloapp/widget/core_widget.dart';
 import '../../bloc/accompanied_service_bloc/accompanied_bloc.dart';
 import '../../bloc/accompanied_service_bloc/accompanied_repository.dart';
@@ -18,6 +19,9 @@ class BookTourPage extends StatefulWidget {
 }
 
 class BookTourPageState extends State<BookTourPage> {
+  List<AccompaniedServiceData?> listBottomSheetDetail = [];
+  ValueChanged<List<AccompaniedServiceData?>>? showListBottomSheetDetail;
+
   @override
   void initState() {
     super.initState();
@@ -82,14 +86,84 @@ class BookTourPageState extends State<BookTourPage> {
             ],
           ),
         ),
-        body: const BookTourPageBody(
+        body: BookTourPageBody(
           header: 'Thông tin người liên hệ',
+          showListBottomSheetDetail: (valueSelected) {
+            if (valueSelected.isNotEmpty) {
+              setState(() {
+                listBottomSheetDetail = valueSelected;
+              });
+            }
+          },
         ),
-        bottomNavigationBar: const BottomAppBar(
-          child: AppBarPaymentWidget(
-            textButton: 'Thanh toán',
-            title: 'Tổng thanh toán',
-            price: 1791000,
+        bottomNavigationBar: GestureDetector(
+          onTap: () {
+            listBottomSheetDetail.isNotEmpty
+                ? showModalBottomSheet(
+                    context: context,
+                    useRootNavigator: true,
+                    builder: (BuildContext context) {
+                      return Container(
+                        height: 400,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                        ),
+                        child: Center(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              const AppBarPaymentWidget(
+                                textButton: 'Thanh toán',
+                                title: 'Tổng thanh toán',
+                                price: 1791000,
+                              ),
+                              const Divider(
+                                indent: 20,
+                                endIndent: 20,
+                                thickness: 1,
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Chi tiết giá',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              ListView.builder(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: listBottomSheetDetail.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return BottomSheetDetail(
+                                      name: listBottomSheetDetail[index]
+                                              ?.t250
+                                              .t251
+                                              .tv251 ??
+                                          '',
+                                      qty: listBottomSheetDetail[index]?.qty ??
+                                          0,
+                                      price:
+                                          listBottomSheetDetail[index]?.tn452,
+                                    );
+                                  }),
+                            ],
+                          ),
+                        ),
+                      );
+                    })
+                : const SizedBox();
+          },
+          child: const BottomAppBar(
+            child: AppBarPaymentWidget(
+              textButton: 'Thanh toán',
+              title: 'Tổng thanh toán',
+              price: 1791000,
+            ),
           ),
         ),
       ),
@@ -98,18 +172,28 @@ class BookTourPageState extends State<BookTourPage> {
 }
 
 class BookTourPageBody extends StatefulWidget {
-  const BookTourPageBody({Key? key, this.header, this.describe, this.title})
-      : super(key: key);
+  BookTourPageBody({
+    Key? key,
+    this.header,
+    this.describe,
+    this.title,
+    this.showListBottomSheetDetail,
+    this.getValueQty,
+  }) : super(key: key);
 
   final String? header;
   final String? describe;
   final String? title;
 
+  ValueChanged<List<AccompaniedServiceData?>>? showListBottomSheetDetail;
+  ValueChanged<num?>? getValueQty;
   @override
   State<BookTourPageBody> createState() => _BookTourPageBodyState();
 }
 
 class _BookTourPageBodyState extends State<BookTourPageBody> {
+  List<AccompaniedServiceData?> listSelectedService = [];
+  num? getQty;
   @override
   void initState() {
     super.initState();
@@ -172,6 +256,20 @@ class _BookTourPageBodyState extends State<BookTourPageBody> {
 
             return AccompaniedServiceView(
               accompaniedList: accompaniedListGet,
+              getValueQty: (valueQty) {
+                if (valueQty != null) {
+                  setState(() {
+                    getQty = valueQty;
+                    widget.getValueQty?.call(getQty);
+                  });
+                }
+              },
+              getSelectedList: (value) {
+                setState(() {
+                  listSelectedService = value;
+                  widget.showListBottomSheetDetail?.call(listSelectedService);
+                });
+              },
             );
           }),
           const Padding(

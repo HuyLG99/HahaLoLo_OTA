@@ -87,13 +87,13 @@ class BookDatetimeBodyState extends State<BookDatetimeBody> {
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         setState(() {
           activeConnection = true;
-          T = "Turn off the data and repress again";
+          // T = "Turn off the data and repress again";
         });
       }
     } on SocketException catch (_) {
       setState(() {
         activeConnection = false;
-        T = "Turn On the data and repress again";
+        // T = "Turn On the data and repress again";
       });
     }
   }

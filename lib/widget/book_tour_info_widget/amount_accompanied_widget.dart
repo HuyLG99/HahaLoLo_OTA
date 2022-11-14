@@ -6,15 +6,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/counter_accompanied_cubit/counter_cubit.dart';
 
 class CounterAccompaniedWidget extends StatefulWidget {
-  CounterAccompaniedWidget({
+  const CounterAccompaniedWidget({
     Key? key,
-    this.count,
     this.typePeople,
     this.typeAge,
     this.colorText,
     required this.maxCount,
+    this.qty,
   }) : super(key: key);
-  num? count;
+  final ValueChanged<num?>? qty;
   final String? typePeople;
   final String? typeAge;
   final Color? colorText;
@@ -26,6 +26,7 @@ class CounterAccompaniedWidget extends StatefulWidget {
 
 class _CounterAccompaniedWidgetState extends State<CounterAccompaniedWidget> {
   late Timer timer;
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -69,8 +70,7 @@ class _CounterAccompaniedWidgetState extends State<CounterAccompaniedWidget> {
                           ? null
                           : context.read<CounterAccompaniedCubit>().decrement();
                       setState(() {
-                        widget.count = count;
-                        print(widget.count);
+                        widget.qty?.call(count == 0 ? count : count - 1);
                       });
                     },
                     child: Icon(
@@ -82,25 +82,37 @@ class _CounterAccompaniedWidgetState extends State<CounterAccompaniedWidget> {
                   SizedBox(
                     width: 60,
                     child: Center(
-                        child: Text(
-                      '$count',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 15),
-                    )),
+                      child: widget.maxCount < count
+                          ? Text(
+                              '${count - 1}',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 15),
+                            )
+                          : Text(
+                              '$count',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 15),
+                            ),
+                    ),
                   ),
                   GestureDetector(
                     onTap: () {
-                      count > 98 || count >= widget.maxCount
-                          ? null
-                          : context.read<CounterAccompaniedCubit>().increment();
                       setState(() {
-                        widget.count = count;
-                        print(widget.count);
+                        count > 98 ||
+                                count >= widget.maxCount ||
+                                count == widget.maxCount
+                            ? null
+                            : context
+                                .read<CounterAccompaniedCubit>()
+                                .increment();
+                        widget.qty
+                            ?.call(count < widget.maxCount ? count + 1 : count);
                       });
                     },
                     child: Icon(
                       Icons.add_circle_outline,
-                      color: count < 99 ? Colors.blue : Colors.grey,
+                      color:
+                          count == widget.maxCount ? Colors.grey : Colors.blue,
                       size: 30,
                     ),
                   ),

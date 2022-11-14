@@ -18,9 +18,11 @@ class AmountBookTourWidget extends StatelessWidget {
               typeAge: 'Từ 12 tuổi',
               count: state.amountCustomer.adult,
               onTapDecrement: () {
-                context
-                    .read<CounterCubit>()
-                    .decrementAdult(state.amountCustomer.adult - 1);
+                state.amountCustomer.adult == 1
+                    ? () {}
+                    : context
+                        .read<CounterCubit>()
+                        .decrementAdult(state.amountCustomer.adult - 1);
               },
               onTapIncrement: () {
                 context

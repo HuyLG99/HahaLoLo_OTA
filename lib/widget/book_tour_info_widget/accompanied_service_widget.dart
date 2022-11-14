@@ -15,15 +15,18 @@ class AccompaniedService extends StatefulWidget {
     this.onSelected,
     this.onDeleted,
     this.currentID,
+    this.amountCount,
   }) : super(key: key);
 
   final String? id;
   final String? name;
-  final num? qty;
+  num? qty;
   final List<AccompaniedServiceData> accompaniedServiceData;
   final ValueChanged<AccompaniedServiceData?>? onSelected;
   final ValueChanged<AccompaniedServiceData?>? onDeleted;
+
   ValueChanged<String?>? currentID;
+  ValueChanged<num?>? amountCount;
   @override
   State<AccompaniedService> createState() => _AccompaniedServiceState();
 }
@@ -59,6 +62,7 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                       onTap: () {
                         setState(() {
                           widget.currentID?.call(widget.name);
+                          widget.amountCount?.call(widget.qty);
                         });
                       },
                       hint: Text(
@@ -79,6 +83,7 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                           selectedMenuItem = selected;
                           widget.onSelected?.call(selected);
                           widget.currentID?.call(widget.name);
+                          widget.amountCount?.call(widget.qty);
                         });
                       },
                       items: widget.accompaniedServiceData
@@ -87,6 +92,7 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                               onTap: () {
                                 setState(() {
                                   widget.currentID?.call(widget.name);
+                                  widget.amountCount?.call(widget.qty);
                                 });
                               },
                               value: selected, // you must provide a value
@@ -111,6 +117,7 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                         setState(() {
                           widget.currentID?.call(widget.name);
                           widget.onDeleted?.call(selectedMenuItem);
+                          widget.amountCount?.call(widget.qty);
                           selectedMenuItem = null;
                         });
                       },
@@ -134,7 +141,18 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                   typePeople: 'Số khách hàng',
                   colorText: Colors.grey,
                   maxCount: stateAmount.amountCustomer.totalCustomer,
-                  count: widget.qty,
+                  qty: (valueQty) {
+                    setState(() {
+                      if (valueQty != widget.qty &&
+                          widget.qty == null &&
+                          widget.name!.isEmpty &&
+                          widget.qty == null) {
+                        valueQty ?? 0 + 1;
+                      }
+                      widget.qty = valueQty;
+                      widget.amountCount?.call(widget.qty);
+                    });
+                  },
                 );
               }),
             ],

@@ -11,7 +11,6 @@ class AppBarPaymentWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(10),
-      width: 400,
       height: 80,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -23,7 +22,7 @@ class AppBarPaymentWidget extends StatelessWidget {
                 '$title',
                 style: const TextStyle(
                   color: Colors.black,
-                  fontSize: 16,
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -31,7 +30,7 @@ class AppBarPaymentWidget extends StatelessWidget {
                 '$price đ',
                 style: const TextStyle(
                   color: Colors.red,
-                  fontSize: 20,
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
                 ),
               ),
