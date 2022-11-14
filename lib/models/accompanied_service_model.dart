@@ -57,6 +57,7 @@ class AccompaniedServiceData {
     required this.id,
     required this.dl146,
     required this.dl147,
+    this.qty,
   });
 
   String currency;
@@ -70,6 +71,7 @@ class AccompaniedServiceData {
   String id;
   DateTime dl146;
   String dl147;
+  num? qty;
 
   factory AccompaniedServiceData.fromJson(Map<String, dynamic> json) =>
       AccompaniedServiceData(
