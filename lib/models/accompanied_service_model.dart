@@ -71,7 +71,7 @@ class AccompaniedServiceData {
   String id;
   DateTime dl146;
   String dl147;
-  num? qty;
+  int? qty;
 
   factory AccompaniedServiceData.fromJson(Map<String, dynamic> json) =>
       AccompaniedServiceData(

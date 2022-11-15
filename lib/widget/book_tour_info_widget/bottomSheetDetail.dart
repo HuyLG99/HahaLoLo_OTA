@@ -10,6 +10,7 @@ class BottomSheetDetail extends StatefulWidget {
     this.listSelectedShowBottomDetail,
     this.checkNull,
     this.getCheckValue,
+    required this.maxCount,
   }) : super(key: key);
   final List<AccompaniedServiceData?>? listSelectedShowBottomDetail;
   final String name;
@@ -17,6 +18,7 @@ class BottomSheetDetail extends StatefulWidget {
   final int? price;
   final bool? checkNull;
   final ValueChanged<bool>? getCheckValue;
+  final num maxCount;
   @override
   BottomSheetDetailState createState() => BottomSheetDetailState();
 }
@@ -52,12 +54,19 @@ class BottomSheetDetailState extends State<BottomSheetDetail> {
                     ),
                     Expanded(
                       flex: 1,
-                      child: Text(
-                        'x ${widget.qty ?? ''}',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
+                      child: widget.maxCount < widget.qty
+                          ? Text(
+                              'x ${widget.maxCount ?? ''}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w400,
+                              ),
+                            )
+                          : Text(
+                              'x ${widget.qty ?? ''}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
                     ),
                     Text(
                       '${widget.price ?? ''} đ',

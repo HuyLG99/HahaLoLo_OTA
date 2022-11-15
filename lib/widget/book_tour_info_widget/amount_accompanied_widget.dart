@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/counter_accompanied_cubit/counter_cubit.dart';
+import '../../bloc/counter_accompanied_cubit/counter_accompanied_cubit.dart';
 
 class CounterAccompaniedWidget extends StatefulWidget {
   const CounterAccompaniedWidget({
@@ -14,11 +14,12 @@ class CounterAccompaniedWidget extends StatefulWidget {
     required this.maxCount,
     this.qty,
   }) : super(key: key);
-  final ValueChanged<num?>? qty;
+  final ValueChanged<int?>? qty;
   final String? typePeople;
   final String? typeAge;
   final Color? colorText;
   final num maxCount;
+
   @override
   State<CounterAccompaniedWidget> createState() =>
       _CounterAccompaniedWidgetState();
@@ -26,6 +27,12 @@ class CounterAccompaniedWidget extends StatefulWidget {
 
 class _CounterAccompaniedWidgetState extends State<CounterAccompaniedWidget> {
   late Timer timer;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,14 +89,14 @@ class _CounterAccompaniedWidgetState extends State<CounterAccompaniedWidget> {
                   SizedBox(
                     width: 60,
                     child: Center(
-                      child: widget.maxCount < count
+                      child: widget.maxCount > count
                           ? Text(
-                              '${count - 1}',
+                              '$count',
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15),
                             )
                           : Text(
-                              '$count',
+                              '${widget.maxCount}',
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15),
                             ),
@@ -112,7 +119,7 @@ class _CounterAccompaniedWidgetState extends State<CounterAccompaniedWidget> {
                     child: Icon(
                       Icons.add_circle_outline,
                       color:
-                          count == widget.maxCount ? Colors.grey : Colors.blue,
+                          count >= widget.maxCount ? Colors.grey : Colors.blue,
                       size: 30,
                     ),
                   ),

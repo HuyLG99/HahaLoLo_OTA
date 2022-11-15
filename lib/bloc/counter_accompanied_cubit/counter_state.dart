@@ -1,4 +1,4 @@
-part of 'counter_cubit.dart';
+part of 'counter_accompanied_cubit.dart';
 
 class CounterAccompaniedState extends Equatable {
   final int counter;

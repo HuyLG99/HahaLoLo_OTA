@@ -20,13 +20,13 @@ class AccompaniedService extends StatefulWidget {
 
   final String? id;
   final String? name;
-  num? qty;
+  int? qty;
   final List<AccompaniedServiceData> accompaniedServiceData;
   final ValueChanged<AccompaniedServiceData?>? onSelected;
   final ValueChanged<AccompaniedServiceData?>? onDeleted;
 
   ValueChanged<String?>? currentID;
-  ValueChanged<num?>? amountCount;
+  ValueChanged<int?>? amountCount;
   @override
   State<AccompaniedService> createState() => _AccompaniedServiceState();
 }
@@ -83,7 +83,6 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                           selectedMenuItem = selected;
                           widget.onSelected?.call(selected);
                           widget.currentID?.call(widget.name);
-                          widget.amountCount?.call(widget.qty);
                         });
                       },
                       items: widget.accompaniedServiceData
@@ -117,7 +116,6 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                         setState(() {
                           widget.currentID?.call(widget.name);
                           widget.onDeleted?.call(selectedMenuItem);
-                          widget.amountCount?.call(widget.qty);
                           selectedMenuItem = null;
                         });
                       },
@@ -142,16 +140,12 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                   colorText: Colors.grey,
                   maxCount: stateAmount.amountCustomer.totalCustomer,
                   qty: (valueQty) {
-                    setState(() {
-                      if (valueQty != widget.qty &&
-                          widget.qty == null &&
-                          widget.name!.isEmpty &&
-                          widget.qty == null) {
-                        valueQty ?? 0 + 1;
-                      }
-                      widget.qty = valueQty;
-                      widget.amountCount?.call(widget.qty);
-                    });
+                    if (valueQty != null) {
+                      setState(() {
+                        widget.qty = valueQty;
+                        widget.amountCount?.call(valueQty);
+                      });
+                    }
                   },
                 );
               }),

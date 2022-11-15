@@ -25,7 +25,7 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
   String? currentID;
   List<MoreServiceModel> moreServiceList = [];
   bool check = true;
-  num? dattaQty;
+  int? dattaQty;
   @override
   void initState() {
     super.initState();
@@ -50,10 +50,9 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
             itemCount: moreServiceList.length,
             itemBuilder: (BuildContext context, int index) {
               return AccompaniedService(
+                qty: moreServiceList[index].qty,
                 amountCount: (valueQty) {
-                  if (valueQty != null &&
-                      moreServiceList.isNotEmpty &&
-                      selectedList.isNotEmpty) {
+                  if (valueQty != null && moreServiceList.isNotEmpty) {
                     setState(() {
                       dattaQty = valueQty;
                       widget.getSelectedList?.call(selectedList);
@@ -100,7 +99,6 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                   selectedList.removeWhere((element) =>
                       element.id == moreServiceList[index].idSelectedMenuItem);
                   selectedList.add(value!);
-
                   accompaniedList = widget.accompaniedList
                       .toSet()
                       .difference(selectedList.toSet())
@@ -114,7 +112,6 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                 },
                 accompaniedServiceData: accompaniedList,
                 name: moreServiceList[index].name,
-                qty: moreServiceList[index].qty,
 
                 /// Delete
                 onDeleted: (value) {
@@ -142,6 +139,7 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                         .removeWhere((element) => element.name == currentID);
                     selectedList.removeWhere(
                         (element) => element.t250.t251.tv251 == currentID);
+
                     accompaniedList = widget.accompaniedList
                         .toSet()
                         .difference(selectedList.toSet())

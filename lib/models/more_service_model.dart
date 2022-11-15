@@ -5,13 +5,13 @@ class MoreServiceModel extends Equatable {
   AccompaniedServiceData? accompaniedServiceData;
   String? idSelectedMenuItem;
   String? name;
-  num? qty;
+  int? qty;
   MoreServiceModel({
     String? idSelectedMenuItem,
     AccompaniedServiceData? accompaniedServiceData,
     String? id,
     String? name,
-    num? qty,
+    int? qty,
   });
 
   @override
