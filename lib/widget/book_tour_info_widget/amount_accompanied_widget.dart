@@ -13,12 +13,14 @@ class CounterAccompaniedWidget extends StatefulWidget {
     this.colorText,
     required this.maxCount,
     this.qty,
+    this.qualityChange,
   }) : super(key: key);
   final ValueChanged<int?>? qty;
+  final int? qualityChange;
   final String? typePeople;
   final String? typeAge;
   final Color? colorText;
-  final num maxCount;
+  final int maxCount;
 
   @override
   State<CounterAccompaniedWidget> createState() =>
@@ -30,9 +32,19 @@ class _CounterAccompaniedWidgetState extends State<CounterAccompaniedWidget> {
 
   @override
   void initState() {
+    print(widget.maxCount);
     // TODO: implement initState
     super.initState();
   }
+
+  // @override
+  // void didUpdateWidget(covariant CounterAccompaniedWidget oldWidget) {
+  //   // TODO: implement didUpdateWidget
+  //   if (widget.maxCount != oldWidget.maxCount) {
+  //     super.didUpdateWidget(widget);
+  //   }
+  //   super.didUpdateWidget(oldWidget);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -89,14 +101,14 @@ class _CounterAccompaniedWidgetState extends State<CounterAccompaniedWidget> {
                   SizedBox(
                     width: 60,
                     child: Center(
-                      child: widget.maxCount > count
+                      child: (widget.qualityChange ?? count) > widget.maxCount
                           ? Text(
-                              '$count',
+                              '${(widget.maxCount)}',
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15),
                             )
                           : Text(
-                              '${widget.maxCount}',
+                              '${widget.qualityChange ?? count}',
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15),
                             ),

@@ -62,7 +62,7 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                       onTap: () {
                         setState(() {
                           widget.currentID?.call(widget.name);
-                          widget.amountCount?.call(widget.qty);
+                          // widget.amountCount?.call(widget.qty);
                         });
                       },
                       hint: Text(
@@ -91,7 +91,7 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                               onTap: () {
                                 setState(() {
                                   widget.currentID?.call(widget.name);
-                                  widget.amountCount?.call(widget.qty);
+                                  // widget.amountCount?.call(widget.qty);
                                 });
                               },
                               value: selected, // you must provide a value
@@ -139,10 +139,10 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                   typePeople: 'Số khách hàng',
                   colorText: Colors.grey,
                   maxCount: stateAmount.amountCustomer.totalCustomer,
+                  qualityChange: widget.qty,
                   qty: (valueQty) {
                     if (valueQty != null) {
                       setState(() {
-                        widget.qty = valueQty;
                         widget.amountCount?.call(valueQty);
                       });
                     }
