@@ -21,7 +21,8 @@ class BookTourPage extends StatefulWidget {
 class BookTourPageState extends State<BookTourPage> {
   List<AccompaniedServiceData?> listBottomSheetDetail = [];
   ValueChanged<List<AccompaniedServiceData?>>? showListBottomSheetDetail;
-  var sum = 0;
+  var sum;
+  int currentSum = 0;
   @override
   void initState() {
     super.initState();
@@ -89,23 +90,24 @@ class BookTourPageState extends State<BookTourPage> {
             ),
           ),
           body: BookTourPageBody(
-            header: 'Thông tin người liên hệ',
-            showListBottomSheetDetail: (valueSelected) {
-              if (valueSelected.isNotEmpty) {
+              header: 'Thông tin người liên hệ',
+              currentSum: currentSum,
+              sum: sum,
+              getSum: (valueSum) {
                 setState(() {
-                  listBottomSheetDetail = valueSelected;
+                  sum = valueSum ?? 0;
+                  currentSum = sum;
                 });
-              }
-            },
-          ),
+              },
+              showListBottomSheetDetail: (valueSelected) {
+                if (valueSelected.isNotEmpty) {
+                  setState(() {
+                    listBottomSheetDetail = valueSelected;
+                  });
+                }
+              }),
           bottomNavigationBar: GestureDetector(
             onTap: () {
-              setState(() {
-                for (int i = 0; i < listBottomSheetDetail.length; i++) {
-                  sum += listBottomSheetDetail[i]!.tn452 *
-                      listBottomSheetDetail[i]!.qty!;
-                }
-              });
               listBottomSheetDetail.isNotEmpty
                   ? showModalBottomSheet(
                       context: context,
@@ -123,7 +125,7 @@ class BookTourPageState extends State<BookTourPage> {
                                 AppBarPaymentWidget(
                                   textButton: 'Thanh toán',
                                   title: 'Tổng thanh toán',
-                                  price: sum,
+                                  price: sum ?? 0,
                                 ),
                                 const Divider(
                                   indent: 20,
@@ -174,7 +176,7 @@ class BookTourPageState extends State<BookTourPage> {
               child: AppBarPaymentWidget(
                 textButton: 'Thanh toán',
                 title: 'Tổng thanh toán',
-                price: sum,
+                price: sum ?? 0,
               ),
             ),
           ),
@@ -191,22 +193,26 @@ class BookTourPageBody extends StatefulWidget {
     this.describe,
     this.title,
     this.showListBottomSheetDetail,
-    this.getValueQty,
+    this.getSum,
+    this.sum,
+    this.currentSum,
   }) : super(key: key);
 
   final String? header;
   final String? describe;
   final String? title;
-
+  int? sum;
+  int? currentSum;
   ValueChanged<List<AccompaniedServiceData?>>? showListBottomSheetDetail;
-  ValueChanged<num?>? getValueQty;
+
+  ValueChanged<int?>? getSum;
   @override
   State<BookTourPageBody> createState() => _BookTourPageBodyState();
 }
 
 class _BookTourPageBodyState extends State<BookTourPageBody> {
   List<AccompaniedServiceData?> listSelectedService = [];
-  num? currentQty;
+
   @override
   void initState() {
     super.initState();
@@ -266,27 +272,29 @@ class _BookTourPageBodyState extends State<BookTourPageBody> {
           BlocBuilder<AccompaniedServiceBloc, AccompaniedServiceState>(
               builder: (context, state) {
             accompaniedListGet = state.listAccompaniedService;
-
             return AccompaniedServiceView(
               accompaniedList: accompaniedListGet,
-              // getValueQty: (valueQty) {
-              //   if (valueQty != null) {
-              //     setState(() {
-              //       if (currentQty == null || currentQty! < valueQty) {
-              //         currentQty = valueQty;
-              //       } else {
-              //         currentQty! - 1;
-              //       }
-              //
-              //       widget.getValueQty?.call(currentQty);
-              //     });
-              //   }
-              // },
               getSelectedList: (value) {
-                setState(() {
-                  listSelectedService = value;
-                  widget.showListBottomSheetDetail?.call(listSelectedService);
-                });
+                if (value.isNotEmpty) {
+                  setState(() {
+                    widget.showListBottomSheetDetail?.call(value);
+                    print(value);
+                    final tong = value.fold(
+                        0,
+                        (int sum, element) =>
+                            sum + ((element!.qty ?? 0) * element.tn452));
+                    print(tong);
+                    widget.getSum?.call(tong);
+                    // for (int i = 0; i < value.length; i++) {
+                    //   if (value[i]?.qty != null) {
+                    //     widget.sum = (value[i]?.qty ?? 0) * value[i]!.tn452;
+                    //     widget.getSum?.call(widget.sum);
+                    //   }
+                    // }
+                    // widget.sum = listSelectedService
+                    //     .reduce((value, element) => value + element);
+                  });
+                }
               },
             );
           }),

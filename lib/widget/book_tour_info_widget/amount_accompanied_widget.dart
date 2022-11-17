@@ -32,19 +32,9 @@ class _CounterAccompaniedWidgetState extends State<CounterAccompaniedWidget> {
 
   @override
   void initState() {
-    print(widget.maxCount);
     // TODO: implement initState
     super.initState();
   }
-
-  // @override
-  // void didUpdateWidget(covariant CounterAccompaniedWidget oldWidget) {
-  //   // TODO: implement didUpdateWidget
-  //   if (widget.maxCount != oldWidget.maxCount) {
-  //     super.didUpdateWidget(widget);
-  //   }
-  //   super.didUpdateWidget(oldWidget);
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +84,9 @@ class _CounterAccompaniedWidgetState extends State<CounterAccompaniedWidget> {
                     },
                     child: Icon(
                       Icons.remove_circle_outline,
-                      color: count > 0 ? Colors.blue : Colors.grey,
+                      color: (widget.qualityChange ?? count) > 0
+                          ? Colors.blue
+                          : Colors.grey,
                       size: 30,
                     ),
                   ),
@@ -124,8 +116,10 @@ class _CounterAccompaniedWidgetState extends State<CounterAccompaniedWidget> {
                             : context
                                 .read<CounterAccompaniedCubit>()
                                 .increment();
-                        widget.qty
-                            ?.call(count < widget.maxCount ? count + 1 : count);
+                        if (count < widget.maxCount) {
+                          widget.qty?.call(
+                              count < widget.maxCount ? count + 1 : count);
+                        }
                       });
                     },
                     child: Icon(

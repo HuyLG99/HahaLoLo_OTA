@@ -14,11 +14,12 @@ class BottomSheetDetail extends StatefulWidget {
   }) : super(key: key);
   final List<AccompaniedServiceData?>? listSelectedShowBottomDetail;
   final String name;
-  final num qty;
+  final int qty;
   final int? price;
   final bool? checkNull;
   final ValueChanged<bool>? getCheckValue;
-  final num maxCount;
+  final int maxCount;
+
   @override
   BottomSheetDetailState createState() => BottomSheetDetailState();
 }

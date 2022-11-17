@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 class AppBarPaymentWidget extends StatelessWidget {
   const AppBarPaymentWidget({Key? key, this.title, this.price, this.textButton})
@@ -26,13 +27,29 @@ class AppBarPaymentWidget extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Text(
-                '$price đ',
-                style: const TextStyle(
-                  color: Colors.red,
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
+              SizedBox(
+                width: 200.0,
+                child: price! > 0
+                    ? Shimmer.fromColors(
+                        baseColor: Colors.red,
+                        highlightColor: Colors.black,
+                        child: Text(
+                          '$price đ',
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )
+                    : Text(
+                        '$price đ',
+                        style: const TextStyle(
+                          color: Colors.red,
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
               ),
             ],
           ),
