@@ -55,19 +55,21 @@ class BottomSheetDetailState extends State<BottomSheetDetail> {
                     ),
                     Expanded(
                       flex: 1,
-                      child: widget.maxCount < widget.qty
-                          ? Text(
-                              'x ${widget.maxCount ?? ''}',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w400,
-                              ),
-                            )
-                          : Text(
-                              'x ${widget.qty ?? ''}',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
+                      child:
+                          // widget.maxCount < widget.qty
+                          //     ? Text(
+                          //         'x ${widget.maxCount ?? ''}',
+                          //         style: const TextStyle(
+                          //           fontWeight: FontWeight.w400,
+                          //         ),
+                          //       )
+                          //     :
+                          Text(
+                        'x ${widget.qty ?? ''}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
                     ),
                     Text(
                       '${widget.price ?? ''} đ',

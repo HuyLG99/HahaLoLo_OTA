@@ -46,7 +46,7 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
                           : (element.qty == 1)
                               ? sum + ((element.qty ?? 1) * element.tn452)
                               : sum + ((element.qty ?? 1) - 1) * element.tn452);
-                  print(totalPrice);
+
                   widget.qty?.call(totalPrice);
                 });
               },
@@ -77,7 +77,7 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
                         : (element.qty == 1)
                             ? sum + ((element.qty ?? 1) * element.tn452)
                             : sum + ((element.qty ?? 1) - 1) * element.tn452);
-                print(totalPrice);
+
                 widget.qty?.call(totalPrice);
               });
             },
@@ -104,7 +104,7 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
                         : (element.qty == 1)
                             ? sum + ((element.qty ?? 1) * element.tn452)
                             : sum + ((element.qty ?? 1) - 1) * element.tn452);
-                print(totalPrice);
+
                 widget.qty?.call(totalPrice);
               });
             },
@@ -131,7 +131,7 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
                         : (element.qty == 1)
                             ? sum + ((element.qty ?? 0) * element.tn452)
                             : sum + ((element.qty ?? 0) - 1) * element.tn452);
-                print(totalPrice);
+
                 widget.qty?.call(totalPrice);
               });
             },

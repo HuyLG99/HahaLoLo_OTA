@@ -1,12 +1,13 @@
 import 'package:bloc/bloc.dart';
-import 'package:hahaloloapp/models/amount_customer_model.dart';
+
 import 'package:equatable/equatable.dart';
+
+import '../../models/more_service_model.dart';
 
 part 'counter_state.dart';
 
 class CounterCubit extends Cubit<CounterState> {
-  CounterCubit()
-      : super(const CounterState(amountCustomer: AmountCustomerModel()));
+  CounterCubit() : super(CounterState(amountCustomer: MoreServiceModel()));
 
   void incrementAdult(int amount) {
     emit(CounterState(
@@ -46,5 +47,13 @@ class CounterCubit extends Cubit<CounterState> {
   void decrementBaby(int amount) {
     emit(CounterState(
         amountCustomer: state.amountCustomer.copyWith(baby: amount)));
+  }
+
+  void increment(int qty) {
+    emit(CounterState(amountCustomer: state.amountCustomer.copyWith(qty: qty)));
+  }
+
+  void decrement(int qty) {
+    emit(CounterState(amountCustomer: state.amountCustomer.copyWith(qty: qty)));
   }
 }
