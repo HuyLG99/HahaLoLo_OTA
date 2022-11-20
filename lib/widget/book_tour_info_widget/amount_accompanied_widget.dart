@@ -69,13 +69,6 @@ class _CounterAccompaniedWidgetState extends State<CounterAccompaniedWidget> {
               GestureDetector(
                 onTap: () {
                   widget.count < 1 ? null : widget.onTapDecrement();
-
-                  // count < 1
-                  //     ? null
-                  //     : context.read<CounterAccompaniedCubit>().decrement();
-                  // setState(() {
-                  //   widget.qty?.call(count == 0 ? count : count - 1);
-                  // });
                 },
                 child: Icon(
                   Icons.remove_circle_outline,
@@ -95,17 +88,6 @@ class _CounterAccompaniedWidgetState extends State<CounterAccompaniedWidget> {
               ),
               GestureDetector(
                 onTap: () {
-                  // setState(() {
-                  //   count > 98 ||
-                  //           count >= widget.maxCount ||
-                  //           count == widget.maxCount
-                  //       ? null
-                  //       : context
-                  //           .read<CounterAccompaniedCubit>()
-                  //           .increment();
-                  //   widget.qty
-                  //       ?.call(count < widget.maxCount ? count + 1 : count);
-                  // });
                   widget.count > 98 ||
                           widget.count >= widget.maxCount ||
                           widget.count == widget.maxCount

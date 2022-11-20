@@ -2,19 +2,21 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hahaloloapp/models/more_service_model.dart';
 
+import '../../bloc/counter_accompanied_cubit/counter_accompanied_cubit.dart';
 import '../../bloc/counter_cubit/counter_cubit.dart';
 import '../../models/accompanied_service_model.dart';
 
 class AmountBookTourWidget extends StatefulWidget {
   AmountBookTourWidget({
     Key? key,
-    this.qty,
+    this.getSum,
     this.listBottomSheetDetail,
     this.maxCount,
   }) : super(key: key);
 
-  final ValueChanged<int?>? qty;
+  final ValueChanged<int?>? getSum;
   final int? maxCount;
   List<AccompaniedServiceData?>? listBottomSheetDetail;
   @override
@@ -24,6 +26,7 @@ class AmountBookTourWidget extends StatefulWidget {
 class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
   @override
   Widget build(BuildContext context) {
+    final _cubit = BlocProvider.of<CounterAccompaniedCubit>(context);
     return BlocBuilder<CounterCubit, CounterState>(builder: (context, state) {
       return Column(
         children: [
@@ -37,6 +40,7 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
                     : context
                         .read<CounterCubit>()
                         .decrementAdult(state.amountCustomer.adult - 1);
+
                 setState(() {
                   final totalPrice = widget.listBottomSheetDetail!.fold(
                       0,
@@ -47,7 +51,10 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
                               ? sum + ((element.qty ?? 1) * element.tn452)
                               : sum + ((element.qty ?? 1) - 1) * element.tn452);
 
-                  widget.qty?.call(totalPrice);
+                  widget.getSum?.call(totalPrice);
+                  if (((widget.maxCount ?? 1) - 1) == 1) {
+                    _cubit.clean();
+                  }
                 });
               },
               onTapIncrement: () {
@@ -78,7 +85,10 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
                             ? sum + ((element.qty ?? 1) * element.tn452)
                             : sum + ((element.qty ?? 1) - 1) * element.tn452);
 
-                widget.qty?.call(totalPrice);
+                widget.getSum?.call(totalPrice);
+                if (((widget.maxCount ?? 1) - 1) == 1) {
+                  _cubit.clean();
+                }
               });
             },
           ),
@@ -105,7 +115,10 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
                             ? sum + ((element.qty ?? 1) * element.tn452)
                             : sum + ((element.qty ?? 1) - 1) * element.tn452);
 
-                widget.qty?.call(totalPrice);
+                widget.getSum?.call(totalPrice);
+                if (((widget.maxCount ?? 1) - 1) == 1) {
+                  _cubit.clean();
+                }
               });
             },
           ),
@@ -132,7 +145,10 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
                             ? sum + ((element.qty ?? 0) * element.tn452)
                             : sum + ((element.qty ?? 0) - 1) * element.tn452);
 
-                widget.qty?.call(totalPrice);
+                widget.getSum?.call(totalPrice);
+                if (((widget.maxCount ?? 1) - 1) == 1) {
+                  _cubit.clean();
+                }
               });
             },
           ),

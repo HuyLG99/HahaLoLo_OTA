@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hahaloloapp/bloc/counter_accompanied_cubit/counter_accompanied_cubit.dart';
 
 import 'package:hahaloloapp/models/accompanied_service_model.dart';
-import 'package:hahaloloapp/models/more_service_model.dart';
 
 import 'amount_accompanied_widget.dart';
 
@@ -37,6 +36,19 @@ class AccompaniedService extends StatefulWidget {
 
 class _AccompaniedServiceState extends State<AccompaniedService> {
   AccompaniedServiceData? selectedMenuItem;
+  int? currentQty = 0;
+  int temp = 0;
+  @override
+  void didUpdateWidget(covariant AccompaniedService oldWidget) {
+    // TODO: implement didUpdateWidget
+    if ((oldWidget.maxCount ?? 1) > (widget.maxCount ?? 1)) {
+      setState(() {
+        ((currentQty ?? 0) - 1);
+      });
+      print(currentQty);
+    }
+    super.didUpdateWidget(oldWidget);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -142,13 +154,23 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                       qualityChange: widget.qty,
                       onTapIncrement: () {
                         context.read<CounterAccompaniedCubit>().increment();
+                        // currentQty = state.counter + 1;
+
                         widget.amountCount?.call(state.counter + 1);
+                        print('state count: ${state.counter + 1}');
+
+                        print('max count: ${(widget.maxCount ?? 1)}');
                       },
                       onTapDecrement: () {
                         context.read<CounterAccompaniedCubit>().decrement();
+                        // currentQty = state.counter - 1;
                         widget.amountCount?.call(state.counter - 1);
+                        print('state count: ${state.counter - 1}');
+                        print('max count: ${(widget.maxCount ?? 1)}');
                       },
-                      count: state.counter,
+                      count: ((widget.maxCount ?? 1)) >= (state.counter)
+                          ? (state.counter)
+                          : (widget.maxCount ?? 1),
                     ),
                   ],
                 ),

@@ -34,162 +34,153 @@ class BookTourPageState extends State<BookTourPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<AccompaniedServiceBloc>(
-          create: (BuildContext context) => AccompaniedServiceBloc(
-              context.read<AccompaniedServiceRepository>()),
-        ),
-        BlocProvider(
-          create: (_) => CounterCubit(),
-        ),
-      ],
-      child: BlocBuilder<CounterCubit, CounterState>(
-          builder: (context, stateAmount) {
-        return Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            elevation: 0,
-            leading: Row(
-              children: [
-                IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.black26,
-                  ),
-                  onPressed: () => Navigator.of(context).pop(),
+    return BlocBuilder<CounterCubit, CounterState>(
+        builder: (context, stateAmount) {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: Row(
+            children: [
+              IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.black26,
                 ),
-              ],
-            ),
-            title: Row(
-              children: [
-                const Expanded(
-                  flex: 3,
-                  child: Center(
-                    child: Text(
-                      'Thông tin đặt Tour',
-                      style: TextStyle(
-                        fontSize: 23,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black,
-                      ),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+          title: Row(
+            children: [
+              const Expanded(
+                flex: 3,
+                child: Center(
+                  child: Text(
+                    'Thông tin đặt Tour',
+                    style: TextStyle(
+                      fontSize: 23,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black,
                     ),
                   ),
                 ),
-                Expanded(
-                  flex: 1,
-                  child: TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      'Chi tiết',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.blue,
-                      ),
+              ),
+              Expanded(
+                flex: 1,
+                child: TextButton(
+                  onPressed: () {},
+                  child: const Text(
+                    'Chi tiết',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.blue,
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          body: BookTourPageBody(
-            header: 'Thông tin người liên hệ',
-            sum: sum,
-            getSum: (valueSum) {
-              setState(() {
-                sum = valueSum ?? 0;
-              });
-            },
-            // showListBottomSheetDetail: (valueSelected) {
-            //   setState(() {
-            //     listBottomSheetDetail = valueSelected;
-            //   });
-            // },
-            // getListBottomSheetDetail: listBottomSheetDetail,
-
-            showListMoreService: (valueMoreService) {
-              setState(() {
-                listShowMoreServiceDetail = valueMoreService;
-              });
-            },
-            getListMoreServiceDetail: listShowMoreServiceDetail,
-          ),
-          bottomNavigationBar: GestureDetector(
-            onTap: () {
-              listShowMoreServiceDetail.isNotEmpty
-                  ? showModalBottomSheet(
-                      context: context,
-                      useRootNavigator: true,
-                      builder: (BuildContext context) {
-                        return Container(
-                          height: 400,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40),
-                          ),
-                          child: Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                AppBarPaymentWidget(
-                                  textButton: 'Thanh toán',
-                                  title: 'Tổng thanh toán',
-                                  price: sum,
-                                ),
-                                const Divider(
-                                  indent: 20,
-                                  endIndent: 20,
-                                  thickness: 1,
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'Chi tiết giá',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+        ),
+        body: BookTourPageBody(
+          header: 'Thông tin người liên hệ',
+          sum: sum,
+          getSum: (valueSum) {
+            setState(() {
+              sum = valueSum ?? 0;
+            });
+          },
+          showListBottomSheetDetail: (valueSelected) {
+            setState(() {
+              listBottomSheetDetail = valueSelected;
+            });
+          },
+          getListBottomSheetDetail: listBottomSheetDetail,
+        ),
+        bottomNavigationBar: GestureDetector(
+          onTap: () {
+            listBottomSheetDetail.isNotEmpty
+                ? showModalBottomSheet(
+                    context: context,
+                    useRootNavigator: true,
+                    builder: (BuildContext context) {
+                      return Container(
+                        height: 400,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                        ),
+                        child: Center(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              AppBarPaymentWidget(
+                                textButton: 'Thanh toán',
+                                title: 'Tổng thanh toán',
+                                price: sum,
+                              ),
+                              const Divider(
+                                indent: 20,
+                                endIndent: 20,
+                                thickness: 1,
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Chi tiết giá',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                ListView.builder(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount: listShowMoreServiceDetail.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return BottomSheetDetail(
-                                        name: listShowMoreServiceDetail[index]
-                                                ?.name ??
-                                            '',
-                                        qty: listShowMoreServiceDetail[index]
-                                                ?.qty ??
-                                            0,
-                                        price: listShowMoreServiceDetail[index]
-                                            ?.price,
-                                        maxCount: stateAmount
-                                            .amountCustomer.totalCustomer,
-                                      );
-                                    }),
-                              ],
-                            ),
+                              ),
+                              ListView.builder(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: listBottomSheetDetail.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return BottomSheetDetail(
+                                      name: listBottomSheetDetail[index]
+                                              ?.t250
+                                              .t251
+                                              .tv251 ??
+                                          '',
+                                      qty: (stateAmount.amountCustomer
+                                                  .totalCustomer) >
+                                              (listBottomSheetDetail[
+                                                          index]
+                                                      ?.qty ??
+                                                  0)
+                                          ? (listBottomSheetDetail[index]
+                                                  ?.qty ??
+                                              0)
+                                          : (stateAmount
+                                              .amountCustomer.totalCustomer),
+                                      price:
+                                          listBottomSheetDetail[index]?.tn452,
+                                      maxCount: stateAmount
+                                          .amountCustomer.totalCustomer,
+                                    );
+                                  }),
+                            ],
                           ),
-                        );
-                      })
-                  : const SizedBox();
-            },
-            child: BottomAppBar(
-              child: AppBarPaymentWidget(
-                textButton: 'Thanh toán',
-                title: 'Tổng thanh toán',
-                price: sum,
-              ),
+                        ),
+                      );
+                    })
+                : const SizedBox();
+          },
+          child: BottomAppBar(
+            child: AppBarPaymentWidget(
+              textButton: 'Thanh toán',
+              title: 'Tổng thanh toán',
+              price: sum,
             ),
           ),
-        );
-      }),
-    );
+        ),
+      );
+    });
   }
 }
 
@@ -274,7 +265,7 @@ class _BookTourPageBodyState extends State<BookTourPageBody> {
               child: AmountBookTourWidget(
                 listBottomSheetDetail: widget.getListBottomSheetDetail,
                 maxCount: stateAmount.amountCustomer.totalCustomer,
-                qty: (value) {
+                getSum: (value) {
                   setState(() {
                     widget.getSum?.call(value);
                   });
@@ -301,31 +292,20 @@ class _BookTourPageBodyState extends State<BookTourPageBody> {
               return AccompaniedServiceView(
                 maxCount: stateAmount.amountCustomer.totalCustomer,
                 accompaniedList: accompaniedListGet,
-                getMoreServiceList: (valueMore) {
+                getSelectedList: (value) {
                   setState(() {
-                    widget.showListMoreService?.call(valueMore);
-                    final totalPrice = valueMore.fold(
+                    widget.showListBottomSheetDetail?.call(value);
+                    final totalPrice = value.fold(
                         0,
-                        (int sum, element) =>
-                            sum + (element!.qty ?? 0) * element.price!);
+                        (int sum, element) => (stateAmount
+                                    .amountCustomer.totalCustomer) <
+                                (element?.qty ?? 0)
+                            ? (sum + ((element!.qty ?? 0) - 1) * element.tn452)
+                            : (sum + (element!.qty ?? 0) * element.tn452));
 
                     widget.getSum?.call(totalPrice);
                   });
                 },
-                // getSelectedList: (value) {
-                //   setState(() {
-                //     widget.showListBottomSheetDetail?.call(value);
-                //     final totalPrice = value.fold(
-                //         0,
-                //         (int sum, element) => (stateAmount
-                //                     .amountCustomer.totalCustomer) <
-                //                 (element?.qty ?? 0)
-                //             ? (sum + ((element!.qty ?? 0) - 1) * element.tn452)
-                //             : (sum + (element!.qty ?? 0) * element.tn452));
-                //
-                //     widget.getSum?.call(totalPrice);
-                //   });
-                // },
               );
             }),
             const Padding(
