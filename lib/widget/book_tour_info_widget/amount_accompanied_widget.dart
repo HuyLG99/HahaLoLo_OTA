@@ -31,12 +31,6 @@ class _CounterAccompaniedWidgetState extends State<CounterAccompaniedWidget> {
   late Timer timer;
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => CounterAccompaniedCubit(),
@@ -75,18 +69,20 @@ class _CounterAccompaniedWidgetState extends State<CounterAccompaniedWidget> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      count < 1
+                      count <= 0
                           ? null
                           : context.read<CounterAccompaniedCubit>().decrement();
                       setState(() {
-                        widget.qty?.call(count == 0 ? count : count - 1);
+                        if (widget.maxCount < count) {
+                          count = widget.maxCount;
+                        }
+                        widget.qty?.call(count > 1 ? count : count - 1);
+                        print(count);
                       });
                     },
                     child: Icon(
                       Icons.remove_circle_outline,
-                      color: (widget.qualityChange ?? count) > 0
-                          ? Colors.blue
-                          : Colors.grey,
+                      color: (count) > 0 ? Colors.blue : Colors.grey,
                       size: 30,
                     ),
                   ),
@@ -95,12 +91,12 @@ class _CounterAccompaniedWidgetState extends State<CounterAccompaniedWidget> {
                     child: Center(
                       child: (widget.qualityChange ?? count) > widget.maxCount
                           ? Text(
-                              '${(widget.maxCount)}',
+                              '${((widget.qualityChange ?? count) - 1)}',
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15),
                             )
                           : Text(
-                              '${widget.qualityChange ?? count}',
+                              '${((widget.qualityChange ?? count))}',
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 15),
                             ),
@@ -117,8 +113,14 @@ class _CounterAccompaniedWidgetState extends State<CounterAccompaniedWidget> {
                                 .read<CounterAccompaniedCubit>()
                                 .increment();
                         if (count < widget.maxCount) {
+                          if (widget.maxCount < count) {
+                            count = widget.maxCount;
+                            print(count);
+                          }
                           widget.qty?.call(
-                              count < widget.maxCount ? count + 1 : count);
+                              (widget.qualityChange ?? count) < widget.maxCount
+                                  ? count + 1
+                                  : count);
                         }
                       });
                     },

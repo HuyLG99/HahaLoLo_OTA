@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hahaloloapp/bloc/counter_cubit/counter_cubit.dart';
+
 import 'package:hahaloloapp/models/accompanied_service_model.dart';
 
 import 'amount_accompanied_widget.dart';
@@ -16,11 +15,13 @@ class AccompaniedService extends StatefulWidget {
     this.onDeleted,
     this.currentID,
     this.amountCount,
+    this.maxCount,
   }) : super(key: key);
 
   final String? id;
   final String? name;
   int? qty;
+  int? maxCount;
   final List<AccompaniedServiceData> accompaniedServiceData;
   final ValueChanged<AccompaniedServiceData?>? onSelected;
   final ValueChanged<AccompaniedServiceData?>? onDeleted;
@@ -62,7 +63,6 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                       onTap: () {
                         setState(() {
                           widget.currentID?.call(widget.name);
-                          // widget.amountCount?.call(widget.qty);
                         });
                       },
                       hint: Text(
@@ -133,22 +133,18 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                 indent: 10,
                 endIndent: 10,
               ),
-              BlocBuilder<CounterCubit, CounterState>(
-                  builder: (context, stateAmount) {
-                return CounterAccompaniedWidget(
-                  typePeople: 'Số khách hàng',
-                  colorText: Colors.grey,
-                  maxCount: stateAmount.amountCustomer.totalCustomer,
-                  qualityChange: widget.qty,
-                  qty: (valueQty) {
-                    if (valueQty != null) {
-                      setState(() {
-                        widget.amountCount?.call(valueQty);
-                      });
-                    }
-                  },
-                );
-              }),
+              CounterAccompaniedWidget(
+                typePeople: 'Số khách hàng',
+                colorText: Colors.grey,
+                maxCount: (widget.maxCount ?? 1) - 1,
+                qualityChange: widget.qty,
+                qty: (valueQty) {
+                  setState(() {
+                    widget.qty = valueQty;
+                    widget.amountCount?.call(widget.qty);
+                  });
+                },
+              )
             ],
           ),
         ),

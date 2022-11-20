@@ -5,6 +5,7 @@ import 'package:hahaloloapp/screen/book_tour/amount_book_tour_view.dart';
 import 'package:hahaloloapp/widget/book_tour_info_widget/accompained_service_view.dart';
 import 'package:hahaloloapp/widget/book_tour_info_widget/bottomSheetDetail.dart';
 import 'package:hahaloloapp/widget/core_widget.dart';
+
 import '../../bloc/accompanied_service_bloc/accompanied_bloc.dart';
 import '../../bloc/accompanied_service_bloc/accompanied_repository.dart';
 import '../../bloc/counter_cubit/counter_cubit.dart';
@@ -21,8 +22,8 @@ class BookTourPage extends StatefulWidget {
 class BookTourPageState extends State<BookTourPage> {
   List<AccompaniedServiceData?> listBottomSheetDetail = [];
   ValueChanged<List<AccompaniedServiceData?>>? showListBottomSheetDetail;
-  var sum;
-  int currentSum = 0;
+  var sum = 0;
+
   @override
   void initState() {
     super.initState();
@@ -90,22 +91,20 @@ class BookTourPageState extends State<BookTourPage> {
             ),
           ),
           body: BookTourPageBody(
-              header: 'Thông tin người liên hệ',
-              currentSum: currentSum,
-              sum: sum,
-              getSum: (valueSum) {
-                setState(() {
-                  sum = valueSum ?? 0;
-                  currentSum = sum;
-                });
-              },
-              showListBottomSheetDetail: (valueSelected) {
-                if (valueSelected.isNotEmpty) {
-                  setState(() {
-                    listBottomSheetDetail = valueSelected;
-                  });
-                }
-              }),
+            header: 'Thông tin người liên hệ',
+            sum: sum,
+            getSum: (valueSum) {
+              setState(() {
+                sum = valueSum ?? 0;
+              });
+            },
+            showListBottomSheetDetail: (valueSelected) {
+              setState(() {
+                listBottomSheetDetail = valueSelected;
+              });
+            },
+            getListBottomSheetDetail: listBottomSheetDetail,
+          ),
           bottomNavigationBar: GestureDetector(
             onTap: () {
               listBottomSheetDetail.isNotEmpty
@@ -125,7 +124,7 @@ class BookTourPageState extends State<BookTourPage> {
                                 AppBarPaymentWidget(
                                   textButton: 'Thanh toán',
                                   title: 'Tổng thanh toán',
-                                  price: sum ?? 0,
+                                  price: sum,
                                 ),
                                 const Divider(
                                   indent: 20,
@@ -176,7 +175,7 @@ class BookTourPageState extends State<BookTourPage> {
               child: AppBarPaymentWidget(
                 textButton: 'Thanh toán',
                 title: 'Tổng thanh toán',
-                price: sum ?? 0,
+                price: sum,
               ),
             ),
           ),
@@ -196,6 +195,8 @@ class BookTourPageBody extends StatefulWidget {
     this.getSum,
     this.sum,
     this.currentSum,
+    this.onCheck,
+    this.getListBottomSheetDetail,
   }) : super(key: key);
 
   final String? header;
@@ -204,15 +205,17 @@ class BookTourPageBody extends StatefulWidget {
   int? sum;
   int? currentSum;
   ValueChanged<List<AccompaniedServiceData?>>? showListBottomSheetDetail;
+  List<AccompaniedServiceData?>? getListBottomSheetDetail;
 
   ValueChanged<int?>? getSum;
+  ValueChanged<bool?>? onCheck;
   @override
   State<BookTourPageBody> createState() => _BookTourPageBodyState();
 }
 
 class _BookTourPageBodyState extends State<BookTourPageBody> {
   List<AccompaniedServiceData?> listSelectedService = [];
-
+  bool check = false;
   @override
   void initState() {
     super.initState();
@@ -224,135 +227,140 @@ class _BookTourPageBodyState extends State<BookTourPageBody> {
   List<AccompaniedServiceData> accompaniedListGet = [];
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 5, 5, 0),
-            child: TitleWidget(
-              header: widget.header,
-              sizeText: 24,
+    return BlocBuilder<CounterCubit, CounterState>(
+        builder: (context, stateAmount) {
+      return SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 5, 5, 0),
+              child: TitleWidget(
+                header: widget.header,
+                sizeText: 24,
+              ),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: BookTourInfoWidget(),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(top: 8.0, bottom: 8),
-            child: Divider(
-              thickness: 15,
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: BookTourInfoWidget(),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(0, 5, 5, 0),
-            child: TitleWidget(
-              header: 'Số lượng hành khách',
-              sizeText: 24,
+            const Padding(
+              padding: EdgeInsets.only(top: 8.0, bottom: 8),
+              child: Divider(
+                thickness: 15,
+              ),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: AmountBookTourWidget(),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(top: 8.0, bottom: 8),
-            child: Divider(
-              thickness: 15,
+            const Padding(
+              padding: EdgeInsets.fromLTRB(0, 5, 5, 0),
+              child: TitleWidget(
+                header: 'Số lượng hành khách',
+                sizeText: 24,
+              ),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(0, 5, 5, 0),
-            child: TitleWidget(
-              header: 'Dịch vụ đính kèm',
-              sizeText: 22,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: AmountBookTourWidget(
+                listBottomSheetDetail: widget.getListBottomSheetDetail,
+                maxCount: stateAmount.amountCustomer.totalCustomer,
+                qty: (value) {
+                  setState(() {
+                    widget.getSum?.call(value);
+                  });
+                },
+              ),
             ),
-          ),
-          BlocBuilder<AccompaniedServiceBloc, AccompaniedServiceState>(
-              builder: (context, state) {
-            accompaniedListGet = state.listAccompaniedService;
-            return AccompaniedServiceView(
-              accompaniedList: accompaniedListGet,
-              getSelectedList: (value) {
-                if (value.isNotEmpty) {
+            const Padding(
+              padding: EdgeInsets.only(top: 8.0, bottom: 8),
+              child: Divider(
+                thickness: 15,
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(0, 5, 5, 0),
+              child: TitleWidget(
+                header: 'Dịch vụ đính kèm',
+                sizeText: 22,
+              ),
+            ),
+            BlocBuilder<AccompaniedServiceBloc, AccompaniedServiceState>(
+                builder: (context, state) {
+              accompaniedListGet = state.listAccompaniedService;
+
+              return AccompaniedServiceView(
+                maxCount: stateAmount.amountCustomer.totalCustomer,
+                accompaniedList: accompaniedListGet,
+                getSelectedList: (value) {
                   setState(() {
                     widget.showListBottomSheetDetail?.call(value);
-                    print(value);
-                    final tong = value.fold(
+                    final totalPrice = value.fold(
                         0,
-                        (int sum, element) =>
-                            sum + ((element!.qty ?? 0) * element.tn452));
-                    print(tong);
-                    widget.getSum?.call(tong);
-                    // for (int i = 0; i < value.length; i++) {
-                    //   if (value[i]?.qty != null) {
-                    //     widget.sum = (value[i]?.qty ?? 0) * value[i]!.tn452;
-                    //     widget.getSum?.call(widget.sum);
-                    //   }
-                    // }
-                    // widget.sum = listSelectedService
-                    //     .reduce((value, element) => value + element);
+                        (int sum, element) => (stateAmount
+                                    .amountCustomer.totalCustomer) <
+                                (element?.qty ?? 0)
+                            ? (sum + ((element!.qty ?? 0) - 1) * element.tn452)
+                            : (sum + (element!.qty ?? 0) * element.tn452));
+
+                    widget.getSum?.call(totalPrice);
                   });
-                }
-              },
-            );
-          }),
-          const Padding(
-            padding: EdgeInsets.only(top: 8.0, bottom: 8),
-            child: Divider(
-              thickness: 15,
+                },
+              );
+            }),
+            const Padding(
+              padding: EdgeInsets.only(top: 8.0, bottom: 8),
+              child: Divider(
+                thickness: 15,
+              ),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(0, 5, 5, 0),
-            child: TitleWidget(
-              header: 'Thông tin người thanh toán',
-              sizeText: 24,
+            const Padding(
+              padding: EdgeInsets.fromLTRB(0, 5, 5, 0),
+              child: TitleWidget(
+                header: 'Thông tin người thanh toán',
+                sizeText: 24,
+              ),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: SingleRadioWidget(
-              radioText: 'Sử dụng thông tin người liên hệ',
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: SingleRadioWidget(
+                radioText: 'Sử dụng thông tin người liên hệ',
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FormValidation2(),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: SingleRadioWidget(
-              radioText: 'Lưu thông tin thanh toán cho lần sau',
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: FormValidation2(),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(top: 8.0, bottom: 8),
-            child: Divider(
-              thickness: 15,
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: SingleRadioWidget(
+                radioText: 'Lưu thông tin thanh toán cho lần sau',
+              ),
             ),
-          ),
-          const DiscountCodeWidget(
-            text: 'Mã giảm giá',
-          ),
-          const Padding(
-            padding: EdgeInsets.only(top: 8.0, bottom: 8),
-            child: Divider(
-              thickness: 15,
+            const Padding(
+              padding: EdgeInsets.only(top: 8.0, bottom: 8),
+              child: Divider(
+                thickness: 15,
+              ),
             ),
-          ),
-          const UseCoinWidget(
-            coinUse: 10000,
-          ),
-          const Padding(
-            padding: EdgeInsets.only(top: 8.0, bottom: 8),
-            child: Divider(
-              thickness: 15,
+            const DiscountCodeWidget(
+              text: 'Mã giảm giá',
             ),
-          ),
-        ],
-      ),
-    );
+            const Padding(
+              padding: EdgeInsets.only(top: 8.0, bottom: 8),
+              child: Divider(
+                thickness: 15,
+              ),
+            ),
+            const UseCoinWidget(
+              coinUse: 10000,
+            ),
+            const Padding(
+              padding: EdgeInsets.only(top: 8.0, bottom: 8),
+              child: Divider(
+                thickness: 15,
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 }

@@ -4,10 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/counter_cubit/counter_cubit.dart';
+import '../../models/accompanied_service_model.dart';
 
-class AmountBookTourWidget extends StatelessWidget {
-  const AmountBookTourWidget({Key? key}) : super(key: key);
+class AmountBookTourWidget extends StatefulWidget {
+  AmountBookTourWidget({
+    Key? key,
+    this.qty,
+    this.listBottomSheetDetail,
+    this.maxCount,
+  }) : super(key: key);
 
+  final ValueChanged<int?>? qty;
+  final int? maxCount;
+  List<AccompaniedServiceData?>? listBottomSheetDetail;
+  @override
+  State<AmountBookTourWidget> createState() => _AmountBookTourWidgetState();
+}
+
+class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CounterCubit, CounterState>(builder: (context, state) {
@@ -23,6 +37,18 @@ class AmountBookTourWidget extends StatelessWidget {
                     : context
                         .read<CounterCubit>()
                         .decrementAdult(state.amountCustomer.adult - 1);
+                setState(() {
+                  final totalPrice = widget.listBottomSheetDetail!.fold(
+                      0,
+                      (int sum, element) => (widget.maxCount ?? 1) <
+                              (element!.qty ?? 0)
+                          ? sum + ((widget.maxCount ?? 1) - 1) * element.tn452
+                          : (element.qty == 1)
+                              ? sum + ((element.qty ?? 1) * element.tn452)
+                              : sum + ((element.qty ?? 1) - 1) * element.tn452);
+                  print(totalPrice);
+                  widget.qty?.call(totalPrice);
+                });
               },
               onTapIncrement: () {
                 context
@@ -42,6 +68,18 @@ class AmountBookTourWidget extends StatelessWidget {
               context
                   .read<CounterCubit>()
                   .decrementChild(state.amountCustomer.child - 1);
+              setState(() {
+                final totalPrice = widget.listBottomSheetDetail!.fold(
+                    0,
+                    (int sum, element) => (widget.maxCount ?? 1) <
+                            (element!.qty ?? 0)
+                        ? sum + ((widget.maxCount ?? 1) - 1) * element.tn452
+                        : (element.qty == 1)
+                            ? sum + ((element.qty ?? 1) * element.tn452)
+                            : sum + ((element.qty ?? 1) - 1) * element.tn452);
+                print(totalPrice);
+                widget.qty?.call(totalPrice);
+              });
             },
           ),
           AmountCounterWidget(
@@ -57,6 +95,18 @@ class AmountBookTourWidget extends StatelessWidget {
               context
                   .read<CounterCubit>()
                   .decrementLittleChild(state.amountCustomer.littleChild - 1);
+              setState(() {
+                final totalPrice = widget.listBottomSheetDetail!.fold(
+                    0,
+                    (int sum, element) => (widget.maxCount ?? 1) <
+                            (element!.qty ?? 0)
+                        ? sum + ((widget.maxCount ?? 1) - 1) * element.tn452
+                        : (element.qty == 1)
+                            ? sum + ((element.qty ?? 1) * element.tn452)
+                            : sum + ((element.qty ?? 1) - 1) * element.tn452);
+                print(totalPrice);
+                widget.qty?.call(totalPrice);
+              });
             },
           ),
           AmountCounterWidget(
@@ -72,6 +122,18 @@ class AmountBookTourWidget extends StatelessWidget {
               context
                   .read<CounterCubit>()
                   .decrementBaby(state.amountCustomer.baby - 1);
+              setState(() {
+                final totalPrice = widget.listBottomSheetDetail!.fold(
+                    0,
+                    (int sum, element) => (widget.maxCount ?? 1) <
+                            (element!.qty ?? 0)
+                        ? sum + ((widget.maxCount ?? 1) - 1) * element.tn452
+                        : (element.qty == 1)
+                            ? sum + ((element.qty ?? 0) * element.tn452)
+                            : sum + ((element.qty ?? 0) - 1) * element.tn452);
+                print(totalPrice);
+                widget.qty?.call(totalPrice);
+              });
             },
           ),
           const RadioOptionWidget(),
@@ -82,7 +144,7 @@ class AmountBookTourWidget extends StatelessWidget {
 }
 
 class AmountCounterWidget extends StatefulWidget {
-  const AmountCounterWidget({
+  AmountCounterWidget({
     Key? key,
     required this.count,
     this.typePeople,

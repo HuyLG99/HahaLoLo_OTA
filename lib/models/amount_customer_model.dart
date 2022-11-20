@@ -13,7 +13,7 @@ class AmountCustomerModel extends Equatable {
     this.baby = 0,
   });
 
-  get totalCustomer => adult + child + littleChild + baby;
+  int get totalCustomer => adult + child + littleChild + baby;
 
   @override
   List<Object?> get props => [adult, child, littleChild, baby];

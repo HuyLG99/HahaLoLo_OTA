@@ -6,6 +6,7 @@ class MoreServiceModel extends Equatable {
   String? idSelectedMenuItem;
   String? name;
   int? qty;
+
   MoreServiceModel({
     String? idSelectedMenuItem,
     AccompaniedServiceData? accompaniedServiceData,
