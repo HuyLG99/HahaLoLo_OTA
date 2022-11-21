@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:hahaloloapp/models/more_service_model.dart';
 
 class CounterAccompaniedWidget extends StatefulWidget {
   const CounterAccompaniedWidget({

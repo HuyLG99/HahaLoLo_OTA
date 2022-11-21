@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../models/more_service_model.dart';
 part 'counter_state.dart';
 
 class CounterAccompaniedCubit extends Cubit<CounterAccompaniedState> {
@@ -20,7 +19,12 @@ class CounterAccompaniedCubit extends Cubit<CounterAccompaniedState> {
   }
 
   void clean() {
-    state.counter = countTemp;
+    state.counter = (countTemp);
+    emit(CounterAccompaniedState(counter: state.counter));
+  }
+
+  void cleanNon() {
+    state.counter = ((state.counter == 0) ? state.counter : state.counter - 1);
     emit(CounterAccompaniedState(counter: state.counter));
   }
 }

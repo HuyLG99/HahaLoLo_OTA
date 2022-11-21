@@ -65,8 +65,13 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                       if (moreServiceList[index].name != null ||
                           valueQty == 0 && moreServiceList[index].qty == null ||
                           valueQty == 0 && selectedList[index].qty == null) {
+                        moreServiceList[index].qty = valueQty;
                         if (moreServiceList[index].name ==
                             selectedList[index].t250.t251.tv251) {
+                          if (moreServiceList[index].name != null) {
+                            selectedList[index].qty =
+                                moreServiceList[index].qty;
+                          }
                           moreServiceList[index].qty = valueQty;
                           selectedList[index].qty = valueQty;
                         }
@@ -96,12 +101,12 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                     if (moreServiceList.isNotEmpty) {
                       if (moreServiceList[index].name ==
                           selectedList[index].t250.t251.tv251) {
+                        moreServiceList[index].qty = dattaQty;
                         if (moreServiceList[index].name != null) {
                           selectedList[index].qty = moreServiceList[index].qty;
                           moreServiceList[index].maxCount = widget.maxCount;
                         }
-                        moreServiceList[index].qty = dattaQty;
-                        selectedList[index].qty = dattaQty;
+                        // selectedList[index].qty = dattaQty;
                         widget.getSelectedList?.call(selectedList);
                         widget.getMoreServiceList?.call(moreServiceList);
                       }
@@ -110,12 +115,13 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                         .toSet()
                         .difference(selectedList.toSet())
                         .toList();
+                    widget.getSelectedList?.call(selectedList);
                   }
 
                   selectedList.removeWhere((element) =>
                       element.id == moreServiceList[index].idSelectedMenuItem);
                   selectedList.add(value!);
-
+                  widget.getSelectedList?.call(selectedList);
                   accompaniedList = widget.accompaniedList
                       .toSet()
                       .difference(selectedList.toSet())
@@ -123,6 +129,7 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                   if (value.t250.t251.tv251 != currentID) {
                     selectedList.removeWhere(
                         (element) => element.t250.t251.tv251 == currentID);
+                    widget.getSelectedList?.call(selectedList);
                   }
                   moreServiceList[index].name = value.t250.t251.tv251;
                   moreServiceList[index].idSelectedMenuItem = value.id;
@@ -141,6 +148,9 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                       moreServiceList[index].name == null &&
                           currentID != null) {
                     moreServiceList.removeAt(index);
+                    if (moreServiceList[index].qty != null) {
+                      selectedList[index].qty = moreServiceList[index].qty;
+                    }
                     widget.getSelectedList?.call(selectedList);
                     widget.getMoreServiceList?.call(moreServiceList);
                   } else if (moreServiceList[index].name != null &&
@@ -154,6 +164,7 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                         .toSet()
                         .difference(selectedList.toSet())
                         .toList();
+
                     widget.getSelectedList?.call(selectedList);
                     widget.getMoreServiceList?.call(moreServiceList);
                   } else if (moreServiceList[index].name != null ||
@@ -166,6 +177,7 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                         .toSet()
                         .difference(selectedList.toSet())
                         .toList();
+
                     widget.getSelectedList?.call(selectedList);
                     widget.getMoreServiceList?.call(moreServiceList);
                   }

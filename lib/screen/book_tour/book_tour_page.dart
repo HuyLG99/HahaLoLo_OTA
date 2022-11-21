@@ -34,153 +34,164 @@ class BookTourPageState extends State<BookTourPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CounterCubit, CounterState>(
-        builder: (context, stateAmount) {
-      return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          leading: Row(
-            children: [
-              IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.black26,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AccompaniedServiceBloc>(
+          create: (BuildContext context) => AccompaniedServiceBloc(
+              context.read<AccompaniedServiceRepository>()),
+        ),
+        BlocProvider(
+          create: (_) => CounterCubit(),
+        ),
+      ],
+      child: BlocBuilder<CounterCubit, CounterState>(
+          builder: (context, stateAmount) {
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            leading: Row(
+              children: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.black26,
+                  ),
+                  onPressed: () => Navigator.of(context).pop(),
                 ),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ],
-          ),
-          title: Row(
-            children: [
-              const Expanded(
-                flex: 3,
-                child: Center(
-                  child: Text(
-                    'Thông tin đặt Tour',
-                    style: TextStyle(
-                      fontSize: 23,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black,
+              ],
+            ),
+            title: Row(
+              children: [
+                const Expanded(
+                  flex: 3,
+                  child: Center(
+                    child: Text(
+                      'Thông tin đặt Tour',
+                      style: TextStyle(
+                        fontSize: 23,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Expanded(
-                flex: 1,
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'Chi tiết',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.blue,
+                Expanded(
+                  flex: 1,
+                  child: TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      'Chi tiết',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.blue,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
-        body: BookTourPageBody(
-          header: 'Thông tin người liên hệ',
-          sum: sum,
-          getSum: (valueSum) {
-            setState(() {
-              sum = valueSum ?? 0;
-            });
-          },
-          showListBottomSheetDetail: (valueSelected) {
-            setState(() {
-              listBottomSheetDetail = valueSelected;
-            });
-          },
-          getListBottomSheetDetail: listBottomSheetDetail,
-        ),
-        bottomNavigationBar: GestureDetector(
-          onTap: () {
-            listBottomSheetDetail.isNotEmpty
-                ? showModalBottomSheet(
-                    context: context,
-                    useRootNavigator: true,
-                    builder: (BuildContext context) {
-                      return Container(
-                        height: 400,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(40),
-                        ),
-                        child: Center(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              AppBarPaymentWidget(
-                                textButton: 'Thanh toán',
-                                title: 'Tổng thanh toán',
-                                price: sum,
-                              ),
-                              const Divider(
-                                indent: 20,
-                                endIndent: 20,
-                                thickness: 1,
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'Chi tiết giá',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                              ListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: listBottomSheetDetail.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return BottomSheetDetail(
-                                      name: listBottomSheetDetail[index]
-                                              ?.t250
-                                              .t251
-                                              .tv251 ??
-                                          '',
-                                      qty: (stateAmount.amountCustomer
-                                                  .totalCustomer) >
-                                              (listBottomSheetDetail[
-                                                          index]
-                                                      ?.qty ??
-                                                  0)
-                                          ? (listBottomSheetDetail[index]
-                                                  ?.qty ??
-                                              0)
-                                          : (stateAmount
-                                              .amountCustomer.totalCustomer),
-                                      price:
-                                          listBottomSheetDetail[index]?.tn452,
-                                      maxCount: stateAmount
-                                          .amountCustomer.totalCustomer,
-                                    );
-                                  }),
-                            ],
-                          ),
-                        ),
-                      );
-                    })
-                : const SizedBox();
-          },
-          child: BottomAppBar(
-            child: AppBarPaymentWidget(
-              textButton: 'Thanh toán',
-              title: 'Tổng thanh toán',
-              price: sum,
+              ],
             ),
           ),
-        ),
-      );
-    });
+          body: BookTourPageBody(
+            header: 'Thông tin người liên hệ',
+            sum: sum,
+            getSum: (valueSum) {
+              setState(() {
+                sum = valueSum ?? 0;
+              });
+            },
+            showListBottomSheetDetail: (valueSelected) {
+              setState(() {
+                listBottomSheetDetail = valueSelected;
+              });
+            },
+            getListBottomSheetDetail: listBottomSheetDetail,
+          ),
+          bottomNavigationBar: GestureDetector(
+            onTap: () {
+              listBottomSheetDetail.isNotEmpty
+                  ? showModalBottomSheet(
+                      context: context,
+                      useRootNavigator: true,
+                      builder: (BuildContext context) {
+                        return Container(
+                          height: 400,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40),
+                          ),
+                          child: Center(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                AppBarPaymentWidget(
+                                  textButton: 'Thanh toán',
+                                  title: 'Tổng thanh toán',
+                                  price: sum,
+                                ),
+                                const Divider(
+                                  indent: 20,
+                                  endIndent: 20,
+                                  thickness: 1,
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Chi tiết giá',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                ListView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: listBottomSheetDetail.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return BottomSheetDetail(
+                                        name: listBottomSheetDetail[index]
+                                                ?.t250
+                                                .t251
+                                                .tv251 ??
+                                            '',
+                                        qty: (stateAmount.amountCustomer
+                                                    .totalCustomer) >
+                                                (listBottomSheetDetail[index]
+                                                        ?.qty ??
+                                                    0)
+                                            ? (listBottomSheetDetail[index]
+                                                    ?.qty ??
+                                                0)
+                                            : (stateAmount
+                                                .amountCustomer.totalCustomer),
+                                        price:
+                                            listBottomSheetDetail[index]?.tn452,
+                                        maxCount: stateAmount
+                                            .amountCustomer.totalCustomer,
+                                      );
+                                    }),
+                              ],
+                            ),
+                          ),
+                        );
+                      })
+                  : const SizedBox();
+            },
+            child: BottomAppBar(
+              child: AppBarPaymentWidget(
+                textButton: 'Thanh toán',
+                title: 'Tổng thanh toán',
+                price: sum,
+              ),
+            ),
+          ),
+        );
+      }),
+    );
   }
 }
 

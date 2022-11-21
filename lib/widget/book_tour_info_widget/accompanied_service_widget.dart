@@ -38,17 +38,6 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
   AccompaniedServiceData? selectedMenuItem;
   int? currentQty = 0;
   int temp = 0;
-  @override
-  void didUpdateWidget(covariant AccompaniedService oldWidget) {
-    // TODO: implement didUpdateWidget
-    if ((oldWidget.maxCount ?? 1) > (widget.maxCount ?? 1)) {
-      setState(() {
-        ((currentQty ?? 0) - 1);
-      });
-      print(currentQty);
-    }
-    super.didUpdateWidget(oldWidget);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +45,7 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
       create: (_) => CounterAccompaniedCubit(),
       child: BlocBuilder<CounterAccompaniedCubit, CounterAccompaniedState>(
         builder: (context, state) {
+          final _cubit = BlocProvider.of<CounterAccompaniedCubit>(context);
           return Column(
             children: [
               Container(
@@ -151,26 +141,38 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                       typePeople: 'Số khách hàng',
                       colorText: Colors.grey,
                       maxCount: widget.maxCount ?? 1,
-                      qualityChange: widget.qty,
                       onTapIncrement: () {
                         context.read<CounterAccompaniedCubit>().increment();
-                        // currentQty = state.counter + 1;
-
                         widget.amountCount?.call(state.counter + 1);
                         print('state count: ${state.counter + 1}');
-
                         print('max count: ${(widget.maxCount ?? 1)}');
                       },
                       onTapDecrement: () {
                         context.read<CounterAccompaniedCubit>().decrement();
-                        // currentQty = state.counter - 1;
-                        widget.amountCount?.call(state.counter - 1);
+                        if ((state.counter) > (widget.maxCount ?? 1)) {
+                          if (((widget.maxCount ?? 1)) == 1) {
+                            _cubit.clean();
+                          }
+                          setState(() {
+                            state.counter == widget.maxCount;
+                          });
+                          print('state count clean: ${state.counter}');
+                        }
+
+                        widget.amountCount?.call((state.counter < 1)
+                            ? (state.counter)
+                            : (state.counter - 1));
+
                         print('state count: ${state.counter - 1}');
                         print('max count: ${(widget.maxCount ?? 1)}');
                       },
                       count: ((widget.maxCount ?? 1)) >= (state.counter)
-                          ? (state.counter)
-                          : (widget.maxCount ?? 1),
+                          ? (state.counter == 0)
+                              ? 0
+                              : (state.counter)
+                          : (state.counter == 1)
+                              ? (state.counter - 1)
+                              : (widget.maxCount ?? 1),
                     ),
                   ],
                 ),

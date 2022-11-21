@@ -36,7 +36,7 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
               count: state.amountCustomer.adult,
               onTapDecrement: () {
                 state.amountCustomer.adult == 1
-                    ? () {}
+                    ? null
                     : context
                         .read<CounterCubit>()
                         .decrementAdult(state.amountCustomer.adult - 1);
@@ -61,6 +61,20 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
                 context
                     .read<CounterCubit>()
                     .incrementAdult(state.amountCustomer.adult + 1);
+                setState(() {
+                  final totalPrice = widget.listBottomSheetDetail!.fold(
+                      0,
+                      (int sum, element) => (widget.maxCount ?? 1) ==
+                                  (element!.qty ?? 0) &&
+                              (element.qty ?? 0) != 0 &&
+                              (element.t250.t251.tv251).isNotEmpty
+                          ? sum + ((widget.maxCount ?? 1)) * element.tn452
+                          : ((element.qty ?? 0) >= 1 || (element.qty ?? 0) == 0)
+                              ? sum + ((element.qty ?? 0)) * element.tn452
+                              : sum + ((element.qty ?? 0) + 1) * element.tn452);
+
+                  widget.getSum?.call(totalPrice);
+                });
               }),
           AmountCounterWidget(
             typePeople: 'Trẻ em',
@@ -70,6 +84,20 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
               context
                   .read<CounterCubit>()
                   .incrementChild(state.amountCustomer.child + 1);
+              setState(() {
+                final totalPrice = widget.listBottomSheetDetail!.fold(
+                    0,
+                    (int sum, element) => (widget.maxCount ?? 1) ==
+                                (element!.qty ?? 0) &&
+                            (element.qty ?? 0) != 0 &&
+                            (element.t250.t251.tv251).isNotEmpty
+                        ? sum + ((widget.maxCount ?? 1)) * element.tn452
+                        : ((element.qty ?? 0) >= 1 || (element.qty ?? 0) == 0)
+                            ? sum + ((element.qty ?? 0)) * element.tn452
+                            : sum + ((element.qty ?? 0) + 1) * element.tn452);
+
+                widget.getSum?.call(totalPrice);
+              });
             },
             onTapDecrement: () {
               context
@@ -81,9 +109,9 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
                     (int sum, element) => (widget.maxCount ?? 1) <
                             (element!.qty ?? 0)
                         ? sum + ((widget.maxCount ?? 1) - 1) * element.tn452
-                        : (element.qty == 1)
-                            ? sum + ((element.qty ?? 1) * element.tn452)
-                            : sum + ((element.qty ?? 1) - 1) * element.tn452);
+                        : ((element.qty ?? 0) == 1 || (element.qty ?? 0) == 0)
+                            ? sum + ((element.qty ?? 0) * element.tn452)
+                            : sum + ((element.qty ?? 0) - 1) * element.tn452);
 
                 widget.getSum?.call(totalPrice);
                 if (((widget.maxCount ?? 1) - 1) == 1) {
@@ -100,6 +128,20 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
               context
                   .read<CounterCubit>()
                   .incrementLittleChild(state.amountCustomer.littleChild + 1);
+              setState(() {
+                final totalPrice = widget.listBottomSheetDetail!.fold(
+                    0,
+                    (int sum, element) => (widget.maxCount ?? 1) ==
+                                (element!.qty ?? 0) &&
+                            (element.qty ?? 0) != 0 &&
+                            (element.t250.t251.tv251).isNotEmpty
+                        ? sum + ((widget.maxCount ?? 1)) * element.tn452
+                        : ((element.qty ?? 0) >= 1 || (element.qty ?? 0) == 0)
+                            ? sum + ((element.qty ?? 0)) * element.tn452
+                            : sum + ((element.qty ?? 0) + 1) * element.tn452);
+
+                widget.getSum?.call(totalPrice);
+              });
             },
             onTapDecrement: () {
               context
@@ -111,9 +153,9 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
                     (int sum, element) => (widget.maxCount ?? 1) <
                             (element!.qty ?? 0)
                         ? sum + ((widget.maxCount ?? 1) - 1) * element.tn452
-                        : (element.qty == 1)
-                            ? sum + ((element.qty ?? 1) * element.tn452)
-                            : sum + ((element.qty ?? 1) - 1) * element.tn452);
+                        : ((element.qty ?? 0) >= 1 || (element.qty ?? 0) == 0)
+                            ? sum + ((element.qty ?? 0) * element.tn452)
+                            : sum + ((element.qty ?? 0) - 1) * element.tn452);
 
                 widget.getSum?.call(totalPrice);
                 if (((widget.maxCount ?? 1) - 1) == 1) {
@@ -130,6 +172,20 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
               context
                   .read<CounterCubit>()
                   .incrementBaby(state.amountCustomer.baby + 1);
+              setState(() {
+                final totalPrice = widget.listBottomSheetDetail!.fold(
+                    0,
+                    (int sum, element) => (widget.maxCount ?? 1) ==
+                                (element!.qty ?? 0) &&
+                            (element.qty ?? 0) != 0 &&
+                            (element.t250.t251.tv251).isNotEmpty
+                        ? sum + ((widget.maxCount ?? 1)) * element.tn452
+                        : ((element.qty ?? 0) >= 1 || (element.qty ?? 0) == 0)
+                            ? sum + ((element.qty ?? 0)) * element.tn452
+                            : sum + ((element.qty ?? 0) + 1) * element.tn452);
+
+                widget.getSum?.call(totalPrice);
+              });
             },
             onTapDecrement: () {
               context
@@ -138,11 +194,11 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
               setState(() {
                 final totalPrice = widget.listBottomSheetDetail!.fold(
                     0,
-                    (int sum, element) => (widget.maxCount ?? 1) <
+                    (int sum, element) => (widget.maxCount ?? 1) <=
                             (element!.qty ?? 0)
                         ? sum + ((widget.maxCount ?? 1) - 1) * element.tn452
-                        : (element.qty == 1)
-                            ? sum + ((element.qty ?? 0) * element.tn452)
+                        : ((element.qty ?? 0) >= 1 || (element.qty ?? 0) == 0)
+                            ? sum + ((element.qty ?? 0)) * element.tn452
                             : sum + ((element.qty ?? 0) - 1) * element.tn452);
 
                 widget.getSum?.call(totalPrice);
