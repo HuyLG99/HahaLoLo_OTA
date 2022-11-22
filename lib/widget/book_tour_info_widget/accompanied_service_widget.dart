@@ -36,8 +36,6 @@ class AccompaniedService extends StatefulWidget {
 
 class _AccompaniedServiceState extends State<AccompaniedService> {
   AccompaniedServiceData? selectedMenuItem;
-  int? currentQty = 0;
-  int temp = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -120,6 +118,8 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                               setState(() {
                                 widget.currentID?.call(widget.name);
                                 widget.onDeleted?.call(selectedMenuItem);
+
+                                // widget.amountCount?.call(widget.qty);
                                 selectedMenuItem = null;
                               });
                             },
@@ -141,6 +141,7 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                       typePeople: 'Số khách hàng',
                       colorText: Colors.grey,
                       maxCount: widget.maxCount ?? 1,
+                      qualityChange: widget.qty,
                       onTapIncrement: () {
                         context.read<CounterAccompaniedCubit>().increment();
                         widget.amountCount?.call(state.counter + 1);
@@ -149,12 +150,41 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                       },
                       onTapDecrement: () {
                         context.read<CounterAccompaniedCubit>().decrement();
-                        if ((state.counter) > (widget.maxCount ?? 1)) {
+                        if ((state.counter) > (widget.maxCount ?? 1) &&
+                            state.counter > 1) {
+                          setState(() {
+                            state.counter = widget.maxCount ?? 0;
+                          });
+                          context.read<CounterAccompaniedCubit>().decrement();
+
                           if (((widget.maxCount ?? 1)) == 1) {
                             _cubit.clean();
                           }
+                          if (((widget.maxCount ?? 1)) == 2) {
+                            _cubit.clean1();
+                          }
+                          if (((widget.maxCount ?? 1)) == 3) {
+                            _cubit.clean2();
+                          }
+                          if (((widget.maxCount ?? 1)) == 4) {
+                            _cubit.clean3();
+                          }
+                          if (((widget.maxCount ?? 1)) == 5) {
+                            _cubit.clean4();
+                          }
+                          if (((widget.maxCount ?? 1)) == 6) {
+                            _cubit.clean5();
+                          }
+                          if (((widget.maxCount ?? 1)) == 7) {
+                            _cubit.clean6();
+                          }
+                          if (((widget.maxCount ?? 1)) == 8) {
+                            _cubit.clean7();
+                          }
                           setState(() {
+                            //   if (state.counter > (widget.maxCount ?? 1)) {
                             state.counter == widget.maxCount;
+                            // }
                           });
                           print('state count clean: ${state.counter}');
                         }
@@ -167,12 +197,14 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                         print('max count: ${(widget.maxCount ?? 1)}');
                       },
                       count: ((widget.maxCount ?? 1)) >= (state.counter)
-                          ? (state.counter == 0)
-                              ? 0
-                              : (state.counter)
+                          ? ((widget.qty ?? 0) == (state.counter)
+                              ? (state.counter)
+                              : (widget.qty ?? 0))
                           : (state.counter == 1)
                               ? (state.counter - 1)
-                              : (widget.maxCount ?? 1),
+                              : ((widget.qty ?? 0) == (widget.maxCount)
+                                  ? (widget.qty ?? 0)
+                                  : (widget.maxCount ?? 1)),
                     ),
                   ],
                 ),

@@ -98,10 +98,13 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                     moreServiceList[index].maxCount = widget.maxCount;
                     moreServiceList[index].price = value?.tn452;
                     selectedList.add(value!);
+                    widget.getSelectedList?.call(selectedList);
+                    widget.getMoreServiceList?.call(moreServiceList);
                     if (moreServiceList.isNotEmpty) {
                       if (moreServiceList[index].name ==
                           selectedList[index].t250.t251.tv251) {
                         moreServiceList[index].qty = dattaQty;
+                        widget.getMoreServiceList?.call(moreServiceList);
                         if (moreServiceList[index].name != null) {
                           selectedList[index].qty = moreServiceList[index].qty;
                           moreServiceList[index].maxCount = widget.maxCount;
@@ -115,13 +118,19 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                         .toSet()
                         .difference(selectedList.toSet())
                         .toList();
+                    widget.getMoreServiceList?.call(moreServiceList);
                     widget.getSelectedList?.call(selectedList);
                   }
 
                   selectedList.removeWhere((element) =>
                       element.id == moreServiceList[index].idSelectedMenuItem);
                   selectedList.add(value!);
-                  widget.getSelectedList?.call(selectedList);
+                  if (moreServiceList[index].name != null) {
+                    selectedList[index].qty = moreServiceList[index].qty;
+                    moreServiceList[index].maxCount = widget.maxCount;
+                    widget.getMoreServiceList?.call(moreServiceList);
+                    widget.getSelectedList?.call(selectedList);
+                  }
                   accompaniedList = widget.accompaniedList
                       .toSet()
                       .difference(selectedList.toSet())
@@ -129,12 +138,15 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                   if (value.t250.t251.tv251 != currentID) {
                     selectedList.removeWhere(
                         (element) => element.t250.t251.tv251 == currentID);
-                    widget.getSelectedList?.call(selectedList);
+                    if (moreServiceList[index].name != null) {
+                      selectedList[index].qty = moreServiceList[index].qty;
+                      moreServiceList[index].maxCount = widget.maxCount;
+                      widget.getMoreServiceList?.call(moreServiceList);
+                      widget.getSelectedList?.call(selectedList);
+                    }
                   }
                   moreServiceList[index].name = value.t250.t251.tv251;
                   moreServiceList[index].idSelectedMenuItem = value.id;
-                  widget.getSelectedList?.call(selectedList);
-                  widget.getMoreServiceList?.call(moreServiceList);
                 },
 
                 name: moreServiceList[index].name,
@@ -148,23 +160,18 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                       moreServiceList[index].name == null &&
                           currentID != null) {
                     moreServiceList.removeAt(index);
-                    if (moreServiceList[index].qty != null) {
-                      selectedList[index].qty = moreServiceList[index].qty;
-                    }
                     widget.getSelectedList?.call(selectedList);
                     widget.getMoreServiceList?.call(moreServiceList);
                   } else if (moreServiceList[index].name != null &&
                       moreServiceList[index].idSelectedMenuItem == value?.id) {
                     moreServiceList
                         .removeWhere((element) => element.name == currentID);
-
                     selectedList
                         .removeWhere((element) => element.id == value?.id);
                     accompaniedList = widget.accompaniedList
                         .toSet()
                         .difference(selectedList.toSet())
                         .toList();
-
                     widget.getSelectedList?.call(selectedList);
                     widget.getMoreServiceList?.call(moreServiceList);
                   } else if (moreServiceList[index].name != null ||
@@ -177,7 +184,6 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                         .toSet()
                         .difference(selectedList.toSet())
                         .toList();
-
                     widget.getSelectedList?.call(selectedList);
                     widget.getMoreServiceList?.call(moreServiceList);
                   }
