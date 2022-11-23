@@ -10,74 +10,7 @@ class BookTourInfoWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Column(
-        children: [
-          // TextFormWidget(
-          //   labelText: 'Họ',
-          //   actionText: TextInputAction.next,
-          //   value: 'dsad',
-          // ),
-          // DotWidget(
-          //   dashColor: Colors.grey,
-          //   dashHeight: 1,
-          //   dashWidth: 5,
-          // ),
-          // TextFormWidget(
-          //   labelText: 'Tên đệm và tên',
-          //   actionText: TextInputAction.next,
-          // ),
-          // DotWidget(
-          //   dashColor: Colors.grey,
-          //   dashHeight: 1,
-          //   dashWidth: 5,
-          // ),
-          // RadioButtonWidget(),
-          // DotWidget(
-          //   dashColor: Colors.grey,
-          //   dashHeight: 1,
-          //   dashWidth: 5,
-          // ),
-          // TextFormWidget(
-          //   labelText: 'Email',
-          //   actionText: TextInputAction.next,
-          // ),
-          // DotWidget(
-          //   dashColor: Colors.grey,
-          //   dashHeight: 1,
-          //   dashWidth: 5,
-          // ),
-          // PhoneCodeWidget(),
-          // DotWidget(
-          //   dashColor: Colors.grey,
-          //   dashHeight: 1,
-          //   dashWidth: 5,
-          // ),
-          // TextFormWidget(
-          //   labelText: 'Địa chỉ',
-          //   actionText: TextInputAction.next,
-          // ),
-          // DotWidget(
-          //   dashColor: Colors.grey,
-          //   dashHeight: 1,
-          //   dashWidth: 5,
-          // ),
-          // TextFormWidget(
-          //   labelText: 'Tỉnh/Thành phố',
-          //   actionText: TextInputAction.next,
-          // ),
-          // DotWidget(
-          //   dashColor: Colors.grey,
-          //   dashHeight: 1,
-          //   dashWidth: 5,
-          // ),
-          // NationalTextWidget(
-          //   labelText: 'Quốc tịch',
-          //   actionText: TextInputAction.done,
-          // ),
-          // DotWidget(
-          //   dashColor: Colors.grey,
-          //   dashHeight: 1,
-          //   dashWidth: 5,
-          // ),
+        children: const [
           FormValidation(),
         ],
       ),
@@ -85,142 +18,40 @@ class BookTourInfoWidget extends StatelessWidget {
   }
 }
 
-class PhoneCodeWidget extends StatelessWidget {
-  const PhoneCodeWidget({Key? key}) : super(key: key);
-
+class FormValidation extends StatefulWidget {
+  const FormValidation({super.key});
   @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const Expanded(
-          flex: 1,
-          child: Center(
-            child: Text(
-              '+84',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w500,
-                color: Colors.blue,
-              ),
-            ),
-          ),
-        ),
-        Expanded(
-          flex: 3,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextFormField(
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  labelStyle: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 18,
-                    color: Colors.grey,
-                  ),
-                  labelText: 'Số điện thoại *',
-                ),
-                validator: (value) {
-                  if (value!.isEmpty ||
-                      !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                          .hasMatch(value)) {
-                    return "Enter Correct Email Address";
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
+  State<FormValidation> createState() => _FormValidationState();
 }
 
-class DotWidget extends StatelessWidget {
-  const DotWidget({
-    Key? key,
-    this.totalWidth = 300,
-    this.dashWidth = 10,
-    this.emptyWidth = 5,
-    this.dashHeight = 2,
-    this.dashColor = Colors.black,
-  }) : super(key: key);
-  final double totalWidth, dashWidth, emptyWidth, dashHeight;
-
-  final Color dashColor;
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 5, 8, 5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: List.generate(
-          totalWidth ~/ (dashWidth + emptyWidth),
-          (_) => Container(
-            width: dashWidth,
-            height: dashHeight,
-            color: dashColor,
-            margin:
-                EdgeInsets.only(left: emptyWidth / 2, right: emptyWidth / 2),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class TextFormWidget extends StatelessWidget {
-  const TextFormWidget({
-    Key? key,
-    this.labelText,
-    this.hintText,
-    this.value,
-    this.actionText,
-  }) : super(key: key);
-
-  final String? labelText;
-  final String? hintText;
-  final String? value;
-  final TextInputAction? actionText;
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-      child: TextFormField(
-        textInputAction: actionText,
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          labelStyle: const TextStyle(
-            fontWeight: FontWeight.w400,
-            fontSize: 15,
-            color: Colors.grey,
-          ),
-          hintText: hintText ?? '',
-          labelText: '$labelText *',
-        ),
-        // onChanged: (_) => FocusScope.of(context).nextFocus(),
-        onSaved: (String? value) {
-          // This optional block of code can be used to run
-          // code when the user saves the form.
-        },
-        validator: (String? value) {
-          return (value != null && value.contains('@'))
-              ? 'Do not use the @ char.'
-              : null;
-        },
-      ),
-    );
-  }
-}
-
-class FormValidation extends StatelessWidget {
+class _FormValidationState extends State<FormValidation> {
   final formKey = GlobalKey<FormState>();
 
-  FormValidation({super.key}); //key for form
+  final firstNameController = TextEditingController(text: 'LE');
+
+  final lastNameController = TextEditingController(text: 'HUY');
+
+  // final genderController = TextEditingController(text: '');
+
+  final emailController = TextEditingController(text: 'Lehuy154@gmail.com');
+
+  final phoneController = TextEditingController(text: '03899123139');
+
+  final addressController =
+      TextEditingController(text: '4000,Ung van Khiem,Ho Chi Minh');
+
+  @override
+  void dispose() {
+    super.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
+    // genderController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    addressController.dispose();
+  }
+
+  //key for form
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -228,6 +59,7 @@ class FormValidation extends StatelessWidget {
       child: Column(
         children: [
           TextFormField(
+            controller: firstNameController,
             autovalidateMode: AutovalidateMode.always,
             textInputAction: TextInputAction.next,
             decoration: const InputDecoration(
@@ -254,6 +86,7 @@ class FormValidation extends StatelessWidget {
             dashWidth: 5,
           ),
           TextFormField(
+            controller: lastNameController,
             autovalidateMode: AutovalidateMode.always,
             textInputAction: TextInputAction.next,
             decoration: const InputDecoration(
@@ -286,6 +119,7 @@ class FormValidation extends StatelessWidget {
             dashWidth: 5,
           ),
           TextFormField(
+            controller: emailController,
             autovalidateMode: AutovalidateMode.always,
             textInputAction: TextInputAction.next,
             decoration: const InputDecoration(
@@ -333,6 +167,7 @@ class FormValidation extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextFormField(
+                      controller: phoneController,
                       autovalidateMode: AutovalidateMode.always,
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.number,
@@ -366,6 +201,7 @@ class FormValidation extends StatelessWidget {
             dashWidth: 5,
           ),
           TextFormField(
+            controller: addressController,
             autovalidateMode: AutovalidateMode.always,
             textInputAction: TextInputAction.done,
             decoration: const InputDecoration(
@@ -378,8 +214,7 @@ class FormValidation extends StatelessWidget {
               ),
             ),
             validator: (value) {
-              if (value!.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
-                //allow upper and lower case alphabets and space
+              if (value!.isEmpty) {
                 return "Enter Correct Address";
               } else {
                 return null;
@@ -391,14 +226,19 @@ class FormValidation extends StatelessWidget {
             dashHeight: 1,
             dashWidth: 5,
           ),
-          // ElevatedButton(
-          //     onPressed: () {
-          //       if (formKey.currentState!.validate()) {
-          //         //check if form data are valid,
-          //         // your process task ahed if all data are valid
-          //       }
-          //     },
-          //     child: Text("Submit Data"))
+          ElevatedButton(
+              onPressed: () {
+                formKey.currentState?.save();
+                if (formKey.currentState!.validate()) {
+                  // final value1 = firstNameController.text;
+                  // final value2 = lastNameController.text;
+                  // final value3 = emailController.text;
+
+                  //check if form data are valid,
+                  // your process task ahed if all data are valid
+                }
+              },
+              child: const Text("Submit Data"))
         ],
       ),
     );
@@ -636,7 +476,6 @@ class FormValidation2 extends StatelessWidget {
               },
               // enabled: false,
               // autovalidateMode: AutovalidateMode.always,
-              initialValue: "Việt Nam",
               textInputAction: TextInputAction.done,
               decoration: const InputDecoration(
                 border: InputBorder.none,
@@ -737,17 +576,153 @@ class FormValidation2 extends StatelessWidget {
               dashHeight: 1,
               dashWidth: 5,
             ),
-
-            // ElevatedButton(
-            //     onPressed: () {
-            //       if (formKey.currentState!.validate()) {
-            //         //check if form data are valid,
-            //         // your process task ahed if all data are valid
-            //       }
-            //     },
-            //     child: Text("Submit Data"))
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 30.0,
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromRGBO(70, 76, 222, 1),
+                  textStyle: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                child: const Text('Submit Data'),
+              ),
+            ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class PhoneCodeWidget extends StatelessWidget {
+  const PhoneCodeWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const Expanded(
+          flex: 1,
+          child: Center(
+            child: Text(
+              '+84',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w500,
+                color: Colors.blue,
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 3,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextFormField(
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  labelStyle: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 18,
+                    color: Colors.grey,
+                  ),
+                  labelText: 'Số điện thoại *',
+                ),
+                validator: (value) {
+                  if (value!.isEmpty ||
+                      !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                          .hasMatch(value)) {
+                    return "Enter Correct Email Address";
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class DotWidget extends StatelessWidget {
+  const DotWidget({
+    Key? key,
+    this.totalWidth = 300,
+    this.dashWidth = 10,
+    this.emptyWidth = 5,
+    this.dashHeight = 2,
+    this.dashColor = Colors.black,
+  }) : super(key: key);
+  final double totalWidth, dashWidth, emptyWidth, dashHeight;
+
+  final Color dashColor;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 5, 8, 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: List.generate(
+          totalWidth ~/ (dashWidth + emptyWidth),
+          (_) => Container(
+            width: dashWidth,
+            height: dashHeight,
+            color: dashColor,
+            margin:
+                EdgeInsets.only(left: emptyWidth / 2, right: emptyWidth / 2),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class TextFormWidget extends StatelessWidget {
+  const TextFormWidget({
+    Key? key,
+    this.labelText,
+    this.hintText,
+    this.value,
+    this.actionText,
+  }) : super(key: key);
+
+  final String? labelText;
+  final String? hintText;
+  final String? value;
+  final TextInputAction? actionText;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+      child: TextFormField(
+        textInputAction: actionText,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          labelStyle: const TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 15,
+            color: Colors.grey,
+          ),
+          hintText: hintText ?? '',
+          labelText: '$labelText *',
+        ),
+        // onChanged: (_) => FocusScope.of(context).nextFocus(),
+        onSaved: (String? value) {
+          // This optional block of code can be used to run
+          // code when the user saves the form.
+        },
+        validator: (String? value) {
+          return (value != null && value.contains('@'))
+              ? 'Do not use the @ char.'
+              : null;
+        },
       ),
     );
   }
@@ -914,15 +889,33 @@ enum SingleChoice { choice, noChoice }
 class _SingleRadioWidgetState extends State<SingleRadioWidget> {
   @override
   Widget build(BuildContext context) {
-    SingleChoice? singleChoice = SingleChoice.choice;
+    SingleChoice? singleChoice = SingleChoice.noChoice;
     return Row(
       children: [
         Radio(
-          value: SingleChoice.noChoice,
+          value: singleChoice,
           groupValue: singleChoice,
           onChanged: (SingleChoice? value) {
             setState(() {
+              value = SingleChoice.choice;
               singleChoice = value;
+              print(singleChoice);
+              // showModalBottomSheet(
+              //     context: context,
+              //     builder: (context) {
+              //       return Column(
+              //         mainAxisSize: MainAxisSize.min,
+              //         children: <Widget>[
+              //           ListTile(
+              //             leading: new Icon(Icons.photo),
+              //             title: new Text('Photo'),
+              //             onTap: () {
+              //               Navigator.pop(context);
+              //             },
+              //           ),
+              //         ],
+              //       );
+              //     });
             });
           },
         ),
@@ -932,7 +925,29 @@ class _SingleRadioWidgetState extends State<SingleRadioWidget> {
           ),
           onPressed: () {
             setState(() {
-              singleChoice = SingleChoice.noChoice;
+              singleChoice = SingleChoice.choice;
+
+              // showModalBottomSheet(
+              //     context: context,
+              //     builder: (context) {
+              //       return Column(
+              //         mainAxisSize: MainAxisSize.min,
+              //         children: <Widget>[
+              //           ListTile(
+              //             title: const Text('Sử dụng thông tin người liên hệ'),
+              //             onTap: () {
+              //               Navigator.pop(context);
+              //             },
+              //           ),
+              //           ListTile(
+              //             title: const Text('Data'),
+              //             onTap: () {
+              //               Navigator.pop(context);
+              //             },
+              //           ),
+              //         ],
+              //       );
+              //     });
             });
           },
           child: Text(

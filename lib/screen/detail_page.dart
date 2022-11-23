@@ -82,8 +82,8 @@ class DetailPageState extends State<DetailPage> {
   }
 
   Future<void> readJsonRating() async {
-    final String response = await rootBundle.loadString('assets/rating.json');
-    final dataRating = await json.decode(response);
+    // final String response = await rootBundle.loadString('assets/rating.json');
+    // final dataRating = await json.decode(response);
     // print(dataRating["data"]);
     // setState(() {
     //   dataRating["data"]

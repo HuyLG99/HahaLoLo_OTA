@@ -3,13 +3,29 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../bloc/counter_accompanied_cubit/counter_accompanied_cubit.dart';
 import '../../bloc/counter_cubit/counter_cubit.dart';
+import '../../models/accompanied_service_model.dart';
 
-class AmountBookTourWidget extends StatelessWidget {
-  const AmountBookTourWidget({Key? key}) : super(key: key);
+class AmountBookTourWidget extends StatefulWidget {
+  AmountBookTourWidget({
+    Key? key,
+    this.getSum,
+    this.listBottomSheetDetail,
+    this.maxCount,
+  }) : super(key: key);
 
+  final ValueChanged<int?>? getSum;
+  final int? maxCount;
+  List<AccompaniedServiceData?>? listBottomSheetDetail;
+  @override
+  State<AmountBookTourWidget> createState() => _AmountBookTourWidgetState();
+}
+
+class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
   @override
   Widget build(BuildContext context) {
+    final cubit = BlocProvider.of<CounterAccompaniedCubit>(context);
     return BlocBuilder<CounterCubit, CounterState>(builder: (context, state) {
       return Column(
         children: [
@@ -18,14 +34,46 @@ class AmountBookTourWidget extends StatelessWidget {
               typeAge: 'Từ 12 tuổi',
               count: state.amountCustomer.adult,
               onTapDecrement: () {
-                context
-                    .read<CounterCubit>()
-                    .decrementAdult(state.amountCustomer.adult - 1);
+                state.amountCustomer.adult == 1
+                    ? null
+                    : context
+                        .read<CounterCubit>()
+                        .decrementAdult(state.amountCustomer.adult - 1);
+
+                setState(() {
+                  final totalPrice = widget.listBottomSheetDetail!.fold(
+                      0,
+                      (int sum, element) => (widget.maxCount ?? 1) <
+                              (element!.qty ?? 0)
+                          ? sum + ((widget.maxCount ?? 1) - 1) * element.tn452
+                          : (element.qty == 1)
+                              ? sum + ((element.qty ?? 1) * element.tn452)
+                              : sum + ((element.qty ?? 1) - 1) * element.tn452);
+
+                  widget.getSum?.call(totalPrice);
+                  if (((widget.maxCount ?? 1) - 1) == 1) {
+                    cubit.clean();
+                  }
+                });
               },
               onTapIncrement: () {
                 context
                     .read<CounterCubit>()
                     .incrementAdult(state.amountCustomer.adult + 1);
+                setState(() {
+                  final totalPrice = widget.listBottomSheetDetail!.fold(
+                      0,
+                      (int sum, element) => (widget.maxCount ?? 1) ==
+                                  (element!.qty ?? 0) &&
+                              (element.qty ?? 0) != 0 &&
+                              (element.t250.t251.tv251).isNotEmpty
+                          ? sum + ((widget.maxCount ?? 1)) * element.tn452
+                          : ((element.qty ?? 0) >= 1 || (element.qty ?? 0) == 0)
+                              ? sum + ((element.qty ?? 0)) * element.tn452
+                              : sum + ((element.qty ?? 0) + 1) * element.tn452);
+
+                  widget.getSum?.call(totalPrice);
+                });
               }),
           AmountCounterWidget(
             typePeople: 'Trẻ em',
@@ -35,11 +83,40 @@ class AmountBookTourWidget extends StatelessWidget {
               context
                   .read<CounterCubit>()
                   .incrementChild(state.amountCustomer.child + 1);
+              setState(() {
+                final totalPrice = widget.listBottomSheetDetail!.fold(
+                    0,
+                    (int sum, element) => (widget.maxCount ?? 1) ==
+                                (element!.qty ?? 0) &&
+                            (element.qty ?? 0) != 0 &&
+                            (element.t250.t251.tv251).isNotEmpty
+                        ? sum + ((widget.maxCount ?? 1)) * element.tn452
+                        : ((element.qty ?? 0) >= 1 || (element.qty ?? 0) == 0)
+                            ? sum + ((element.qty ?? 0)) * element.tn452
+                            : sum + ((element.qty ?? 0) + 1) * element.tn452);
+
+                widget.getSum?.call(totalPrice);
+              });
             },
             onTapDecrement: () {
               context
                   .read<CounterCubit>()
                   .decrementChild(state.amountCustomer.child - 1);
+              setState(() {
+                final totalPrice = widget.listBottomSheetDetail!.fold(
+                    0,
+                    (int sum, element) => (widget.maxCount ?? 1) <
+                            (element!.qty ?? 0)
+                        ? sum + ((widget.maxCount ?? 1) - 1) * element.tn452
+                        : ((element.qty ?? 0) == 1 || (element.qty ?? 0) == 0)
+                            ? sum + ((element.qty ?? 0) * element.tn452)
+                            : sum + ((element.qty ?? 0) - 1) * element.tn452);
+
+                widget.getSum?.call(totalPrice);
+                if (((widget.maxCount ?? 1) - 1) == 1) {
+                  cubit.clean();
+                }
+              });
             },
           ),
           AmountCounterWidget(
@@ -50,11 +127,40 @@ class AmountBookTourWidget extends StatelessWidget {
               context
                   .read<CounterCubit>()
                   .incrementLittleChild(state.amountCustomer.littleChild + 1);
+              setState(() {
+                final totalPrice = widget.listBottomSheetDetail!.fold(
+                    0,
+                    (int sum, element) => (widget.maxCount ?? 1) ==
+                                (element!.qty ?? 0) &&
+                            (element.qty ?? 0) != 0 &&
+                            (element.t250.t251.tv251).isNotEmpty
+                        ? sum + ((widget.maxCount ?? 1)) * element.tn452
+                        : ((element.qty ?? 0) >= 1 || (element.qty ?? 0) == 0)
+                            ? sum + ((element.qty ?? 0)) * element.tn452
+                            : sum + ((element.qty ?? 0) + 1) * element.tn452);
+
+                widget.getSum?.call(totalPrice);
+              });
             },
             onTapDecrement: () {
               context
                   .read<CounterCubit>()
                   .decrementLittleChild(state.amountCustomer.littleChild - 1);
+              setState(() {
+                final totalPrice = widget.listBottomSheetDetail!.fold(
+                    0,
+                    (int sum, element) => (widget.maxCount ?? 1) <
+                            (element!.qty ?? 0)
+                        ? sum + ((widget.maxCount ?? 1) - 1) * element.tn452
+                        : ((element.qty ?? 0) >= 1 || (element.qty ?? 0) == 0)
+                            ? sum + ((element.qty ?? 0) * element.tn452)
+                            : sum + ((element.qty ?? 0) - 1) * element.tn452);
+
+                widget.getSum?.call(totalPrice);
+                if (((widget.maxCount ?? 1) - 1) == 1) {
+                  cubit.clean();
+                }
+              });
             },
           ),
           AmountCounterWidget(
@@ -65,11 +171,40 @@ class AmountBookTourWidget extends StatelessWidget {
               context
                   .read<CounterCubit>()
                   .incrementBaby(state.amountCustomer.baby + 1);
+              setState(() {
+                final totalPrice = widget.listBottomSheetDetail!.fold(
+                    0,
+                    (int sum, element) => (widget.maxCount ?? 1) ==
+                                (element!.qty ?? 0) &&
+                            (element.qty ?? 0) != 0 &&
+                            (element.t250.t251.tv251).isNotEmpty
+                        ? sum + ((widget.maxCount ?? 1)) * element.tn452
+                        : ((element.qty ?? 0) >= 1 || (element.qty ?? 0) == 0)
+                            ? sum + ((element.qty ?? 0)) * element.tn452
+                            : sum + ((element.qty ?? 0) + 1) * element.tn452);
+
+                widget.getSum?.call(totalPrice);
+              });
             },
             onTapDecrement: () {
               context
                   .read<CounterCubit>()
                   .decrementBaby(state.amountCustomer.baby - 1);
+              setState(() {
+                final totalPrice = widget.listBottomSheetDetail!.fold(
+                    0,
+                    (int sum, element) => (widget.maxCount ?? 1) <=
+                            (element!.qty ?? 0)
+                        ? sum + ((widget.maxCount ?? 1) - 1) * element.tn452
+                        : ((element.qty ?? 0) >= 1 || (element.qty ?? 0) == 0)
+                            ? sum + ((element.qty ?? 0)) * element.tn452
+                            : sum + ((element.qty ?? 0) - 1) * element.tn452);
+
+                widget.getSum?.call(totalPrice);
+                if (((widget.maxCount ?? 1) - 1) == 1) {
+                  cubit.clean();
+                }
+              });
             },
           ),
           const RadioOptionWidget(),
