@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hahaloloapp/bloc/accompanied_service_bloc/accompanied_repository.dart';
 import 'package:hahaloloapp/screen/book_tour/book_tour_page.dart';
-import 'package:hahaloloapp/screen/bookdatetime_page.dart';
 import 'package:hahaloloapp/screen/detail_page.dart';
 
 import 'bloc/accompanied_service_bloc/accompanied_bloc.dart';

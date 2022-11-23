@@ -17,15 +17,16 @@ class AccompaniedServiceBloc
 
   AccompaniedServiceBloc(this.accompaniedServiceRepository)
       : super(AccompaniedServiceState(
-          listAccompaniedService: [],
-          selectedList: [],
-          remainList: [],
+          listAccompaniedService: const [],
+          selectedList: const [],
+          remainList: const [],
         )) {
     on<AccompaniedServiceCompareSelected>((event, emit) async {
       emit(AccompaniedServiceState(
-          listAccompaniedService: [],
-          selectedList: [],
-          remainList: []).copyWith(status: AccompaniedServiceStatus.loading));
+              listAccompaniedService: const [],
+              selectedList: const [],
+              remainList: const [])
+          .copyWith(status: AccompaniedServiceStatus.loading));
       data = await accompaniedServiceRepository.readAccompanied();
       try {
         emit(AccompaniedServiceState(

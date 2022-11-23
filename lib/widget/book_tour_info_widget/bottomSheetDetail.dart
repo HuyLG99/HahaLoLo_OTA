@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hahaloloapp/models/accompanied_service_model.dart';
 
 class BottomSheetDetail extends StatefulWidget {
-  BottomSheetDetail({
+  const BottomSheetDetail({
     Key? key,
     required this.name,
     required this.qty,
@@ -45,7 +45,7 @@ class BottomSheetDetailState extends State<BottomSheetDetail> {
                     Expanded(
                       flex: 2,
                       child: Text(
-                        widget.name ?? '',
+                        widget.name,
                         style: const TextStyle(
                           fontSize: 20,
                           color: Colors.black,
@@ -56,7 +56,7 @@ class BottomSheetDetailState extends State<BottomSheetDetail> {
                     Expanded(
                       flex: 1,
                       child: Text(
-                        'x ${widget.qty ?? ''}',
+                        'x ${widget.qty}',
                         style: const TextStyle(
                           fontWeight: FontWeight.w400,
                         ),

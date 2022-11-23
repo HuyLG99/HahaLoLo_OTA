@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hahaloloapp/models/more_service_model.dart';
 
 import '../../bloc/counter_accompanied_cubit/counter_accompanied_cubit.dart';
 import '../../bloc/counter_cubit/counter_cubit.dart';
@@ -26,7 +25,7 @@ class AmountBookTourWidget extends StatefulWidget {
 class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
   @override
   Widget build(BuildContext context) {
-    final _cubit = BlocProvider.of<CounterAccompaniedCubit>(context);
+    final cubit = BlocProvider.of<CounterAccompaniedCubit>(context);
     return BlocBuilder<CounterCubit, CounterState>(builder: (context, state) {
       return Column(
         children: [
@@ -53,7 +52,7 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
 
                   widget.getSum?.call(totalPrice);
                   if (((widget.maxCount ?? 1) - 1) == 1) {
-                    _cubit.clean();
+                    cubit.clean();
                   }
                 });
               },
@@ -115,7 +114,7 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
 
                 widget.getSum?.call(totalPrice);
                 if (((widget.maxCount ?? 1) - 1) == 1) {
-                  _cubit.clean();
+                  cubit.clean();
                 }
               });
             },
@@ -159,7 +158,7 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
 
                 widget.getSum?.call(totalPrice);
                 if (((widget.maxCount ?? 1) - 1) == 1) {
-                  _cubit.clean();
+                  cubit.clean();
                 }
               });
             },
@@ -203,7 +202,7 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
 
                 widget.getSum?.call(totalPrice);
                 if (((widget.maxCount ?? 1) - 1) == 1) {
-                  _cubit.clean();
+                  cubit.clean();
                 }
               });
             },
@@ -216,7 +215,7 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
 }
 
 class AmountCounterWidget extends StatefulWidget {
-  AmountCounterWidget({
+  const AmountCounterWidget({
     Key? key,
     required this.count,
     this.typePeople,
