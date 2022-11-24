@@ -10,6 +10,7 @@ enum AccompaniedServiceStatus {
   failure
 }
 
+//ignore: must_be_immutable
 class AccompaniedServiceState extends Equatable {
   final AccompaniedServiceStatus status;
   List<AccompaniedServiceData> listAccompaniedService;

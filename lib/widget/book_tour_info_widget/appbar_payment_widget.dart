@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
+//ignore: must_be_immutable
 class AppBarPaymentWidget extends StatefulWidget {
   AppBarPaymentWidget(
       {Key? key,

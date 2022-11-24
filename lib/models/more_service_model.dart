@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:hahaloloapp/models/accompanied_service_model.dart';
 
+//ignore: must_be_immutable
 class MoreServiceModel extends Equatable {
   AccompaniedServiceData? accompaniedServiceData;
   String? idSelectedMenuItem;

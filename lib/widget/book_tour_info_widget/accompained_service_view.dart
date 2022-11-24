@@ -4,6 +4,7 @@ import 'package:hahaloloapp/models/more_service_model.dart';
 
 import 'accompanied_service_widget.dart';
 
+//ignore: must_be_immutable
 class AccompaniedServiceView extends StatefulWidget {
   AccompaniedServiceView({
     Key? key,

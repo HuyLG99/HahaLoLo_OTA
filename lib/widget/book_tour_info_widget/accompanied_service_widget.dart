@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hahaloloapp/bloc/counter_accompanied_cubit/counter_accompanied_cubit.dart';
 
 import 'package:hahaloloapp/models/accompanied_service_model.dart';
 
+import '../../bloc/counter_accompanied_cubit/counter_accompanied_cubit.dart';
 import 'amount_accompanied_widget.dart';
 
+//ignore: must_be_immutable
 class AccompaniedService extends StatefulWidget {
   AccompaniedService({
     Key? key,
