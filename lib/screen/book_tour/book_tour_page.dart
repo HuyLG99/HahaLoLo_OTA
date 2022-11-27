@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hahaloloapp/models/accompanied_service_model.dart';
@@ -6,10 +8,12 @@ import 'package:hahaloloapp/screen/book_tour/amount_book_tour_view.dart';
 import 'package:hahaloloapp/widget/book_tour_info_widget/accompained_service_view.dart';
 import 'package:hahaloloapp/widget/book_tour_info_widget/bottom_sheet_detail.dart';
 import 'package:hahaloloapp/widget/core_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../bloc/accompanied_service_bloc/accompanied_bloc.dart';
 import '../../bloc/accompanied_service_bloc/accompanied_repository.dart';
 import '../../bloc/counter_cubit/counter_cubit.dart';
+import '../../models/customer_information_model.dart';
 import '../../widget/book_tour_info_widget/appbar_payment_widget.dart';
 import '../../widget/book_tour_info_widget/form_validation_2_widget.dart';
 import '../../widget/book_tour_info_widget/fom_validation_widget.dart';
@@ -29,9 +33,28 @@ class BookTourPageState extends State<BookTourPage> {
   ValueChanged<List<MoreServiceModel?>>? showListMoreService;
   var sum = 0;
 
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  List<CustomerInformationModel>? listInformationCustomer = [];
+
+  void updateListInfo() async {
+    final SharedPreferences prefs = await _prefs;
+    setState(() {
+      final resultDataString = prefs.getString('textInput') ?? '';
+      final resultEndCode = jsonDecode(resultDataString);
+      final resultObject = CustomerInformationModel.fromJson(resultEndCode);
+      listInformationCustomer?.add(resultObject);
+      final String? listValueUpdateString =
+          prefs.getString('listValueUpdate_key');
+      final List<CustomerInformationModel> listChange =
+          CustomerInformationModel.decode(listValueUpdateString ?? '');
+      listInformationCustomer = listChange;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    // updateListInfo();
   }
 
   @override
@@ -109,6 +132,7 @@ class BookTourPageState extends State<BookTourPage> {
               });
             },
             getListBottomSheetDetail: listBottomSheetDetail,
+            listInformationCustomer: listInformationCustomer,
           ),
           bottomNavigationBar: GestureDetector(
             onTap: () {
@@ -127,6 +151,9 @@ class BookTourPageState extends State<BookTourPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 AppBarPaymentWidget(
+                                  callback: () {
+                                    updateListInfo();
+                                  },
                                   textButton: 'Thanh toán',
                                   title: 'Tổng thanh toán',
                                   price: sum,
@@ -185,6 +212,9 @@ class BookTourPageState extends State<BookTourPage> {
             },
             child: BottomAppBar(
               child: AppBarPaymentWidget(
+                callback: () {
+                  updateListInfo();
+                },
                 textButton: 'Thanh toán',
                 title: 'Tổng thanh toán',
                 price: sum,
@@ -211,6 +241,7 @@ class BookTourPageBody extends StatefulWidget {
     this.getListBottomSheetDetail,
     this.showListMoreService,
     this.getListMoreServiceDetail,
+    this.listInformationCustomer,
   }) : super(key: key);
 
   final String? header;
@@ -222,8 +253,9 @@ class BookTourPageBody extends StatefulWidget {
   ValueChanged<List<MoreServiceModel?>>? showListMoreService;
   List<AccompaniedServiceData?>? getListBottomSheetDetail;
   List<MoreServiceModel?>? getListMoreServiceDetail;
-
   ValueChanged<int?>? getSum;
+
+  List<CustomerInformationModel>? listInformationCustomer;
 
   @override
   State<BookTourPageBody> createState() => _BookTourPageBodyState();
@@ -236,6 +268,7 @@ class _BookTourPageBodyState extends State<BookTourPageBody> {
   @override
   void initState() {
     super.initState();
+
     context
         .read<AccompaniedServiceBloc>()
         .add(AccompaniedServiceCompareSelected());
@@ -257,8 +290,8 @@ class _BookTourPageBodyState extends State<BookTourPageBody> {
                 sizeText: 24,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
               child: FormValidation(),
             ),
             const Padding(
@@ -337,7 +370,9 @@ class _BookTourPageBodyState extends State<BookTourPageBody> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: FormValidation2(),
+              child: FormValidation2(
+                listInformation: widget.listInformationCustomer,
+              ),
             ),
             const Padding(
               padding: EdgeInsets.only(top: 8.0, bottom: 8),

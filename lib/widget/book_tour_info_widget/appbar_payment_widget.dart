@@ -11,14 +11,15 @@ class AppBarPaymentWidget extends StatefulWidget {
       this.price,
       this.textButton,
       this.check,
-      this.onChanged})
+      this.onChanged,
+      required this.callback})
       : super(key: key);
   final String? title;
   final int? price;
   final String? textButton;
   bool? check;
   final ValueChanged<bool>? onChanged;
-
+  final Function callback;
   @override
   State<AppBarPaymentWidget> createState() => _AppBarPaymentWidgetState();
 }
@@ -89,7 +90,9 @@ class _AppBarPaymentWidgetState extends State<AppBarPaymentWidget> {
             ],
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              widget.callback();
+            },
             child: Container(
               width: 140,
               height: 40,

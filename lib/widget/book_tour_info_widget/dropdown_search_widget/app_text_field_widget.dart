@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'bottom_sheet_search_bar_widget.dart';
 
 /// This is search text field class.
+//ignore: must_be_immutable
 class AppTextField extends StatefulWidget {
   DropDown dropDown;
   Function(String) onTextChanged;

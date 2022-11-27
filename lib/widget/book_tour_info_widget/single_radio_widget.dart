@@ -1,5 +1,130 @@
 import 'package:flutter/material.dart';
 
+class CheckboxFormField extends StatefulWidget {
+  final Function callback;
+  final String? text;
+
+  const CheckboxFormField({Key? key, required this.callback, this.text})
+      : super(key: key);
+
+  @override
+  CheckboxFormFieldState createState() => CheckboxFormFieldState();
+}
+
+class CheckboxFormFieldState extends State<CheckboxFormField> {
+  bool checkboxValue = false;
+  @override
+  Widget build(BuildContext context) {
+    return FormField(
+      builder: (state) {
+        return Column(
+          children: [
+            Row(
+              children: [
+                Checkbox(
+                  value: checkboxValue,
+                  onChanged: (value) {
+                    widget.callback();
+                    checkboxValue = value!;
+                    state.didChange(value);
+                  },
+                ),
+                GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        widget.callback();
+                        checkboxValue = !checkboxValue;
+                      });
+                    },
+                    child: SizedBox(
+                      width: 300,
+                      child: Text(
+                        '${widget.text}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    )),
+              ],
+            ),
+            // Text(
+            //   state.errorText ?? '',
+            //   style: TextStyle(
+            //     color: Theme.of(context).errorColor,
+            //   ),
+            // ),
+          ],
+        );
+      },
+      // validator: (value) {
+      //   if (!checkboxValue) return 'You must check this box';
+      //   return null;
+      // },
+      // onSaved: (value) {
+      //   widget.callback('Check Box', value.toString());
+      // },
+    );
+  }
+}
+
+class RadioFormField extends StatefulWidget {
+  final Function callback;
+  const RadioFormField({Key? key, required this.callback}) : super(key: key);
+
+  @override
+  RadioFormFieldState createState() => RadioFormFieldState();
+}
+
+class RadioFormFieldState extends State<RadioFormField> {
+  String radioValue = 'Top';
+
+  @override
+  Widget build(BuildContext context) {
+    return FormField(
+      builder: (state) {
+        return Column(
+          children: [
+            Radio<String>(
+                value: 'Top',
+                groupValue: radioValue,
+                onChanged: (String? value) {
+                  setState(() {
+                    radioValue = value!;
+                  });
+                }),
+            Radio<String>(
+                value: 'Bottom',
+                groupValue: radioValue,
+                onChanged: (String? value) {
+                  setState(() {
+                    radioValue = value!;
+                  });
+                }),
+            Text(
+              state.errorText ?? '',
+              style: TextStyle(
+                color: Theme.of(context).errorColor,
+              ),
+            ),
+          ],
+        );
+      },
+      validator: (value) {
+        if (radioValue == 'Bottom') {
+          return 'You must choose the top radio button.';
+        }
+        return null;
+      },
+      onSaved: (value) {
+        widget.callback('Radio', radioValue);
+      },
+    );
+  }
+}
+
 class SingleRadioWidget extends StatefulWidget {
   const SingleRadioWidget({Key? key, this.radioText}) : super(key: key);
   final String? radioText;

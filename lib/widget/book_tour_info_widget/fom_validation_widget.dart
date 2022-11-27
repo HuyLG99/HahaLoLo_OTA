@@ -34,15 +34,15 @@ class FormValidationState extends State<FormValidation> {
     setState(() {
       if (formKey.currentState!.validate()) {
         formKey.currentState?.save();
-        prefs.setString('firstName', textInputValue.firstName ?? '');
+        prefs.setString('firstName', firstNameController.text ?? '');
         prefs.getString('firstName') ?? '';
-        prefs.setString('lastName', textInputValue.lastName ?? '');
+        prefs.setString('lastName', lastNameController.text ?? '');
         prefs.getString('lastName') ?? '';
-        prefs.setString('email', textInputValue.email ?? '');
+        prefs.setString('email', emailController.text ?? '');
         prefs.getString('email') ?? '';
-        prefs.setString('phone', textInputValue.phone ?? '');
+        prefs.setString('phone', phoneController.text ?? '');
         prefs.getString('phone') ?? '';
-        prefs.setString('address', textInputValue.address ?? '');
+        prefs.setString('address', addressController.text ?? '');
         prefs.getString('address') ?? '';
       }
     });
@@ -94,7 +94,7 @@ class FormValidationState extends State<FormValidation> {
               }
             },
             onSaved: (value) async {
-              textInputValue.firstName = value;
+              // textInputValue.firstName = value;
             },
           ),
           const DotWidget(
@@ -124,7 +124,7 @@ class FormValidationState extends State<FormValidation> {
               }
             },
             onSaved: (value) {
-              textInputValue.lastName = value;
+              // textInputValue.lastName = value;
             },
           ),
           const DotWidget(
@@ -161,7 +161,7 @@ class FormValidationState extends State<FormValidation> {
               }
             },
             onSaved: (value) {
-              textInputValue.email = value;
+              // textInputValue.email = value;
             },
           ),
           const DotWidget(
@@ -213,7 +213,7 @@ class FormValidationState extends State<FormValidation> {
                         }
                       },
                       onSaved: (value) {
-                        textInputValue.phone = value;
+                        // textInputValue.phone = value;
                       },
                     ),
                   ],
@@ -247,7 +247,7 @@ class FormValidationState extends State<FormValidation> {
               }
             },
             onSaved: (value) {
-              textInputValue.address = value;
+              // textInputValue.address = value;
             },
           ),
           const DotWidget(
