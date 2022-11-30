@@ -39,7 +39,6 @@ class DetailPageState extends State<DetailPage> {
   Future checkUserConnection() async {
     try {
       final result = await InternetAddress.lookup('google.com');
-      // print(result);
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         setState(() {
           activeConnection = true;

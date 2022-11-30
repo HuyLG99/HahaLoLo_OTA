@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CheckboxFormField extends StatefulWidget {
   final Function callback;
   final String? text;
-
-  const CheckboxFormField({Key? key, required this.callback, this.text})
+  bool? checkboxValue = false;
+  CheckboxFormField(
+      {Key? key, required this.callback, this.text, this.checkboxValue})
       : super(key: key);
 
   @override
@@ -12,7 +14,12 @@ class CheckboxFormField extends StatefulWidget {
 }
 
 class CheckboxFormFieldState extends State<CheckboxFormField> {
-  bool checkboxValue = false;
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  void getCheckChoose(bool value) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setBool('checkChoose_key', value);
+  }
+
   @override
   Widget build(BuildContext context) {
     return FormField(
@@ -22,18 +29,102 @@ class CheckboxFormFieldState extends State<CheckboxFormField> {
             Row(
               children: [
                 Checkbox(
-                  value: checkboxValue,
+                  value: widget.checkboxValue,
                   onChanged: (value) {
                     widget.callback();
-                    checkboxValue = value!;
+                    // checkboxValue = value!;
                     state.didChange(value);
+                    // getCheckChoose(checkboxValue);
                   },
                 ),
                 GestureDetector(
                     onTap: () {
                       setState(() {
                         widget.callback();
-                        checkboxValue = !checkboxValue;
+                        // widget.checkboxValue = true;
+                        // getCheckChoose(checkboxValue);
+                      });
+                    },
+                    child: SizedBox(
+                      width: 300,
+                      child: Text(
+                        '${widget.text}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    )),
+              ],
+            ),
+            // Text(
+            //   state.errorText ?? '',
+            //   style: TextStyle(
+            //     color: Theme.of(context).errorColor,
+            //   ),
+            // ),
+          ],
+        );
+      },
+      // validator: (value) {
+      //   if (!checkboxValue) return 'You must check this box';
+      //   return null;
+      // },
+      // onSaved: (value) {
+      //   widget.callback('Check Box', value.toString());
+      // },
+    );
+  }
+}
+
+class CheckboxSaveUseAfter extends StatefulWidget {
+  final Function callback;
+  final String? text;
+  bool checkboxValue;
+
+  CheckboxSaveUseAfter(
+      {Key? key,
+      required this.callback,
+      this.text,
+      required this.checkboxValue})
+      : super(key: key);
+
+  @override
+  CheckboxSaveUseAfterState createState() => CheckboxSaveUseAfterState();
+}
+
+class CheckboxSaveUseAfterState extends State<CheckboxSaveUseAfter> {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  void getCheckSave(bool value) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setBool('checkSave_key', value);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FormField(
+      builder: (state) {
+        return Column(
+          children: [
+            Row(
+              children: [
+                Checkbox(
+                  value: widget.checkboxValue,
+                  onChanged: (value) {
+                    widget.callback();
+                    widget.checkboxValue = value!;
+                    state.didChange(value);
+                    getCheckSave(widget.checkboxValue);
+                  },
+                ),
+                GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        widget.callback();
+                        widget.checkboxValue = !widget.checkboxValue;
+                        getCheckSave(widget.checkboxValue);
                       });
                     },
                     child: SizedBox(

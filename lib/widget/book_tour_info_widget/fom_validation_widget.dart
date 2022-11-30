@@ -28,6 +28,11 @@ class FormValidationState extends State<FormValidation> {
       TextEditingController(text: '4000,Ung Van Khiem,Ho Chi Minh');
 
   CustomerInformationModel textInputValue = CustomerInformationModel();
+  // bool firstNameValidate = false;
+  // bool lastNameValidate = false;
+  // bool emailValidate = false;
+  // bool phoneValidate = false;
+  // bool addressValidate = false;
 
   void loadDataForm() async {
     final SharedPreferences prefs = await _prefs;
@@ -35,17 +40,56 @@ class FormValidationState extends State<FormValidation> {
       if (formKey.currentState!.validate()) {
         formKey.currentState?.save();
         prefs.setString('firstName', firstNameController.text ?? '');
-        prefs.getString('firstName') ?? '';
+        // prefs.getString('firstName') ?? '';
         prefs.setString('lastName', lastNameController.text ?? '');
-        prefs.getString('lastName') ?? '';
+        // prefs.getString('lastName') ?? '';
         prefs.setString('email', emailController.text ?? '');
-        prefs.getString('email') ?? '';
+        // prefs.getString('email') ?? '';
         prefs.setString('phone', phoneController.text ?? '');
-        prefs.getString('phone') ?? '';
+        // prefs.getString('phone') ?? '';
         prefs.setString('address', addressController.text ?? '');
-        prefs.getString('address') ?? '';
+        // prefs.getString('address') ?? '';
       }
     });
+  }
+
+  void setCheckFirstNameNull(bool value, String firstName) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setBool('checkFirstNameValidate_key', value);
+    prefs.setString('firstName', firstName ?? '');
+  }
+
+  void setCheckLastNameNull(bool value, String lastName) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setBool('checkLastNameValidate_key', value);
+    prefs.setString('lastName', lastName ?? '');
+  }
+
+  void setCheckEmailNull(bool value, String email) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setBool('checkEmailValidate_key', value);
+    prefs.setString('email', email ?? '');
+  }
+
+  void setCheckPhoneNull(bool value, String phone) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setBool('checkPhoneValidate_key', value);
+    prefs.setString('phone', phone ?? '');
+  }
+
+  void setCheckAddressNull(bool value, String address) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setBool('checkAddressValidate_key', value);
+    prefs.setString('address', address ?? '');
+  }
+
+  Future scrollItem() async {
+    final context = formKey.currentContext!;
+    await Scrollable.ensureVisible(
+      context,
+      curve: Curves.ease,
+      duration: const Duration(seconds: 1),
+    );
   }
 
   @override
@@ -88,8 +132,13 @@ class FormValidationState extends State<FormValidation> {
             validator: (value) {
               if (value!.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
                 //allow upper and lower case alphabets and space
+                scrollItem();
+                setCheckFirstNameNull(true, value);
+
                 return "Enter Correct Name";
               } else {
+                setCheckFirstNameNull(false, value);
+
                 return null;
               }
             },
@@ -118,8 +167,11 @@ class FormValidationState extends State<FormValidation> {
             validator: (value) {
               if (value!.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
                 //allow upper and lower case alphabets and space
+                scrollItem();
+                setCheckLastNameNull(true, value);
                 return "Enter Correct Name";
               } else {
+                setCheckLastNameNull(false, value);
                 return null;
               }
             },
@@ -155,8 +207,11 @@ class FormValidationState extends State<FormValidation> {
               if (value!.isEmpty ||
                   !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                       .hasMatch(value)) {
+                scrollItem();
+                setCheckEmailNull(true, value);
                 return "Enter Correct Email Address";
               } else {
+                setCheckEmailNull(false, value);
                 return null;
               }
             },
@@ -207,8 +262,11 @@ class FormValidationState extends State<FormValidation> {
                         if (value!.isEmpty ||
                             !RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$')
                                 .hasMatch(value)) {
+                          scrollItem();
+                          setCheckPhoneNull(true, value);
                           return "Enter Correct Phone Number";
                         } else {
+                          setCheckPhoneNull(false, value);
                           return null;
                         }
                       },
@@ -241,8 +299,11 @@ class FormValidationState extends State<FormValidation> {
             ),
             validator: (value) {
               if (value!.isEmpty) {
+                scrollItem();
+                setCheckAddressNull(true, value);
                 return "Enter Correct Address";
               } else {
+                setCheckAddressNull(false, value);
                 return null;
               }
             },
@@ -255,27 +316,6 @@ class FormValidationState extends State<FormValidation> {
             dashHeight: 1,
             dashWidth: 5,
           ),
-          // ElevatedButton(
-          //   onPressed: () async {
-          //     final SharedPreferences prefs = await _prefs;
-          //     setState(() {
-          //       if (formKey.currentState!.validate()) {
-          //         formKey.currentState?.save();
-          //         prefs.setString('firstName', textInputValue.firstName ?? '');
-          //         prefs.getString('firstName') ?? '';
-          //         prefs.setString('lastName', textInputValue.lastName ?? '');
-          //         prefs.getString('lastName') ?? '';
-          //         prefs.setString('email', textInputValue.email ?? '');
-          //         prefs.getString('email') ?? '';
-          //         prefs.setString('phone', textInputValue.phone ?? '');
-          //         prefs.getString('phone') ?? '';
-          //         prefs.setString('address', textInputValue.address ?? '');
-          //         prefs.getString('address') ?? '';
-          //       }
-          //     });
-          //   },
-          //   child: const Text("Submit Data"),
-          // ),
         ],
       ),
     );

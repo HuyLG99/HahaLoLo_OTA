@@ -35,40 +35,11 @@ class FormValidation2State extends State<FormValidation2> {
       TextEditingController();
 
   List<CustomerInformationModel>? listValueUpdate;
-  bool _isShown = true;
-  void _delete(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (BuildContext ctx) {
-          return AlertDialog(
-            title: const Text('Please Confirm'),
-            content: const Text('Are you sure to remove the box?'),
-            actions: [
-              // The "Yes" button
-              TextButton(
-                  onPressed: () {
-                    // Remove the box
-                    setState(() {
-                      _isShown = false;
-                    });
-
-                    // Close the dialog
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Yes')),
-              TextButton(
-                  onPressed: () {
-                    // Close the dialog
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('No'))
-            ],
-          );
-        });
-  }
 
   void loadData() async {
-    setState(() {});
+    setState(() {
+      check = true;
+    });
     final SharedPreferences prefs = await _prefs;
     formKey2.currentState?.save();
     firstNameController2.text = prefs.getString('firstName') ?? '';
@@ -80,8 +51,26 @@ class FormValidation2State extends State<FormValidation2> {
     cityTextEditingController.text = prefs.getString('city') ?? '';
   }
 
+  void onTapSetData(int index) {
+    setState(() {
+      check = true;
+      firstNameController2.text =
+          widget.listInformation![index].firstName ?? '';
+      lastNameController2.text = widget.listInformation![index].lastName ?? '';
+      emailController2.text = widget.listInformation![index].email ?? '';
+      phoneController2.text = widget.listInformation![index].phone ?? '';
+      addressController2.text = widget.listInformation![index].address ?? '';
+      nationTextEditingController.text =
+          widget.listInformation![index].nation ?? '';
+      cityTextEditingController.text =
+          widget.listInformation![index].city ?? '';
+    });
+  }
+
   void saveData() async {
-    setState(() {});
+    setState(() {
+      isValidateActive = true;
+    });
     final SharedPreferences prefs = await _prefs;
     if (formKey2.currentState!.validate()) {
       formKey2.currentState?.save();
@@ -94,7 +83,7 @@ class FormValidation2State extends State<FormValidation2> {
         nation: nationTextEditingController.text,
         city: cityTextEditingController.text,
       );
-      listValueUpdate?.add(textInputValue);
+      // listValueUpdate?.add(textInputValue);
       final resultsJson = textInputValue.toJson();
       final resultsString = jsonEncode(resultsJson);
       prefs.setString('textInput', resultsString);
@@ -110,15 +99,24 @@ class FormValidation2State extends State<FormValidation2> {
     final String encodedData =
         CustomerInformationModel.encode(listValueUpdate!);
     await prefs.setString('listValueUpdate_key', encodedData);
+    print(prefs.getString('listValueUpdate_key'));
   }
 
   void removeKeyValue() async {
     final SharedPreferences prefs = await _prefs;
-    prefs.remove('listValueUpdate_key');
+    prefs.remove('textInput');
   }
 
   void setNullData() async {
-    setState(() {});
+    setState(() {
+      if (widget.listInformation!.isEmpty) {
+        setState(() {
+          check = false;
+          saveCheck = false;
+          removeKeyValue();
+        });
+      }
+    });
     formKey2.currentState?.save();
     firstNameController2.text = '';
     lastNameController2.text = '';
@@ -129,11 +127,35 @@ class FormValidation2State extends State<FormValidation2> {
     cityTextEditingController.text = '';
   }
 
+  void getCheckUse() async {
+    final SharedPreferences prefs = await _prefs;
+    setState(() {
+      check = prefs.getBool('checkChoose_key')!;
+    });
+  }
+
+  void deleteItem(int index) {
+    setState(() {
+      listValueUpdate?.removeAt(index);
+      // widget.listInformation?.removeAt(index);
+      addDataToList();
+      setNullData();
+      saveCheck = false;
+      check = false;
+    });
+  }
+
   bool check = false;
   bool saveCheck = false;
+  bool isValidateActive = false;
   @override
   void initState() {
     super.initState();
+    addDataToList();
+    setNullData();
+    setState(() {
+      check = false;
+    });
   }
 
   @override
@@ -156,183 +178,156 @@ class FormValidation2State extends State<FormValidation2> {
       child: Column(
         children: [
           CheckboxFormField(
+            checkboxValue: check,
             text:
                 'Sử dụng thông tin người thanh toán hoặc thông tin người liên hệ',
             callback: () {
               setState(() {
                 if (widget.listInformation!.isEmpty) {
-                  loadData();
+                  check == true ? setNullData() : loadData();
                   listValueUpdate = widget.listInformation;
                 } else if (widget.listInformation!.isNotEmpty) {
+                  setState(() {
+                    check = false;
+                  });
                   setNullData();
                   listValueUpdate = widget.listInformation;
+
                   showModalBottomSheet(
                       context: context,
                       builder: (context) {
-                        return Container(
-                          height: MediaQuery.of(context).size.height * 0.25,
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(40.0),
-                              topRight: Radius.circular(40.0),
+                        return StatefulBuilder(builder:
+                            (BuildContext context, StateSetter setState) {
+                          return Container(
+                            height: MediaQuery.of(context).size.height * 0.25,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(40.0),
+                                topRight: Radius.circular(40.0),
+                              ),
                             ),
-                          ),
-                          child: ListView.builder(
-                              itemCount: widget.listInformation!.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    ListTile(
-                                      title: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Expanded(
-                                            flex: 2,
-                                            child: Text(
-                                              '${widget.listInformation![index].firstName ?? ''}'
-                                              ' ${widget.listInformation![index].lastName ?? ''}',
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: IconButton(
-                                              onPressed: () {
-                                                showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext ctx) {
-                                                      return AlertDialog(
-                                                        title: Column(
-                                                          children: const [
-                                                            Icon(
-                                                              Icons.cancel,
-                                                              color:
-                                                                  Colors.green,
+                            child: ListView.builder(
+                                itemCount: widget.listInformation!.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          onTapSetData(index);
+                                          Navigator.pop(context);
+                                        },
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 12),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Expanded(
+                                                flex: 2,
+                                                child: Text(
+                                                  '${widget.listInformation![index].firstName ?? ''}'
+                                                  ' ${widget.listInformation![index].lastName ?? ''}',
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    showDialog(
+                                                        context: context,
+                                                        builder:
+                                                            (BuildContext ctx) {
+                                                          return AlertDialog(
+                                                            title: Column(
+                                                              children: const [
+                                                                Icon(
+                                                                  Icons.cancel,
+                                                                  color: Colors
+                                                                      .green,
+                                                                ),
+                                                                Text(
+                                                                    'Xóa tài khoản thanh toán'),
+                                                                Divider(
+                                                                  thickness: 2,
+                                                                ),
+                                                              ],
                                                             ),
-                                                            Text(
-                                                                'Xóa tài khoản thanh toán'),
-                                                            Divider(
-                                                              thickness: 2,
+                                                            content: SizedBox(
+                                                              width: 50,
+                                                              height: 150,
+                                                              child: Column(
+                                                                children: const [
+                                                                  Text(
+                                                                      'Bạn có chắc muốn xóa tài khoản thanh toán này?\n'
+                                                                      '\nTài khoản sẽ không xuất hiện trong mục tài khoản thanh toán nữa'),
+                                                                ],
+                                                              ),
                                                             ),
-                                                          ],
-                                                        ),
-                                                        content: SizedBox(
-                                                          width: 50,
-                                                          height: 150,
-                                                          child: Column(
-                                                            children: const [
-                                                              Text(
-                                                                  'Bạn có chắc muốn xóa tài khoản thanh toán này?\n'
-                                                                  '\nTài khoản sẽ không xuất hiện trong mục tài khoản thanh toán nữa'),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        actions: [
-                                                          // The "Yes" button
-                                                          Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Center(
-                                                                child:
-                                                                    ElevatedButton(
-                                                                        onPressed:
-                                                                            () {
+                                                            actions: [
+                                                              // The "Yes" button
+                                                              Column(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Center(
+                                                                    child: ElevatedButton(
+                                                                        onPressed: () {
                                                                           // Remove the box
                                                                           setState(
                                                                               () {
-                                                                            _isShown =
-                                                                                false;
-                                                                            listValueUpdate?.removeAt(index);
-                                                                            addDataToList();
+                                                                            deleteItem(index);
                                                                           });
                                                                           // Close the dialog
+
                                                                           Navigator.of(context)
                                                                               .pop();
                                                                         },
-                                                                        child: const Text(
-                                                                            'Đồng ý')),
-                                                              ),
-                                                              Center(
-                                                                child:
-                                                                    ElevatedButton(
-                                                                        onPressed:
-                                                                            () {
+                                                                        child: const Text('Đồng ý')),
+                                                                  ),
+                                                                  Center(
+                                                                    child: ElevatedButton(
+                                                                        onPressed: () {
                                                                           // Close the dialog
                                                                           Navigator.of(context)
                                                                               .pop();
                                                                         },
-                                                                        child: const Text(
-                                                                            'Bỏ qua')),
-                                                              )
+                                                                        child: const Text('Bỏ qua')),
+                                                                  )
+                                                                ],
+                                                              ),
                                                             ],
-                                                          ),
-                                                        ],
-                                                      );
-                                                    });
+                                                          );
+                                                        });
 
-                                                // removeKeyValue();
-                                              },
-                                              icon: const Icon(
-                                                Icons.delete,
-                                                color: Colors.redAccent,
+                                                    // removeKeyValue();
+                                                  },
+                                                  icon: const Icon(
+                                                    Icons.delete,
+                                                    color: Colors.redAccent,
+                                                  ),
+                                                ),
                                               ),
-                                            ),
+                                            ],
                                           ),
-                                        ],
+                                        ),
                                       ),
-                                      onTap: () {
-                                        setState(() {
-                                          check = true;
-                                          firstNameController2.text = widget
-                                                  .listInformation![index]
-                                                  .firstName ??
-                                              '';
-                                          lastNameController2.text = widget
-                                                  .listInformation![index]
-                                                  .lastName ??
-                                              '';
-                                          emailController2.text = widget
-                                                  .listInformation![index]
-                                                  .email ??
-                                              '';
-                                          phoneController2.text = widget
-                                                  .listInformation![index]
-                                                  .phone ??
-                                              '';
-                                          addressController2.text = widget
-                                                  .listInformation![index]
-                                                  .address ??
-                                              '';
-                                          nationTextEditingController.text =
-                                              widget.listInformation![index]
-                                                      .nation ??
-                                                  '';
-                                          cityTextEditingController.text =
-                                              widget.listInformation![index]
-                                                      .city ??
-                                                  '';
-                                        });
-                                        Navigator.pop(context);
-                                      },
-                                    )
-                                  ],
-                                );
-                              }),
-                        );
+                                    ],
+                                  );
+                                }),
+                          );
+                        });
                       });
                 }
               });
             },
           ),
-          widget.listInformation!.isNotEmpty &&
-                  check == true &&
-                  firstNameController2.text.isNotEmpty
+          firstNameController2.text.isNotEmpty && listValueUpdate!.isNotEmpty
               ? GestureDetector(
                   onTap: () {
                     showModalBottomSheet(
@@ -353,68 +348,108 @@ class FormValidation2State extends State<FormValidation2> {
                                   return Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      ListTile(
-                                        title: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                '${widget.listInformation![index].firstName ?? ''} '
-                                                '${widget.listInformation![index].lastName ?? ''}',
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: IconButton(
-                                                onPressed: () {
-                                                  listValueUpdate
-                                                      ?.removeAt(index);
-                                                  addDataToList();
-                                                },
-                                                icon: const Icon(
-                                                  Icons.delete,
-                                                  color: Colors.redAccent,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                      GestureDetector(
                                         onTap: () {
-                                          setState(() {
-                                            firstNameController2.text = widget
-                                                    .listInformation![index]
-                                                    .firstName ??
-                                                '';
-                                            lastNameController2.text = widget
-                                                    .listInformation![index]
-                                                    .lastName ??
-                                                '';
-                                            emailController2.text = widget
-                                                    .listInformation![index]
-                                                    .email ??
-                                                '';
-                                            phoneController2.text = widget
-                                                    .listInformation![index]
-                                                    .phone ??
-                                                '';
-                                            addressController2.text = widget
-                                                    .listInformation![index]
-                                                    .address ??
-                                                '';
-                                            nationTextEditingController.text =
-                                                widget.listInformation![index]
-                                                        .nation ??
-                                                    '';
-                                            cityTextEditingController.text =
-                                                widget.listInformation![index]
-                                                        .city ??
-                                                    '';
-                                          });
+                                          onTapSetData(index);
+
                                           Navigator.pop(context);
                                         },
-                                      )
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 12),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  '${widget.listInformation![index].firstName ?? ''} '
+                                                  '${widget.listInformation![index].lastName ?? ''}',
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: IconButton(
+                                                  onPressed: () {
+                                                    showDialog(
+                                                        context: context,
+                                                        builder:
+                                                            (BuildContext ctx) {
+                                                          return AlertDialog(
+                                                            title: Column(
+                                                              children: const [
+                                                                Icon(
+                                                                  Icons.cancel,
+                                                                  color: Colors
+                                                                      .green,
+                                                                ),
+                                                                Text(
+                                                                    'Xóa tài khoản thanh toán'),
+                                                                Divider(
+                                                                  thickness: 2,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            content: SizedBox(
+                                                              width: 50,
+                                                              height: 150,
+                                                              child: Column(
+                                                                children: const [
+                                                                  Text(
+                                                                      'Bạn có chắc muốn xóa tài khoản thanh toán này?\n'
+                                                                      '\nTài khoản sẽ không xuất hiện trong mục tài khoản thanh toán nữa'),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            actions: [
+                                                              // The "Yes" button
+                                                              Column(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Center(
+                                                                    child: ElevatedButton(
+                                                                        onPressed: () {
+                                                                          // Remove the box
+                                                                          setState(
+                                                                              () {
+                                                                            deleteItem(index);
+                                                                          });
+
+                                                                          // Close the dialog
+                                                                          Navigator.of(context)
+                                                                              .pop();
+                                                                        },
+                                                                        child: const Text('Đồng ý')),
+                                                                  ),
+                                                                  Center(
+                                                                    child: ElevatedButton(
+                                                                        onPressed: () {
+                                                                          // Close the dialog
+                                                                          Navigator.of(context)
+                                                                              .pop();
+                                                                        },
+                                                                        child: const Text('Bỏ qua')),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          );
+                                                        });
+                                                  },
+                                                  icon: const Icon(
+                                                    Icons.delete,
+                                                    color: Colors.redAccent,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   );
                                 }),
@@ -447,6 +482,8 @@ class FormValidation2State extends State<FormValidation2> {
                 )
               : const SizedBox(),
           TextFormField(
+            autovalidateMode:
+                isValidateActive == false ? null : AutovalidateMode.always,
             textInputAction: TextInputAction.next,
             controller: firstNameController2,
             decoration: const InputDecoration(
@@ -467,6 +504,7 @@ class FormValidation2State extends State<FormValidation2> {
               }
             },
             onSaved: (value) async {
+              firstNameController2.text = value ?? '';
               // textInputValue.firstName = value;
             },
           ),
@@ -476,7 +514,8 @@ class FormValidation2State extends State<FormValidation2> {
             dashWidth: 5,
           ),
           TextFormField(
-            // autovalidateMode: AutovalidateMode.always,
+            autovalidateMode:
+                isValidateActive == false ? null : AutovalidateMode.always,
             controller: lastNameController2,
             textInputAction: TextInputAction.next,
             decoration: const InputDecoration(
@@ -506,7 +545,8 @@ class FormValidation2State extends State<FormValidation2> {
             dashWidth: 5,
           ),
           TextFormField(
-            // autovalidateMode: AutovalidateMode.always,
+            autovalidateMode:
+                isValidateActive == false ? null : AutovalidateMode.always,
             controller: emailController2,
             textInputAction: TextInputAction.next,
             decoration: const InputDecoration(
@@ -557,7 +597,9 @@ class FormValidation2State extends State<FormValidation2> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextFormField(
-                      // autovalidateMode: AutovalidateMode.always,
+                      autovalidateMode: isValidateActive == false
+                          ? null
+                          : AutovalidateMode.always,
                       controller: phoneController2,
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.number,
@@ -594,7 +636,8 @@ class FormValidation2State extends State<FormValidation2> {
             dashWidth: 5,
           ),
           TextFormField(
-            // autovalidateMode: AutovalidateMode.always,
+            autovalidateMode:
+                isValidateActive == false ? null : AutovalidateMode.always,
             controller: addressController2,
             textInputAction: TextInputAction.done,
             decoration: const InputDecoration(
@@ -629,6 +672,7 @@ class FormValidation2State extends State<FormValidation2> {
             hint: 'Quốc tịch',
             isCitySelected: true,
             cities: _listOfNation,
+            isValidateActive: isValidateActive,
           ),
           const DotWidget(
             dashColor: Colors.grey,
@@ -641,21 +685,26 @@ class FormValidation2State extends State<FormValidation2> {
             hint: 'Thành phố',
             isCitySelected: true,
             cities: _listOfCities,
+            isValidateActive: isValidateActive,
           ),
           const DotWidget(
             dashColor: Colors.grey,
             dashHeight: 1,
             dashWidth: 5,
           ),
-          widget.listInformation!.length < 3
-              ? CheckboxFormField(
-                  text: 'Lưu thông tin thanh toán cho lần sau',
-                  callback: () {
-                    saveData();
-                    // addDataToList();
-                  },
-                )
-              : const SizedBox(),
+          // widget.listInformation!.length < 3
+          //     ?
+          CheckboxSaveUseAfter(
+            checkboxValue: saveCheck,
+            text: 'Lưu thông tin thanh toán cho lần sau',
+            callback: () {
+              setState(() {});
+              saveCheck = !saveCheck;
+              saveCheck == false ? null : saveData();
+              // addDataToList();
+            },
+          )
+          // : const SizedBox(),
         ],
       ),
     );
@@ -668,6 +717,8 @@ class AppTextField extends StatefulWidget {
   final String title;
   final String hint;
   final bool isCitySelected;
+
+  final bool isValidateActive;
   final List<SelectedListItem>? cities;
   AppTextField({
     required this.textEditingController,
@@ -675,6 +726,7 @@ class AppTextField extends StatefulWidget {
     required this.hint,
     required this.isCitySelected,
     this.cities,
+    required this.isValidateActive,
     Key? key,
   }) : super(key: key);
 
@@ -712,6 +764,8 @@ class AppTextFieldState extends State<AppTextField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextFormField(
+          autovalidateMode:
+              widget.isValidateActive == false ? null : AutovalidateMode.always,
           controller: widget.textEditingController,
           decoration: InputDecoration(
             labelText: widget.title,
@@ -725,7 +779,7 @@ class AppTextFieldState extends State<AppTextField> {
           validator: (value) {
             if (value!.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
               //allow upper and lower case alphabets and space
-              return "Enter Correct Address";
+              return "Enter Correct Nation";
             } else {
               return null;
             }

@@ -32,29 +32,68 @@ class BookTourPageState extends State<BookTourPage> {
   ValueChanged<List<AccompaniedServiceData?>>? showListBottomSheetDetail;
   ValueChanged<List<MoreServiceModel?>>? showListMoreService;
   var sum = 0;
-
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   List<CustomerInformationModel>? listInformationCustomer = [];
-
+  bool isCheckSave = false;
+  bool oneOn = false;
+  bool isValidateFirstNameNull = false;
+  bool isValidateLastNameNull = false;
+  bool isValidatePhoneNull = false;
+  bool isValidateEmailNameNull = false;
+  bool isValidateAddressNameNull = false;
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   void updateListInfo() async {
     final SharedPreferences prefs = await _prefs;
     setState(() {
       final resultDataString = prefs.getString('textInput') ?? '';
       final resultEndCode = jsonDecode(resultDataString);
       final resultObject = CustomerInformationModel.fromJson(resultEndCode);
-      listInformationCustomer?.add(resultObject);
+      if (listInformationCustomer!.length < 4) {
+        isCheckSave = prefs.getBool('checkSave_key')!;
+        isValidateFirstNameNull = prefs.getBool('checkFirstNameValidate_key')!;
+        isValidateLastNameNull = prefs.getBool('checkLastNameValidate_key')!;
+        isValidateEmailNameNull = prefs.getBool('checkEmailValidate_key')!;
+        isValidatePhoneNull = prefs.getBool('checkPhoneValidate_key')!;
+        isValidateAddressNameNull = prefs.getBool('checkAddressValidate_key')!;
+        if (isCheckSave == true &&
+            isValidateFirstNameNull == false &&
+            isValidateLastNameNull == false &&
+            isValidateEmailNameNull == false &&
+            isValidatePhoneNull == false &&
+            isValidateAddressNameNull == false) {
+          if (listInformationCustomer!.length == 3) {
+            listInformationCustomer!.removeAt(0);
+          }
+          listInformationCustomer?.add(resultObject);
+        }
+      }
+      final String encodedData =
+          CustomerInformationModel.encode(listInformationCustomer!);
+      prefs.setString('listValueUpdate_key', encodedData);
+      print(listInformationCustomer);
+    });
+  }
+
+  void addDataToList() async {
+    final SharedPreferences prefs = await _prefs;
+    setState(() {
       final String? listValueUpdateString =
           prefs.getString('listValueUpdate_key');
       final List<CustomerInformationModel> listChange =
           CustomerInformationModel.decode(listValueUpdateString ?? '');
       listInformationCustomer = listChange;
+      print(listInformationCustomer);
     });
   }
 
   @override
   void initState() {
     super.initState();
-    // updateListInfo();
+    setState(() {
+      addDataToList();
+      if (listInformationCustomer!.isNotEmpty) {
+        updateListInfo();
+      }
+    });
   }
 
   @override
@@ -263,18 +302,29 @@ class BookTourPageBody extends StatefulWidget {
 
 class _BookTourPageBodyState extends State<BookTourPageBody> {
   List<AccompaniedServiceData?> listSelectedService = [];
+  List<AccompaniedServiceData> accompaniedListGet = [];
   bool check = false;
+  List<CustomerInformationModel>? listInformationCustomer = [];
+
+  final formValidateKey = GlobalKey();
+  Future scrollItem() async {
+    final context = formValidateKey.currentContext!;
+    await Scrollable.ensureVisible(
+      context,
+      curve: Curves.ease,
+      duration: const Duration(seconds: 1),
+    );
+  }
 
   @override
   void initState() {
     super.initState();
-
+    // updateListChange();
     context
         .read<AccompaniedServiceBloc>()
         .add(AccompaniedServiceCompareSelected());
   }
 
-  List<AccompaniedServiceData> accompaniedListGet = [];
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CounterCubit, CounterState>(
@@ -290,9 +340,11 @@ class _BookTourPageBodyState extends State<BookTourPageBody> {
                 sizeText: 24,
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: FormValidation(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: FormValidation(
+                key: formValidateKey,
+              ),
             ),
             const Padding(
               padding: EdgeInsets.only(top: 8.0, bottom: 8),
