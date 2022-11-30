@@ -1,17 +1,23 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hahaloloapp/models/accompanied_service_model.dart';
 import 'package:hahaloloapp/models/more_service_model.dart';
 import 'package:hahaloloapp/screen/book_tour/amount_book_tour_view.dart';
 import 'package:hahaloloapp/widget/book_tour_info_widget/accompained_service_view.dart';
-import 'package:hahaloloapp/widget/book_tour_info_widget/bottomSheetDetail.dart';
+import 'package:hahaloloapp/widget/book_tour_info_widget/bottom_sheet_detail.dart';
 import 'package:hahaloloapp/widget/core_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../bloc/accompanied_service_bloc/accompanied_bloc.dart';
 import '../../bloc/accompanied_service_bloc/accompanied_repository.dart';
 import '../../bloc/counter_cubit/counter_cubit.dart';
+import '../../models/customer_information_model.dart';
 import '../../widget/book_tour_info_widget/appbar_payment_widget.dart';
-import '../../widget/book_tour_info_widget/book_tour_widget.dart';
+import '../../widget/book_tour_info_widget/form_validation_2_widget.dart';
+import '../../widget/book_tour_info_widget/fom_validation_widget.dart';
+import '../../widget/book_tour_info_widget/infor_input_customer_widget.dart';
 
 class BookTourPage extends StatefulWidget {
   const BookTourPage({Key? key}) : super(key: key);
@@ -26,10 +32,68 @@ class BookTourPageState extends State<BookTourPage> {
   ValueChanged<List<AccompaniedServiceData?>>? showListBottomSheetDetail;
   ValueChanged<List<MoreServiceModel?>>? showListMoreService;
   var sum = 0;
+  List<CustomerInformationModel>? listInformationCustomer = [];
+  bool isCheckSave = false;
+  bool oneOn = false;
+  bool isValidateFirstNameNull = false;
+  bool isValidateLastNameNull = false;
+  bool isValidatePhoneNull = false;
+  bool isValidateEmailNameNull = false;
+  bool isValidateAddressNameNull = false;
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  void updateListInfo() async {
+    final SharedPreferences prefs = await _prefs;
+    setState(() {
+      final resultDataString = prefs.getString('textInput') ?? '';
+      final resultEndCode = jsonDecode(resultDataString);
+      final resultObject = CustomerInformationModel.fromJson(resultEndCode);
+      if (listInformationCustomer!.length < 4) {
+        isCheckSave = prefs.getBool('checkSave_key')!;
+        isValidateFirstNameNull = prefs.getBool('checkFirstNameValidate_key')!;
+        isValidateLastNameNull = prefs.getBool('checkLastNameValidate_key')!;
+        isValidateEmailNameNull = prefs.getBool('checkEmailValidate_key')!;
+        isValidatePhoneNull = prefs.getBool('checkPhoneValidate_key')!;
+        isValidateAddressNameNull = prefs.getBool('checkAddressValidate_key')!;
+        if (isCheckSave == true &&
+            isValidateFirstNameNull == false &&
+            isValidateLastNameNull == false &&
+            isValidateEmailNameNull == false &&
+            isValidatePhoneNull == false &&
+            isValidateAddressNameNull == false) {
+          if (listInformationCustomer!.length == 3) {
+            listInformationCustomer!.removeAt(0);
+          }
+          listInformationCustomer?.add(resultObject);
+        }
+      }
+      final String encodedData =
+          CustomerInformationModel.encode(listInformationCustomer!);
+      prefs.setString('listValueUpdate_key', encodedData);
+      print(listInformationCustomer);
+    });
+  }
+
+  void addDataToList() async {
+    final SharedPreferences prefs = await _prefs;
+    setState(() {
+      final String? listValueUpdateString =
+          prefs.getString('listValueUpdate_key');
+      final List<CustomerInformationModel> listChange =
+          CustomerInformationModel.decode(listValueUpdateString ?? '');
+      listInformationCustomer = listChange;
+      print(listInformationCustomer);
+    });
+  }
 
   @override
   void initState() {
     super.initState();
+    setState(() {
+      addDataToList();
+      if (listInformationCustomer!.isNotEmpty) {
+        updateListInfo();
+      }
+    });
   }
 
   @override
@@ -107,6 +171,7 @@ class BookTourPageState extends State<BookTourPage> {
               });
             },
             getListBottomSheetDetail: listBottomSheetDetail,
+            listInformationCustomer: listInformationCustomer,
           ),
           bottomNavigationBar: GestureDetector(
             onTap: () {
@@ -125,6 +190,9 @@ class BookTourPageState extends State<BookTourPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 AppBarPaymentWidget(
+                                  callback: () {
+                                    updateListInfo();
+                                  },
                                   textButton: 'Thanh toán',
                                   title: 'Tổng thanh toán',
                                   price: sum,
@@ -183,6 +251,9 @@ class BookTourPageState extends State<BookTourPage> {
             },
             child: BottomAppBar(
               child: AppBarPaymentWidget(
+                callback: () {
+                  updateListInfo();
+                },
                 textButton: 'Thanh toán',
                 title: 'Tổng thanh toán',
                 price: sum,
@@ -195,6 +266,7 @@ class BookTourPageState extends State<BookTourPage> {
   }
 }
 
+//ignore: must_be_immutable
 class BookTourPageBody extends StatefulWidget {
   BookTourPageBody({
     Key? key,
@@ -205,10 +277,10 @@ class BookTourPageBody extends StatefulWidget {
     this.getSum,
     this.sum,
     this.currentSum,
-    this.onCheck,
     this.getListBottomSheetDetail,
     this.showListMoreService,
     this.getListMoreServiceDetail,
+    this.listInformationCustomer,
   }) : super(key: key);
 
   final String? header;
@@ -220,25 +292,39 @@ class BookTourPageBody extends StatefulWidget {
   ValueChanged<List<MoreServiceModel?>>? showListMoreService;
   List<AccompaniedServiceData?>? getListBottomSheetDetail;
   List<MoreServiceModel?>? getListMoreServiceDetail;
-
   ValueChanged<int?>? getSum;
-  ValueChanged<bool?>? onCheck;
+
+  List<CustomerInformationModel>? listInformationCustomer;
+
   @override
   State<BookTourPageBody> createState() => _BookTourPageBodyState();
 }
 
 class _BookTourPageBodyState extends State<BookTourPageBody> {
   List<AccompaniedServiceData?> listSelectedService = [];
+  List<AccompaniedServiceData> accompaniedListGet = [];
   bool check = false;
+  List<CustomerInformationModel>? listInformationCustomer = [];
+
+  final formValidateKey = GlobalKey();
+  Future scrollItem() async {
+    final context = formValidateKey.currentContext!;
+    await Scrollable.ensureVisible(
+      context,
+      curve: Curves.ease,
+      duration: const Duration(seconds: 1),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
+    // updateListChange();
     context
         .read<AccompaniedServiceBloc>()
         .add(AccompaniedServiceCompareSelected());
   }
 
-  List<AccompaniedServiceData> accompaniedListGet = [];
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CounterCubit, CounterState>(
@@ -254,9 +340,11 @@ class _BookTourPageBodyState extends State<BookTourPageBody> {
                 sizeText: 24,
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: BookTourInfoWidget(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: FormValidation(
+                key: formValidateKey,
+              ),
             ),
             const Padding(
               padding: EdgeInsets.only(top: 8.0, bottom: 8),
@@ -332,20 +420,10 @@ class _BookTourPageBodyState extends State<BookTourPageBody> {
                 sizeText: 24,
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: SingleRadioWidget(
-                radioText: 'Sử dụng thông tin người liên hệ',
-              ),
-            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: FormValidation2(),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: SingleRadioWidget(
-                radioText: 'Lưu thông tin thanh toán cho lần sau',
+              child: FormValidation2(
+                listInformation: widget.listInformationCustomer,
               ),
             ),
             const Padding(

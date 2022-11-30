@@ -9,8 +9,10 @@ import 'bloc/calendar_blocs/calendar_repository.dart';
 import 'bloc/counter_accompanied_cubit/counter_accompanied_cubit.dart';
 import 'bloc/counter_cubit/counter_cubit.dart';
 import 'bloc/datetime_blocs/datetime_repository.dart';
+import 'core/shared_preferences.dart';
 
 void main() {
+  SharedPrefs().init();
   runApp(const MyApp());
 }
 

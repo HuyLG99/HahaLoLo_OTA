@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hahaloloapp/models/accompanied_service_model.dart';
 
 class BottomSheetDetail extends StatefulWidget {
   const BottomSheetDetail({
@@ -7,12 +6,11 @@ class BottomSheetDetail extends StatefulWidget {
     required this.name,
     required this.qty,
     this.price,
-    this.listSelectedShowBottomDetail,
     this.checkNull,
     this.getCheckValue,
     required this.maxCount,
   }) : super(key: key);
-  final List<AccompaniedServiceData?>? listSelectedShowBottomDetail;
+
   final String name;
   final int qty;
   final int? price;
