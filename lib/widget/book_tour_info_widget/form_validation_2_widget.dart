@@ -99,7 +99,6 @@ class FormValidation2State extends State<FormValidation2> {
     final String encodedData =
         CustomerInformationModel.encode(listValueUpdate!);
     await prefs.setString('listValueUpdate_key', encodedData);
-    print(prefs.getString('listValueUpdate_key'));
   }
 
   void removeKeyValue() async {
@@ -137,7 +136,6 @@ class FormValidation2State extends State<FormValidation2> {
   void deleteItem(int index) {
     setState(() {
       listValueUpdate?.removeAt(index);
-      // widget.listInformation?.removeAt(index);
       addDataToList();
       setNullData();
       saveCheck = false;
