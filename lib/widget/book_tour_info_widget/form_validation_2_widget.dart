@@ -11,17 +11,20 @@ import 'dropdown_search_widget/bottom_sheet_search_bar_widget.dart';
 
 import 'infor_input_customer_widget.dart';
 
+//ignore: must_be_immutable
 class FormValidation2 extends StatefulWidget {
   final String? labelText;
   final String? hintText;
-  const FormValidation2(
+  FormValidation2(
       {super.key,
       this.labelText,
       this.hintText,
       this.listInformation,
-      this.isValidateActive});
+      this.isValidateActive,
+      required this.onChanged});
   final List<CustomerInformationModel>? listInformation;
-  final bool? isValidateActive;
+  bool? isValidateActive;
+  final ValueChanged<bool> onChanged;
   @override
   State<FormValidation2> createState() => FormValidation2State();
 }
@@ -38,15 +41,41 @@ class FormValidation2State extends State<FormValidation2> {
       TextEditingController();
   final TextEditingController cityTextEditingController =
       TextEditingController();
-
+  bool isValidateFirstNameNull = false;
+  bool isValidateLastNameNull = false;
+  bool isValidatePhoneNull = false;
+  bool isValidateEmailNameNull = false;
+  bool isValidateAddressNameNull = false;
   List<CustomerInformationModel>? listValueUpdate;
+  String? fistName;
+  String? lastName;
+  void checkStatusValidate() async {
+    final SharedPreferences prefs = await _prefs;
+    setState(() {
+      isValidateFirstNameNull = prefs.getBool('checkFirstNameValidate_key')!;
+      isValidateLastNameNull = prefs.getBool('checkLastNameValidate_key')!;
+      isValidateEmailNameNull = prefs.getBool('checkEmailValidate_key')!;
+      isValidatePhoneNull = prefs.getBool('checkPhoneValidate_key')!;
+      isValidateAddressNameNull = prefs.getBool('checkAddressValidate_key')!;
+    });
+    if (isValidateFirstNameNull == false &&
+        isValidateLastNameNull == false &&
+        isValidateEmailNameNull == false &&
+        isValidatePhoneNull == false &&
+        isValidateAddressNameNull == false) {
+      loadData();
+      widget.isValidateActive == true;
+    } else {
+      formKey2.currentState?.validate();
+      widget.onChanged.call(true);
+    }
+  }
 
   void loadData() async {
     setState(() {
       check = true;
     });
     final SharedPreferences prefs = await _prefs;
-    formKey2.currentState?.save();
     firstNameController2.text = prefs.getString('firstName') ?? '';
     lastNameController2.text = prefs.getString('lastName') ?? '';
     emailController2.text = prefs.getString('email') ?? '';
@@ -54,6 +83,9 @@ class FormValidation2State extends State<FormValidation2> {
     addressController2.text = prefs.getString('address') ?? '';
     nationTextEditingController.text = prefs.getString('nation') ?? '';
     cityTextEditingController.text = prefs.getString('city') ?? '';
+    if (formKey2.currentState!.validate()) {
+      formKey2.currentState?.save();
+    }
   }
 
   void loadDataForm2() async {
@@ -77,9 +109,12 @@ class FormValidation2State extends State<FormValidation2> {
 
   void onTapSetData(int index) {
     setState(() {
+      widget.isValidateActive = true;
       check = true;
       saveCheck = false;
       isActiveCheckBox = true;
+      fistName = (widget.listInformation![index].firstName ?? '');
+      lastName = (widget.listInformation![index].lastName ?? '');
       firstNameController2.text =
           widget.listInformation![index].firstName ?? '';
       lastNameController2.text = widget.listInformation![index].lastName ?? '';
@@ -95,9 +130,7 @@ class FormValidation2State extends State<FormValidation2> {
   }
 
   void saveData() async {
-    setState(() {
-      // isValidateActive = true;
-    });
+    setState(() {});
     final SharedPreferences prefs = await _prefs;
     if (formKey2.currentState!.validate()) {
       formKey2.currentState?.save();
@@ -127,7 +160,7 @@ class FormValidation2State extends State<FormValidation2> {
   void addDataToList() async {
     final SharedPreferences prefs = await _prefs;
     final String encodedData =
-        CustomerInformationModel.encode(listValueUpdate!);
+        CustomerInformationModel.encode(listValueUpdate ?? []);
     await prefs.setString('listValueUpdate_key', encodedData);
   }
 
@@ -164,12 +197,6 @@ class FormValidation2State extends State<FormValidation2> {
     });
   }
 
-  // void setCheckUse() async {
-  //   final SharedPreferences prefs = await _prefs;
-  //   setState(() {
-  //     isValidateActive = prefs.setBool('onValidate_key', isValidateActive);
-  //   });
-  // }
   Future scrollItem() async {
     final context = formKey2.currentContext!;
     await Scrollable.ensureVisible(
@@ -186,7 +213,19 @@ class FormValidation2State extends State<FormValidation2> {
       setNullData();
       saveCheck = false;
       check = false;
+      (widget.listInformation ?? []).isEmpty
+          ? Navigator.of(context).pop()
+          : null;
     });
+  }
+
+  void getCheckNull() async {
+    final SharedPreferences prefs = await _prefs;
+    isCheckFirstName = prefs.getBool('checkFirstNameValidate2_key');
+    isCheckLastName = prefs.getBool('checkLastNameValidate2_key');
+    isCheckEmail = prefs.getBool('checkEmailValidate2_key');
+    isCheckAddress = prefs.getBool('checkAddressValidate2_key');
+    isCheckPhone = prefs.getBool('checkPhoneValidate2_key');
   }
 
   void setCheckFirstNameNull2(bool value, String firstName2) async {
@@ -222,9 +261,17 @@ class FormValidation2State extends State<FormValidation2> {
   bool check = false;
   bool saveCheck = false;
   bool isActiveCheckBox = false;
+  bool? isCheckFirstName;
+  bool? isCheckLastName;
+  bool? isCheckEmail;
+  bool? isCheckPhone;
+  bool? isCheckAddress;
+
+  bool isShowBottomSheet = true;
   @override
   void initState() {
     super.initState();
+    getCheckNull();
     addDataToList();
     setNullData();
     setState(() {
@@ -258,7 +305,7 @@ class FormValidation2State extends State<FormValidation2> {
             callback: () {
               setState(() {
                 if (widget.listInformation!.isEmpty) {
-                  check == true ? setNullData() : loadData();
+                  check == true ? setNullData() : checkStatusValidate();
                   listValueUpdate = widget.listInformation;
                 } else if (widget.listInformation!.isNotEmpty) {
                   setState(() {
@@ -283,7 +330,8 @@ class FormValidation2State extends State<FormValidation2> {
                               ),
                             ),
                             child: ListView.builder(
-                                itemCount: widget.listInformation!.length,
+                                itemCount:
+                                    (widget.listInformation ?? []).length,
                                 itemBuilder: (BuildContext context, int index) {
                                   return Column(
                                     mainAxisSize: MainAxisSize.min,
@@ -359,7 +407,6 @@ class FormValidation2State extends State<FormValidation2> {
                                                                             deleteItem(index);
                                                                           });
                                                                           // Close the dialog
-
                                                                           Navigator.of(context)
                                                                               .pop();
                                                                         },
@@ -379,8 +426,6 @@ class FormValidation2State extends State<FormValidation2> {
                                                             ],
                                                           );
                                                         });
-
-                                                    // removeKeyValue();
                                                   },
                                                   icon: const Icon(
                                                     Icons.delete,
@@ -541,12 +586,11 @@ class FormValidation2State extends State<FormValidation2> {
                       color: Colors.white,
                       border: Border.all(color: Colors.blue),
                     ),
-                    child: firstNameController2.text.isEmpty
+                    child: (fistName ?? '').isEmpty && (lastName ?? '').isEmpty
                         ? const Text('')
                         : Center(
                             child: Text(
-                            firstNameController2.text +
-                                lastNameController2.text,
+                            '$fistName $lastName',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
@@ -575,7 +619,8 @@ class FormValidation2State extends State<FormValidation2> {
             validator: (value) {
               if (value!.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
                 //allow upper and lower case alphabets and space
-                scrollItem();
+                getCheckNull();
+                isCheckFirstName == true ? null : scrollItem();
                 firstNameController2.text = value ?? '';
                 setCheckFirstNameNull2(true, value);
                 return "Enter Correct Name";
@@ -588,6 +633,7 @@ class FormValidation2State extends State<FormValidation2> {
               final SharedPreferences prefs = await _prefs;
               setState(() {
                 isActiveCheckBox = false;
+
                 prefs.setString('firstName2', firstNameController2.text ?? '');
               });
             },
@@ -623,7 +669,8 @@ class FormValidation2State extends State<FormValidation2> {
             validator: (value) {
               if (value!.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
                 //allow upper and lower case alphabets and space
-                scrollItem();
+                getCheckNull();
+                isCheckLastName == true ? null : scrollItem();
                 setCheckLastNameNull2(true, value);
                 return "Enter Correct Name";
               } else {
@@ -670,7 +717,8 @@ class FormValidation2State extends State<FormValidation2> {
               if (value!.isEmpty ||
                   !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                       .hasMatch(value)) {
-                scrollItem();
+                getCheckNull();
+                isCheckEmail == true ? null : scrollItem();
                 setCheckEmailNull2(true, value);
                 return "Enter Correct Email Address";
               } else {
@@ -738,7 +786,8 @@ class FormValidation2State extends State<FormValidation2> {
                         if (value!.isEmpty ||
                             !RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$')
                                 .hasMatch(value)) {
-                          scrollItem();
+                          getCheckNull();
+                          isCheckPhone == true ? null : scrollItem();
                           setCheckPhoneNull2(true, value);
                           return "Enter Correct Phone Number";
                         } else {
@@ -791,7 +840,8 @@ class FormValidation2State extends State<FormValidation2> {
             validator: (value) {
               if (value!.isEmpty) {
                 //allow upper and lower case alphabets and space
-                scrollItem();
+                getCheckNull();
+                isCheckAddress == true ? null : scrollItem();
                 setCheckAddressNull2(true, value);
                 return "Enter Correct Address";
               } else {
@@ -802,7 +852,7 @@ class FormValidation2State extends State<FormValidation2> {
             onChanged: (value) async {
               final SharedPreferences prefs = await _prefs;
               setState(() {
-                // isActiveCheckBox = false;
+                isActiveCheckBox = false;
                 prefs.setString('address2', addressController2.text ?? '');
               });
             },
@@ -826,6 +876,10 @@ class FormValidation2State extends State<FormValidation2> {
             isCitySelected: true,
             cities: _listOfNation,
             isValidateActive: widget.isValidateActive ?? false,
+            onChanged: (value) {
+              setState(() {});
+              isActiveCheckBox = value;
+            },
           ),
           const DotWidget(
             dashColor: Colors.grey,
@@ -839,14 +893,16 @@ class FormValidation2State extends State<FormValidation2> {
             isCitySelected: true,
             cities: _listOfCities,
             isValidateActive: widget.isValidateActive ?? false,
+            onChanged: (value) {
+              setState(() {});
+              isActiveCheckBox = value;
+            },
           ),
           const DotWidget(
             dashColor: Colors.grey,
             dashHeight: 1,
             dashWidth: 5,
           ),
-          // widget.listInformation!.length < 3
-          //     ?
           isActiveCheckBox == false
               ? CheckboxSaveUseAfter(
                   checkboxValue: saveCheck,
@@ -871,9 +927,9 @@ class AppTextField extends StatefulWidget {
   final String title;
   final String hint;
   final bool isCitySelected;
-
   final bool isValidateActive;
   final List<SelectedListItem>? cities;
+  final ValueChanged<bool> onChanged;
   AppTextField({
     required this.textEditingController,
     required this.title,
@@ -882,6 +938,7 @@ class AppTextField extends StatefulWidget {
     this.cities,
     required this.isValidateActive,
     Key? key,
+    required this.onChanged,
   }) : super(key: key);
 
   @override
@@ -905,6 +962,8 @@ class AppTextFieldState extends State<AppTextField> {
         selectedItem: (String selected) async {
           final SharedPreferences prefs = await _prefs;
           setState(() {
+            widget.isValidateActive == false;
+            widget.onChanged.call(false);
             widget.textEditingController.text = selected;
             prefs.setString('nation2', selected);
           });
@@ -957,6 +1016,7 @@ class AppTextFieldState extends State<AppTextField> {
                   onTextFieldTap();
                   final SharedPreferences prefs = await _prefs;
                   setState(() {
+                    widget.onChanged.call(false);
                     prefs.setString(
                         'nation2', widget.textEditingController.text ?? '');
                   });
@@ -977,6 +1037,7 @@ class AppTextCityField extends StatefulWidget {
 
   final bool isValidateActive;
   final List<SelectedListItem>? cities;
+  final ValueChanged<bool> onChanged;
   AppTextCityField({
     required this.textEditingController,
     required this.title,
@@ -985,6 +1046,7 @@ class AppTextCityField extends StatefulWidget {
     this.cities,
     required this.isValidateActive,
     Key? key,
+    required this.onChanged,
   }) : super(key: key);
 
   @override
@@ -1008,6 +1070,7 @@ class AppTextCityFieldState extends State<AppTextCityField> {
         selectedItem: (String selected) async {
           final SharedPreferences prefs = await _prefs;
           setState(() {
+            widget.onChanged.call(false);
             widget.textEditingController.text = selected;
             prefs.setString('city2', selected);
           });
@@ -1059,6 +1122,7 @@ class AppTextCityFieldState extends State<AppTextCityField> {
                   onTextFieldTap();
                   final SharedPreferences prefs = await _prefs;
                   setState(() {
+                    widget.onChanged.call(false);
                     prefs.setString(
                         'nation2', widget.textEditingController.text ?? '');
                   });

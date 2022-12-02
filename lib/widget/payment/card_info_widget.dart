@@ -173,8 +173,8 @@ class CardTourInfo extends StatelessWidget {
               Expanded(
                   flex: 1,
                   child: Text(
-                    '${qtyAdult! > 0 ? '$qtyAdult người lớn' : ''}${qtyChild! > 0 ? ', $qtyChild trẻ em' : ''}'
-                    '${qtyLittleChild! > 0 ? ', $qtyLittleChild trẻ nhỏ' : ''}${qtyBaby! > 0 ? ', $qtyBaby em bé' : ''}',
+                    '${(qtyAdult ?? 1) > 0 ? '$qtyAdult người lớn' : ''}${(qtyChild ?? 0) > 0 ? ', $qtyChild trẻ em' : ''}'
+                    '${(qtyLittleChild ?? 0) > 0 ? ', $qtyLittleChild trẻ nhỏ' : ''}${(qtyBaby ?? 0) > 0 ? ', $qtyBaby em bé' : ''}',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,

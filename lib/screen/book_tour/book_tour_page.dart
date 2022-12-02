@@ -196,7 +196,6 @@ class BookTourPageState extends State<BookTourPage> {
       final List<CustomerInformationModel> listChange =
           CustomerInformationModel.decode(listValueUpdateString ?? '');
       listInformationCustomer = listChange;
-      print(listInformationCustomer);
     });
   }
 
@@ -205,9 +204,9 @@ class BookTourPageState extends State<BookTourPage> {
     super.initState();
     setState(() {
       addDataToList();
-      // if (listInformationCustomer!.isNotEmpty) {
-      //   updateListInfo();
-      // }
+      if (listInformationCustomer!.isNotEmpty) {
+        updateListInfo();
+      }
     });
   }
 
@@ -447,6 +446,7 @@ class _BookTourPageBodyState extends State<BookTourPageBody> {
   void initState() {
     super.initState();
     // updateListChange();
+    scrollItem();
     context
         .read<AccompaniedServiceBloc>()
         .add(AccompaniedServiceCompareSelected());
@@ -550,6 +550,11 @@ class _BookTourPageBodyState extends State<BookTourPageBody> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: FormValidation2(
+                onChanged: (value) {
+                  setState(() {
+                    scrollItem();
+                  });
+                },
                 listInformation: widget.listInformationCustomer,
                 isValidateActive: widget.isActiveValidate,
               ),
