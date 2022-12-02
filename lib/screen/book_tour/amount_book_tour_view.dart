@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../bloc/counter_accompanied_cubit/counter_accompanied_cubit.dart';
 import '../../bloc/counter_cubit/counter_cubit.dart';
@@ -24,6 +25,27 @@ class AmountBookTourWidget extends StatefulWidget {
 }
 
 class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  void setQtyAdult(int qtyAdult) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setInt('qtyAdult', qtyAdult);
+  }
+
+  void setQtyChild(int qtyChild) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setInt('qtyChild', qtyChild);
+  }
+
+  void setQtyLittleChild(int qtyLittleChild) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setInt('qtyLittleChild', qtyLittleChild);
+  }
+
+  void setQtyBaby(int qtyBaby) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setInt('qtyBaby', qtyBaby);
+  }
+
   @override
   Widget build(BuildContext context) {
     final cubit = BlocProvider.of<CounterAccompaniedCubit>(context);
@@ -40,7 +62,7 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
                     : context
                         .read<CounterCubit>()
                         .decrementAdult(state.amountCustomer.adult - 1);
-
+                setQtyAdult(state.amountCustomer.adult - 1);
                 setState(() {
                   final totalPrice = widget.listBottomSheetDetail!.fold(
                       0,
@@ -84,6 +106,7 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
               context
                   .read<CounterCubit>()
                   .incrementChild(state.amountCustomer.child + 1);
+              setQtyChild(state.amountCustomer.child + 1);
               setState(() {
                 final totalPrice = widget.listBottomSheetDetail!.fold(
                     0,
@@ -103,6 +126,7 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
               context
                   .read<CounterCubit>()
                   .decrementChild(state.amountCustomer.child - 1);
+              setQtyChild(state.amountCustomer.child - 1);
               setState(() {
                 final totalPrice = widget.listBottomSheetDetail!.fold(
                     0,
@@ -128,6 +152,7 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
               context
                   .read<CounterCubit>()
                   .incrementLittleChild(state.amountCustomer.littleChild + 1);
+              setQtyLittleChild(state.amountCustomer.littleChild + 1);
               setState(() {
                 final totalPrice = widget.listBottomSheetDetail!.fold(
                     0,
@@ -147,6 +172,7 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
               context
                   .read<CounterCubit>()
                   .decrementLittleChild(state.amountCustomer.littleChild - 1);
+              setQtyLittleChild(state.amountCustomer.littleChild - 1);
               setState(() {
                 final totalPrice = widget.listBottomSheetDetail!.fold(
                     0,
@@ -172,6 +198,7 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
               context
                   .read<CounterCubit>()
                   .incrementBaby(state.amountCustomer.baby + 1);
+              setQtyBaby(state.amountCustomer.baby + 1);
               setState(() {
                 final totalPrice = widget.listBottomSheetDetail!.fold(
                     0,
@@ -191,6 +218,7 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
               context
                   .read<CounterCubit>()
                   .decrementBaby(state.amountCustomer.baby - 1);
+              setQtyBaby(state.amountCustomer.baby - 1);
               setState(() {
                 final totalPrice = widget.listBottomSheetDetail!.fold(
                     0,

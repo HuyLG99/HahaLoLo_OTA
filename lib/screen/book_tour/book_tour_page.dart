@@ -18,6 +18,7 @@ import '../../widget/book_tour_info_widget/appbar_payment_widget.dart';
 import '../../widget/book_tour_info_widget/form_validation_2_widget.dart';
 import '../../widget/book_tour_info_widget/fom_validation_widget.dart';
 import '../../widget/book_tour_info_widget/infor_input_customer_widget.dart';
+import 'payment_page.dart';
 
 class BookTourPage extends StatefulWidget {
   const BookTourPage({Key? key}) : super(key: key);
@@ -33,20 +34,115 @@ class BookTourPageState extends State<BookTourPage> {
   ValueChanged<List<MoreServiceModel?>>? showListMoreService;
   var sum = 0;
   List<CustomerInformationModel>? listInformationCustomer = [];
-  bool isCheckSave = false;
+  bool? isCheckSave;
   bool oneOn = false;
   bool isValidateFirstNameNull = false;
   bool isValidateLastNameNull = false;
   bool isValidatePhoneNull = false;
   bool isValidateEmailNameNull = false;
   bool isValidateAddressNameNull = false;
+  bool isValidateFirstNameNull2 = false;
+  bool isValidateLastNameNull2 = false;
+  bool isValidatePhoneNull2 = false;
+  bool isValidateEmailNameNull2 = false;
+  bool isValidateAddressNameNull2 = false;
+  bool isActiveValidate = false;
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  String? firstName2;
+  String? lastName2;
+  String? email2;
+  String? phone2;
+  String? address2;
+  String? nation2;
+  String? city2;
+
+  void checkStatusValidate() async {
+    final SharedPreferences prefs = await _prefs;
+    setState(() {
+      isCheckSave = prefs.getBool('checkSave_key')!;
+      isValidateFirstNameNull = prefs.getBool('checkFirstNameValidate_key')!;
+      isValidateLastNameNull = prefs.getBool('checkLastNameValidate_key')!;
+      isValidateEmailNameNull = prefs.getBool('checkEmailValidate_key')!;
+      isValidatePhoneNull = prefs.getBool('checkPhoneValidate_key')!;
+      isValidateAddressNameNull = prefs.getBool('checkAddressValidate_key')!;
+      isValidateFirstNameNull2 = prefs.getBool('checkFirstNameValidate2_key')!;
+      isValidateLastNameNull2 = prefs.getBool('checkLastNameValidate2_key')!;
+      isValidateEmailNameNull2 = prefs.getBool('checkEmailValidate2_key')!;
+      isValidatePhoneNull2 = prefs.getBool('checkPhoneValidate2_key')!;
+      isValidateAddressNameNull2 = prefs.getBool('checkAddressValidate2_key')!;
+    });
+  }
+
+  void getNewValueUpdate() async {
+    final SharedPreferences prefs = await _prefs;
+    firstName2 = prefs.getString('firstName2');
+    lastName2 = prefs.getString('lastName2');
+    email2 = prefs.getString('email2');
+    phone2 = prefs.getString('phone2');
+    address2 = prefs.getString('address2');
+    nation2 = prefs.getString('nation2');
+    city2 = prefs.getString('city2');
+
+    CustomerInformationModel textInputValue = CustomerInformationModel(
+      firstName: firstName2,
+      lastName: lastName2,
+      email: email2,
+      phone: phone2,
+      address: address2,
+      nation: nation2,
+      city: city2,
+    );
+    // listInformationCustomer?.add(textInputValue);
+  }
+
   void updateListInfo() async {
     final SharedPreferences prefs = await _prefs;
     setState(() {
       final resultDataString = prefs.getString('textInput') ?? '';
+      getNewValueUpdate();
+      if (listInformationCustomer!.isEmpty && resultDataString == '' ||
+          listInformationCustomer!.isNotEmpty && resultDataString == '') {
+        isCheckSave = prefs.getBool('checkSave_key')!;
+        isValidateFirstNameNull = prefs.getBool('checkFirstNameValidate_key')!;
+        isValidateLastNameNull = prefs.getBool('checkLastNameValidate_key')!;
+        isValidateEmailNameNull = prefs.getBool('checkEmailValidate_key')!;
+        isValidatePhoneNull = prefs.getBool('checkPhoneValidate_key')!;
+        isValidateAddressNameNull = prefs.getBool('checkAddressValidate_key')!;
+        isValidateFirstNameNull2 =
+            prefs.getBool('checkFirstNameValidate2_key')!;
+        isValidateLastNameNull2 = prefs.getBool('checkLastNameValidate2_key')!;
+        isValidateEmailNameNull2 = prefs.getBool('checkEmailValidate2_key')!;
+        isValidatePhoneNull2 = prefs.getBool('checkPhoneValidate2_key')!;
+        isValidateAddressNameNull2 =
+            prefs.getBool('checkAddressValidate2_key')!;
+        if (isValidateFirstNameNull == false &&
+            isValidateLastNameNull == false &&
+            isValidateEmailNameNull == false &&
+            isValidatePhoneNull == false &&
+            isValidateAddressNameNull == false &&
+            isValidateFirstNameNull2 == false &&
+            firstName2!.isEmpty &&
+            lastName2!.isEmpty &&
+            email2!.isEmpty &&
+            address2!.isEmpty &&
+            phone2!.isEmpty &&
+            isValidateLastNameNull2 == false &&
+            isValidateEmailNameNull2 == false &&
+            isValidatePhoneNull2 == false &&
+            isValidateAddressNameNull2 == false) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PaymentPage(
+                      listBottomSheetDetail: listBottomSheetDetail,
+                    )),
+          );
+        }
+      }
       final resultEndCode = jsonDecode(resultDataString);
       final resultObject = CustomerInformationModel.fromJson(resultEndCode);
+
       if (listInformationCustomer!.length < 4) {
         isCheckSave = prefs.getBool('checkSave_key')!;
         isValidateFirstNameNull = prefs.getBool('checkFirstNameValidate_key')!;
@@ -54,22 +150,41 @@ class BookTourPageState extends State<BookTourPage> {
         isValidateEmailNameNull = prefs.getBool('checkEmailValidate_key')!;
         isValidatePhoneNull = prefs.getBool('checkPhoneValidate_key')!;
         isValidateAddressNameNull = prefs.getBool('checkAddressValidate_key')!;
-        if (isCheckSave == true &&
-            isValidateFirstNameNull == false &&
+        isValidateFirstNameNull2 =
+            prefs.getBool('checkFirstNameValidate2_key')!;
+        isValidateLastNameNull2 = prefs.getBool('checkLastNameValidate2_key')!;
+        isValidateEmailNameNull2 = prefs.getBool('checkEmailValidate2_key')!;
+        isValidatePhoneNull2 = prefs.getBool('checkPhoneValidate2_key')!;
+        isValidateAddressNameNull2 =
+            prefs.getBool('checkAddressValidate2_key')!;
+        if (isValidateFirstNameNull == false &&
             isValidateLastNameNull == false &&
             isValidateEmailNameNull == false &&
             isValidatePhoneNull == false &&
-            isValidateAddressNameNull == false) {
-          if (listInformationCustomer!.length == 3) {
+            isValidateAddressNameNull == false &&
+            isValidateFirstNameNull2 == false &&
+            isValidateLastNameNull2 == false &&
+            isValidateEmailNameNull2 == false &&
+            isValidatePhoneNull2 == false &&
+            isValidateAddressNameNull2 == false) {
+          if (listInformationCustomer!.length == 3 && isCheckSave == true) {
             listInformationCustomer!.removeAt(0);
           }
-          listInformationCustomer?.add(resultObject);
+          isCheckSave == true
+              ? listInformationCustomer?.add(resultObject)
+              : null;
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PaymentPage(
+                      listBottomSheetDetail: listBottomSheetDetail,
+                    )),
+          );
         }
       }
       final String encodedData =
           CustomerInformationModel.encode(listInformationCustomer!);
       prefs.setString('listValueUpdate_key', encodedData);
-      print(listInformationCustomer);
     });
   }
 
@@ -90,9 +205,9 @@ class BookTourPageState extends State<BookTourPage> {
     super.initState();
     setState(() {
       addDataToList();
-      if (listInformationCustomer!.isNotEmpty) {
-        updateListInfo();
-      }
+      // if (listInformationCustomer!.isNotEmpty) {
+      //   updateListInfo();
+      // }
     });
   }
 
@@ -160,6 +275,7 @@ class BookTourPageState extends State<BookTourPage> {
           body: BookTourPageBody(
             header: 'Thông tin người liên hệ',
             sum: sum,
+            isActiveValidate: isActiveValidate,
             getSum: (valueSum) {
               setState(() {
                 sum = valueSum ?? 0;
@@ -192,6 +308,14 @@ class BookTourPageState extends State<BookTourPage> {
                                 AppBarPaymentWidget(
                                   callback: () {
                                     updateListInfo();
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => PaymentPage(
+                                                listBottomSheetDetail:
+                                                    listBottomSheetDetail,
+                                              )),
+                                    );
                                   },
                                   textButton: 'Thanh toán',
                                   title: 'Tổng thanh toán',
@@ -252,6 +376,9 @@ class BookTourPageState extends State<BookTourPage> {
             child: BottomAppBar(
               child: AppBarPaymentWidget(
                 callback: () {
+                  setState(() {
+                    isActiveValidate = true;
+                  });
                   updateListInfo();
                 },
                 textButton: 'Thanh toán',
@@ -281,6 +408,7 @@ class BookTourPageBody extends StatefulWidget {
     this.showListMoreService,
     this.getListMoreServiceDetail,
     this.listInformationCustomer,
+    this.isActiveValidate,
   }) : super(key: key);
 
   final String? header;
@@ -293,7 +421,7 @@ class BookTourPageBody extends StatefulWidget {
   List<AccompaniedServiceData?>? getListBottomSheetDetail;
   List<MoreServiceModel?>? getListMoreServiceDetail;
   ValueChanged<int?>? getSum;
-
+  final bool? isActiveValidate;
   List<CustomerInformationModel>? listInformationCustomer;
 
   @override
@@ -305,7 +433,6 @@ class _BookTourPageBodyState extends State<BookTourPageBody> {
   List<AccompaniedServiceData> accompaniedListGet = [];
   bool check = false;
   List<CustomerInformationModel>? listInformationCustomer = [];
-
   final formValidateKey = GlobalKey();
   Future scrollItem() async {
     final context = formValidateKey.currentContext!;
@@ -424,6 +551,7 @@ class _BookTourPageBodyState extends State<BookTourPageBody> {
               padding: const EdgeInsets.all(8.0),
               child: FormValidation2(
                 listInformation: widget.listInformationCustomer,
+                isValidateActive: widget.isActiveValidate,
               ),
             ),
             const Padding(

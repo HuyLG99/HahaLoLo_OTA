@@ -15,8 +15,13 @@ class FormValidation2 extends StatefulWidget {
   final String? labelText;
   final String? hintText;
   const FormValidation2(
-      {super.key, this.labelText, this.hintText, this.listInformation});
+      {super.key,
+      this.labelText,
+      this.hintText,
+      this.listInformation,
+      this.isValidateActive});
   final List<CustomerInformationModel>? listInformation;
+  final bool? isValidateActive;
   @override
   State<FormValidation2> createState() => FormValidation2State();
 }
@@ -51,9 +56,30 @@ class FormValidation2State extends State<FormValidation2> {
     cityTextEditingController.text = prefs.getString('city') ?? '';
   }
 
+  void loadDataForm2() async {
+    final SharedPreferences prefs = await _prefs;
+    setState(() {
+      if (formKey2.currentState!.validate()) {
+        formKey2.currentState?.save();
+        prefs.setString('firstName2', firstNameController2.text ?? '');
+        // prefs.getString('firstName') ?? '';
+        prefs.setString('lastName2', lastNameController2.text ?? '');
+        // prefs.getString('lastName') ?? '';
+        prefs.setString('email2', emailController2.text ?? '');
+        // prefs.getString('email') ?? '';
+        prefs.setString('phone2', phoneController2.text ?? '');
+        // prefs.getString('phone') ?? '';
+        prefs.setString('address2', addressController2.text ?? '');
+        // prefs.getString('address') ?? '';
+      }
+    });
+  }
+
   void onTapSetData(int index) {
     setState(() {
       check = true;
+      saveCheck = false;
+      isActiveCheckBox = true;
       firstNameController2.text =
           widget.listInformation![index].firstName ?? '';
       lastNameController2.text = widget.listInformation![index].lastName ?? '';
@@ -64,12 +90,13 @@ class FormValidation2State extends State<FormValidation2> {
           widget.listInformation![index].nation ?? '';
       cityTextEditingController.text =
           widget.listInformation![index].city ?? '';
+      saveData();
     });
   }
 
   void saveData() async {
     setState(() {
-      isValidateActive = true;
+      // isValidateActive = true;
     });
     final SharedPreferences prefs = await _prefs;
     if (formKey2.currentState!.validate()) {
@@ -87,6 +114,9 @@ class FormValidation2State extends State<FormValidation2> {
       final resultsJson = textInputValue.toJson();
       final resultsString = jsonEncode(resultsJson);
       prefs.setString('textInput', resultsString);
+      prefs.setString('nation2', nationTextEditingController.text);
+      prefs.setString('city2', cityTextEditingController.text);
+
       // final resultDataString = prefs.getString('textInput') ?? '';
       // final resultEndCode = jsonDecode(resultDataString);
       // final resutlObject = CustomerInformationModel.fromJson(resultEndCode);
@@ -112,6 +142,7 @@ class FormValidation2State extends State<FormValidation2> {
         setState(() {
           check = false;
           saveCheck = false;
+          isActiveCheckBox = saveCheck;
           removeKeyValue();
         });
       }
@@ -133,6 +164,21 @@ class FormValidation2State extends State<FormValidation2> {
     });
   }
 
+  // void setCheckUse() async {
+  //   final SharedPreferences prefs = await _prefs;
+  //   setState(() {
+  //     isValidateActive = prefs.setBool('onValidate_key', isValidateActive);
+  //   });
+  // }
+  Future scrollItem() async {
+    final context = formKey2.currentContext!;
+    await Scrollable.ensureVisible(
+      context,
+      curve: Curves.ease,
+      duration: const Duration(seconds: 1),
+    );
+  }
+
   void deleteItem(int index) {
     setState(() {
       listValueUpdate?.removeAt(index);
@@ -143,9 +189,39 @@ class FormValidation2State extends State<FormValidation2> {
     });
   }
 
+  void setCheckFirstNameNull2(bool value, String firstName2) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setBool('checkFirstNameValidate2_key', value);
+    prefs.setString('firstName2', firstName2 ?? '');
+  }
+
+  void setCheckLastNameNull2(bool value, String lastName2) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setBool('checkLastNameValidate2_key', value);
+    prefs.setString('lastName2', lastName2 ?? '');
+  }
+
+  void setCheckEmailNull2(bool value, String email2) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setBool('checkEmailValidate2_key', value);
+    prefs.setString('email2', email2 ?? '');
+  }
+
+  void setCheckPhoneNull2(bool value, String phone2) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setBool('checkPhoneValidate2_key', value);
+    prefs.setString('phone2', phone2 ?? '');
+  }
+
+  void setCheckAddressNull2(bool value, String address2) async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setBool('checkAddressValidate2_key', value);
+    prefs.setString('address2', address2 ?? '');
+  }
+
   bool check = false;
   bool saveCheck = false;
-  bool isValidateActive = false;
+  bool isActiveCheckBox = false;
   @override
   void initState() {
     super.initState();
@@ -187,6 +263,7 @@ class FormValidation2State extends State<FormValidation2> {
                 } else if (widget.listInformation!.isNotEmpty) {
                   setState(() {
                     check = false;
+                    isActiveCheckBox = false;
                   });
                   setNullData();
                   listValueUpdate = widget.listInformation;
@@ -325,7 +402,8 @@ class FormValidation2State extends State<FormValidation2> {
               });
             },
           ),
-          firstNameController2.text.isNotEmpty && listValueUpdate!.isNotEmpty
+          firstNameController2.text.isNotEmpty &&
+                  widget.listInformation!.isNotEmpty
               ? GestureDetector(
                   onTap: () {
                     showModalBottomSheet(
@@ -480,8 +558,9 @@ class FormValidation2State extends State<FormValidation2> {
                 )
               : const SizedBox(),
           TextFormField(
-            autovalidateMode:
-                isValidateActive == false ? null : AutovalidateMode.always,
+            autovalidateMode: widget.isValidateActive == false
+                ? null
+                : AutovalidateMode.always,
             textInputAction: TextInputAction.next,
             controller: firstNameController2,
             decoration: const InputDecoration(
@@ -496,14 +575,29 @@ class FormValidation2State extends State<FormValidation2> {
             validator: (value) {
               if (value!.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
                 //allow upper and lower case alphabets and space
+                scrollItem();
+                firstNameController2.text = value ?? '';
+                setCheckFirstNameNull2(true, value);
                 return "Enter Correct Name";
               } else {
+                setCheckFirstNameNull2(false, value);
                 return null;
               }
             },
+            onChanged: (value) async {
+              final SharedPreferences prefs = await _prefs;
+              setState(() {
+                isActiveCheckBox = false;
+                prefs.setString('firstName2', firstNameController2.text ?? '');
+              });
+            },
             onSaved: (value) async {
               firstNameController2.text = value ?? '';
-              // textInputValue.firstName = value;
+              final SharedPreferences prefs = await _prefs;
+              setState(() {
+                // isActiveCheckBox = false;
+                prefs.setString('firstName2', firstNameController2.text ?? '');
+              });
             },
           ),
           const DotWidget(
@@ -512,8 +606,9 @@ class FormValidation2State extends State<FormValidation2> {
             dashWidth: 5,
           ),
           TextFormField(
-            autovalidateMode:
-                isValidateActive == false ? null : AutovalidateMode.always,
+            autovalidateMode: widget.isValidateActive == false
+                ? null
+                : AutovalidateMode.always,
             controller: lastNameController2,
             textInputAction: TextInputAction.next,
             decoration: const InputDecoration(
@@ -528,13 +623,27 @@ class FormValidation2State extends State<FormValidation2> {
             validator: (value) {
               if (value!.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
                 //allow upper and lower case alphabets and space
+                scrollItem();
+                setCheckLastNameNull2(true, value);
                 return "Enter Correct Name";
               } else {
+                setCheckLastNameNull2(false, value);
                 return null;
               }
             },
-            onSaved: (value) {
-              // textInputValue.lastName = value;
+            onChanged: (value) async {
+              final SharedPreferences prefs = await _prefs;
+              setState(() {
+                isActiveCheckBox = false;
+                prefs.setString('lastName2', lastNameController2.text ?? '');
+              });
+            },
+            onSaved: (value) async {
+              lastNameController2.text = value!;
+              final SharedPreferences prefs = await _prefs;
+              setState(() {
+                prefs.setString('lastName2', lastNameController2.text ?? '');
+              });
             },
           ),
           const DotWidget(
@@ -543,8 +652,9 @@ class FormValidation2State extends State<FormValidation2> {
             dashWidth: 5,
           ),
           TextFormField(
-            autovalidateMode:
-                isValidateActive == false ? null : AutovalidateMode.always,
+            autovalidateMode: widget.isValidateActive == false
+                ? null
+                : AutovalidateMode.always,
             controller: emailController2,
             textInputAction: TextInputAction.next,
             decoration: const InputDecoration(
@@ -560,13 +670,27 @@ class FormValidation2State extends State<FormValidation2> {
               if (value!.isEmpty ||
                   !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                       .hasMatch(value)) {
+                scrollItem();
+                setCheckEmailNull2(true, value);
                 return "Enter Correct Email Address";
               } else {
+                setCheckEmailNull2(false, value);
                 return null;
               }
             },
-            onSaved: (value) {
-              // textInputValue.email = value;
+            onChanged: (value) async {
+              final SharedPreferences prefs = await _prefs;
+              setState(() {
+                isActiveCheckBox = false;
+                prefs.setString('email2', emailController2.text ?? '');
+              });
+            },
+            onSaved: (value) async {
+              emailController2.text = value!;
+              final SharedPreferences prefs = await _prefs;
+              setState(() {
+                prefs.setString('email2', emailController2.text ?? '');
+              });
             },
           ),
           const DotWidget(
@@ -595,7 +719,7 @@ class FormValidation2State extends State<FormValidation2> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextFormField(
-                      autovalidateMode: isValidateActive == false
+                      autovalidateMode: widget.isValidateActive == false
                           ? null
                           : AutovalidateMode.always,
                       controller: phoneController2,
@@ -614,13 +738,29 @@ class FormValidation2State extends State<FormValidation2> {
                         if (value!.isEmpty ||
                             !RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$')
                                 .hasMatch(value)) {
+                          scrollItem();
+                          setCheckPhoneNull2(true, value);
                           return "Enter Correct Phone Number";
                         } else {
+                          setCheckPhoneNull2(false, value);
                           return null;
                         }
                       },
-                      onSaved: (value) {
-                        // textInputValue.phone = value;
+                      onChanged: (value) async {
+                        final SharedPreferences prefs = await _prefs;
+                        setState(() {
+                          // isActiveCheckBox = false;
+                          prefs.setString(
+                              'phone2', phoneController2.text ?? '');
+                        });
+                      },
+                      onSaved: (value) async {
+                        phoneController2.text = value!;
+                        final SharedPreferences prefs = await _prefs;
+                        setState(() {
+                          prefs.setString(
+                              'phone2', phoneController2.text ?? '');
+                        });
                       },
                     ),
                   ],
@@ -634,8 +774,9 @@ class FormValidation2State extends State<FormValidation2> {
             dashWidth: 5,
           ),
           TextFormField(
-            autovalidateMode:
-                isValidateActive == false ? null : AutovalidateMode.always,
+            autovalidateMode: widget.isValidateActive == false
+                ? null
+                : AutovalidateMode.always,
             controller: addressController2,
             textInputAction: TextInputAction.done,
             decoration: const InputDecoration(
@@ -650,13 +791,27 @@ class FormValidation2State extends State<FormValidation2> {
             validator: (value) {
               if (value!.isEmpty) {
                 //allow upper and lower case alphabets and space
+                scrollItem();
+                setCheckAddressNull2(true, value);
                 return "Enter Correct Address";
               } else {
+                setCheckAddressNull2(false, value);
                 return null;
               }
             },
-            onSaved: (value) {
-              // textInputValue.address = value;
+            onChanged: (value) async {
+              final SharedPreferences prefs = await _prefs;
+              setState(() {
+                // isActiveCheckBox = false;
+                prefs.setString('address2', addressController2.text ?? '');
+              });
+            },
+            onSaved: (value) async {
+              addressController2.text = value!;
+              final SharedPreferences prefs = await _prefs;
+              setState(() {
+                prefs.setString('address2', addressController2.text ?? '');
+              });
             },
           ),
           const DotWidget(
@@ -670,20 +825,20 @@ class FormValidation2State extends State<FormValidation2> {
             hint: 'Quốc tịch',
             isCitySelected: true,
             cities: _listOfNation,
-            isValidateActive: isValidateActive,
+            isValidateActive: widget.isValidateActive ?? false,
           ),
           const DotWidget(
             dashColor: Colors.grey,
             dashHeight: 1,
             dashWidth: 5,
           ),
-          AppTextField(
+          AppTextCityField(
             textEditingController: cityTextEditingController,
             title: 'Thành Phố *',
             hint: 'Thành phố',
             isCitySelected: true,
             cities: _listOfCities,
-            isValidateActive: isValidateActive,
+            isValidateActive: widget.isValidateActive ?? false,
           ),
           const DotWidget(
             dashColor: Colors.grey,
@@ -692,17 +847,18 @@ class FormValidation2State extends State<FormValidation2> {
           ),
           // widget.listInformation!.length < 3
           //     ?
-          CheckboxSaveUseAfter(
-            checkboxValue: saveCheck,
-            text: 'Lưu thông tin thanh toán cho lần sau',
-            callback: () {
-              setState(() {});
-              saveCheck = !saveCheck;
-              saveCheck == false ? null : saveData();
-              // addDataToList();
-            },
-          )
-          // : const SizedBox(),
+          isActiveCheckBox == false
+              ? CheckboxSaveUseAfter(
+                  checkboxValue: saveCheck,
+                  text: 'Lưu thông tin thanh toán cho lần sau',
+                  callback: () {
+                    setState(() {});
+                    saveCheck = !saveCheck;
+                    saveCheck == false ? null : saveData();
+                    // addDataToList();
+                  },
+                )
+              : const SizedBox(),
         ],
       ),
     );
@@ -734,6 +890,7 @@ class AppTextField extends StatefulWidget {
 
 class AppTextFieldState extends State<AppTextField> {
   TextEditingController searchTextEditingController = TextEditingController();
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   /// This is on text changed method which will display on city text field on changed.
   void onTextFieldTap() {
@@ -745,9 +902,11 @@ class AppTextFieldState extends State<AppTextField> {
         searchBackgroundColor: Colors.black12,
         dataList: widget.cities ?? [],
         selectedItems: (List<dynamic> selectedList) {},
-        selectedItem: (String selected) {
+        selectedItem: (String selected) async {
+          final SharedPreferences prefs = await _prefs;
           setState(() {
             widget.textEditingController.text = selected;
+            prefs.setString('nation2', selected);
           });
         },
         enableMultipleSelection: false,
@@ -785,10 +944,124 @@ class AppTextFieldState extends State<AppTextField> {
           onSaved: (value) {
             // textInputValue.nation = value;
           },
+          onChanged: (value) async {
+            final SharedPreferences prefs = await _prefs;
+            setState(() {
+              prefs.setString(
+                  'nation2', widget.textEditingController.text ?? '');
+            });
+          },
           onTap: widget.isCitySelected
-              ? () {
+              ? () async {
                   FocusScope.of(context).unfocus();
                   onTextFieldTap();
+                  final SharedPreferences prefs = await _prefs;
+                  setState(() {
+                    prefs.setString(
+                        'nation2', widget.textEditingController.text ?? '');
+                  });
+                }
+              : null,
+        ),
+      ],
+    );
+  }
+}
+
+//ignore: must_be_immutable
+class AppTextCityField extends StatefulWidget {
+  TextEditingController textEditingController = TextEditingController();
+  final String title;
+  final String hint;
+  final bool isCitySelected;
+
+  final bool isValidateActive;
+  final List<SelectedListItem>? cities;
+  AppTextCityField({
+    required this.textEditingController,
+    required this.title,
+    required this.hint,
+    required this.isCitySelected,
+    this.cities,
+    required this.isValidateActive,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  AppTextCityFieldState createState() => AppTextCityFieldState();
+}
+
+class AppTextCityFieldState extends State<AppTextCityField> {
+  TextEditingController searchTextEditingController = TextEditingController();
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  /// This is on text changed method which will display on city text field on changed.
+  void onTextFieldTap() {
+    DropDownState(
+      DropDown(
+        submitButtonColor: const Color.fromRGBO(70, 76, 222, 1),
+        searchHintText: "Thành phố...",
+        bottomSheetTitle: 'Thành phố',
+        searchBackgroundColor: Colors.black12,
+        dataList: widget.cities ?? [],
+        selectedItems: (List<dynamic> selectedList) {},
+        selectedItem: (String selected) async {
+          final SharedPreferences prefs = await _prefs;
+          setState(() {
+            widget.textEditingController.text = selected;
+            prefs.setString('city2', selected);
+          });
+        },
+        enableMultipleSelection: false,
+        searchController: searchTextEditingController,
+      ),
+    ).showModal(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextFormField(
+          autovalidateMode:
+              widget.isValidateActive == false ? null : AutovalidateMode.always,
+          controller: widget.textEditingController,
+          decoration: InputDecoration(
+            labelText: widget.title,
+            border: InputBorder.none,
+            labelStyle: const TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 15,
+              color: Colors.grey,
+            ),
+          ),
+          validator: (value) {
+            if (value!.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
+              //allow upper and lower case alphabets and space
+              return "Enter Correct Nation";
+            } else {
+              return null;
+            }
+          },
+          onSaved: (value) {
+            // textInputValue.nation = value;
+          },
+          onChanged: (value) async {
+            final SharedPreferences prefs = await _prefs;
+            setState(() {
+              prefs.setString('city2', widget.textEditingController.text ?? '');
+            });
+          },
+          onTap: widget.isCitySelected
+              ? () async {
+                  FocusScope.of(context).unfocus();
+                  onTextFieldTap();
+                  final SharedPreferences prefs = await _prefs;
+                  setState(() {
+                    prefs.setString(
+                        'nation2', widget.textEditingController.text ?? '');
+                  });
                 }
               : null,
         ),

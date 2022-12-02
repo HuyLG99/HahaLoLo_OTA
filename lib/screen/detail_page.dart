@@ -34,24 +34,24 @@ class DetailPageState extends State<DetailPage> {
   final discountKey = GlobalKey();
   final installmentKey = GlobalKey();
 
-  bool activeConnection = false;
-  String T = "";
-  Future checkUserConnection() async {
-    try {
-      final result = await InternetAddress.lookup('google.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        setState(() {
-          activeConnection = true;
-          T = "Turn off the data and repress again";
-        });
-      }
-    } on SocketException catch (_) {
-      setState(() {
-        activeConnection = false;
-        T = "Turn On the data and repress again";
-      });
-    }
-  }
+  bool activeConnection = true;
+  // String T = "";
+  // Future checkUserConnection() async {
+  //   try {
+  //     final result = await InternetAddress.lookup('google.com');
+  //     if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+  //       setState(() {
+  //         activeConnection = true;
+  //         T = "Turn off the data and repress again";
+  //       });
+  //     }
+  //   } on SocketException catch (_) {
+  //     setState(() {
+  //       activeConnection = false;
+  //       T = "Turn On the data and repress again";
+  //     });
+  //   }
+  // }
 
   Future scrollItem() async {
     final context = discountKey.currentContext!;
@@ -95,10 +95,10 @@ class DetailPageState extends State<DetailPage> {
   @override
   void initState() {
     super.initState();
-    Timer.periodic(const Duration(seconds: 2), (timer) {
-      checkUserConnection();
-      // print('Check');
-    });
+    // Timer.periodic(const Duration(seconds: 2), (timer) {
+    //   checkUserConnection();
+    //   // print('Check');
+    // });
 
     readJson();
     readJsonRating();
@@ -463,7 +463,7 @@ class DetailPageState extends State<DetailPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          checkUserConnection();
+          // checkUserConnection();
           Navigator.push(
             context,
             MaterialPageRoute(
