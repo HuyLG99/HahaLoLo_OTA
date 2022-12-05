@@ -12,7 +12,6 @@ import 'bloc/datetime_blocs/datetime_repository.dart';
 import 'core/shared_preferences.dart';
 
 void main() {
-  SharedPrefs().init();
   runApp(const MyApp());
 }
 

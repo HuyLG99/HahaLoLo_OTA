@@ -57,13 +57,14 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                 accompaniedServiceData: accompaniedList,
                 qty: moreServiceList[index].qty,
                 amountCount: (valueQty) {
-                  if (valueQty != null &&
-                      moreServiceList.isNotEmpty &&
-                      selectedList.isNotEmpty) {
+                  if (valueQty != null && moreServiceList.isNotEmpty) {
                     setState(() {
                       dattaQty = valueQty;
+
+                      // moreServiceList[index].qty = valueQty;
                       widget.getSelectedList?.call(selectedList);
                       if (moreServiceList[index].name != null ||
+                          moreServiceList[index].name == null ||
                           valueQty == 0 && moreServiceList[index].qty == null ||
                           valueQty == 0 && selectedList[index].qty == null) {
                         moreServiceList[index].qty = valueQty;

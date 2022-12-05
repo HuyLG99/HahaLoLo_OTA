@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hahaloloapp/screen/bookdatetime_page.dart';
+
+import '../screen/book_tour/payment_page.dart';
 
 class BottomAppBarCustom extends StatelessWidget {
   const BottomAppBarCustom({Key? key}) : super(key: key);
@@ -34,7 +37,15 @@ class BottomAppBarCustom extends StatelessWidget {
             ],
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const BookDateTimePage(
+                          checkActive: true,
+                        )),
+              );
+            },
             child: Container(
               width: 140,
               height: 40,

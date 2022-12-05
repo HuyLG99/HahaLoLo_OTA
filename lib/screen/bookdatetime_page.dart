@@ -1,10 +1,8 @@
-import 'dart:async';
-import 'dart:io';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hahaloloapp/screen/book_tour/book_tour_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../bloc/calendar_blocs/calendar.bloc.dart';
 import '../bloc/calendar_blocs/calendar_repository.dart';
@@ -76,34 +74,34 @@ class BookDatetimeBodyState extends State<BookDatetimeBody> {
   late final ScrollController controller;
   bool isSelected = true;
   int selectedIndex = 0;
-  bool activeConnection = false;
+  bool activeConnection = true;
   String T = "";
-  Future checkUserConnection() async {
-    try {
-      final result = await InternetAddress.lookup('google.com');
-      // print(result);
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        setState(() {
-          activeConnection = true;
-          // T = "Turn off the data and repress again";
-        });
-      }
-    } on SocketException catch (_) {
-      setState(() {
-        activeConnection = false;
-        // T = "Turn On the data and repress again";
-      });
-    }
-  }
+  // Future checkUserConnection() async {
+  //   try {
+  //     final result = await InternetAddress.lookup('google.com');
+  //     // print(result);
+  //     if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+  //       setState(() {
+  //         activeConnection = true;
+  //         // T = "Turn off the data and repress again";
+  //       });
+  //     }
+  //   } on SocketException catch (_) {
+  //     setState(() {
+  //       activeConnection = false;
+  //       // T = "Turn On the data and repress again";
+  //     });
+  //   }
+  // }
 
   @override
   void initState() {
     super.initState();
 
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      checkUserConnection();
-      // print('Check2');
-    });
+    // Timer.periodic(const Duration(seconds: 1), (timer) {
+    //   checkUserConnection();
+    //   // print('Check2');
+    // });
     widget.checkActive == true
         ? context.read<DatetimeBloc>().add(DatetimeFetch())
         : const SizedBox();
@@ -120,7 +118,7 @@ class BookDatetimeBodyState extends State<BookDatetimeBody> {
   void scrollListener() async {
     if (controller.position.pixels == controller.position.maxScrollExtent) {
       ///  call loadMore
-      checkUserConnection();
+      // checkUserConnection();
       activeConnection == true
           ? context.read<DatetimeBloc>().add(DatetimeLoadMore())
           : const SizedBox();
@@ -258,13 +256,13 @@ class BookDatetimeBodyState extends State<BookDatetimeBody> {
                                   selectedIndex = index;
                                   if (selectedIndex != 0 &&
                                       selectedIndex != 2) {
-                                    checkUserConnection();
+                                    // checkUserConnection();
                                     context
                                         .read<CalendarBloc>()
                                         .add(CalendarFetch2());
                                   } else if (selectedIndex == 0 ||
                                       selectedIndex == 2) {
-                                    checkUserConnection();
+                                    // checkUserConnection();
                                     context
                                         .read<CalendarBloc>()
                                         .add(CalendarFetch());
@@ -464,6 +462,7 @@ class DateYearWidget extends StatelessWidget {
   final int? year;
   final Color? color;
   final Color? colorText;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -499,7 +498,7 @@ class DateYearWidget extends StatelessWidget {
   }
 }
 
-class UpcomingCalendarWidget extends StatelessWidget {
+class UpcomingCalendarWidget extends StatefulWidget {
   const UpcomingCalendarWidget({
     Key? key,
     this.weekDayStart,
@@ -521,10 +520,30 @@ class UpcomingCalendarWidget extends StatelessWidget {
   final int? monthEnd;
   final int? yearEnd;
   final int? total;
+
+  @override
+  State<UpcomingCalendarWidget> createState() => UpcomingCalendarWidgetState();
+}
+
+class UpcomingCalendarWidgetState extends State<UpcomingCalendarWidget> {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  void setStartEndDateTour() async {
+    final SharedPreferences prefs = await _prefs;
+    setState(() {
+      prefs.setInt('dayStartTour', widget.dayStart ?? 0);
+      prefs.setInt('monthStartTour', widget.monthStart ?? 0);
+      prefs.setInt('yearStartTour', widget.yearStart ?? 0);
+      prefs.setInt('dayEndTour', widget.dayEnd ?? 0);
+      prefs.setInt('monthEndTour', widget.monthEnd ?? 0);
+      prefs.setInt('yearEndTour', widget.yearEnd ?? 0);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        setStartEndDateTour();
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -560,7 +579,7 @@ class UpcomingCalendarWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Th $weekDayStart, $dayStart/$monthStart/$yearStart',
+                        'Th ${widget.weekDayStart}, ${widget.dayStart}/${widget.monthStart}/${widget.yearStart}',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
@@ -587,7 +606,7 @@ class UpcomingCalendarWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Th $weekDayEnd, $dayEnd/$monthEnd/$yearEnd',
+                        'Th ${widget.weekDayEnd}, ${widget.dayEnd}/${widget.monthEnd}/${widget.yearEnd}',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
@@ -604,7 +623,7 @@ class UpcomingCalendarWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '$total đ',
+                    '${widget.total} đ',
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w500,
@@ -613,6 +632,7 @@ class UpcomingCalendarWidget extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
+                      setStartEndDateTour();
                       Navigator.push(
                         context,
                         MaterialPageRoute(

@@ -87,7 +87,7 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                                 selectedMenuItem = selected;
                                 widget.onSelected?.call(selected);
                                 widget.currentID?.call(widget.name);
-                                widget.amountCount?.call(state.counter);
+                                widget.amountCount?.call(widget.qty);
                               });
                             },
                             items: widget.accompaniedServiceData
@@ -120,7 +120,9 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                               setState(() {
                                 widget.currentID?.call(widget.name);
                                 widget.onDeleted?.call(selectedMenuItem);
-                                state.counter = widget.qty ?? 0;
+
+                                // state.counter = widget.qty ?? 0;
+
                                 // widget.amountCount?.call(state.counter);
                                 selectedMenuItem = null;
                               });
@@ -154,8 +156,6 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                           });
                         }
                         widget.amountCount?.call(state.counter + 1);
-                        // print('state count: ${state.counter + 1}');
-                        // print('max count: ${(widget.maxCount ?? 1)}');
                       },
                       onTapDecrement: () {
                         context.read<CounterAccompaniedCubit>().decrement();
@@ -164,7 +164,9 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                           setState(() {
                             state.counter = widget.maxCount ?? 0;
                           });
-
+                          if (((widget.maxCount ?? 1)) == 0) {
+                            cubit.clean();
+                          }
                           if (((widget.maxCount ?? 1)) == 1) {
                             cubit.clean();
                           }
@@ -201,15 +203,12 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                         widget.amountCount?.call((state.counter < 1)
                             ? (state.counter)
                             : (state.counter - 1));
-
-                        // print('state count: ${state.counter - 1}');
-                        // print('max count: ${(widget.maxCount ?? 1)}');
                       },
                       count: ((widget.maxCount ?? 1)) >= (state.counter)
                           ? ((widget.qty ?? 0) == (state.counter)
                               ? (state.counter)
                               : (widget.qty == 0)
-                                  ? (state.counter)
+                                  ? (state.counter = 0)
                                   : (widget.qty ?? 0))
                           : (state.counter == 1)
                               ? (state.counter - 1)

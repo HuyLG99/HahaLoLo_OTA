@@ -28,12 +28,6 @@ class FormValidationState extends State<FormValidation> {
       TextEditingController(text: '4000,Ung Van Khiem,Ho Chi Minh');
 
   CustomerInformationModel textInputValue = CustomerInformationModel();
-  // bool firstNameValidate = false;
-  // bool lastNameValidate = false;
-  // bool emailValidate = false;
-  // bool phoneValidate = false;
-  // bool addressValidate = false;
-
   void loadDataForm() async {
     final SharedPreferences prefs = await _prefs;
     setState(() {
@@ -83,6 +77,27 @@ class FormValidationState extends State<FormValidation> {
     prefs.setString('address', address ?? '');
   }
 
+  bool isValidateFirstNameNull = false;
+  bool isValidateLastNameNull = false;
+  bool isValidatePhoneNull = false;
+  bool isValidateEmailNameNull = false;
+  bool isValidateAddressNameNull = false;
+  void checkStatusValidate() async {
+    final SharedPreferences prefs = await _prefs;
+    setState(() {
+      isValidateFirstNameNull = prefs.getBool('checkFirstNameValidate2_key')!;
+      isValidateLastNameNull = prefs.getBool('checkLastNameValidate2_key')!;
+      isValidateEmailNameNull = prefs.getBool('checkEmailValidate2_key')!;
+      isValidatePhoneNull = prefs.getBool('checkPhoneValidate2_key')!;
+      isValidateAddressNameNull = prefs.getBool('checkAddressValidate2_key')!;
+    });
+    if (isValidateFirstNameNull == true &&
+        isValidateLastNameNull == true &&
+        isValidateEmailNameNull == true &&
+        isValidatePhoneNull == true &&
+        isValidateAddressNameNull == true) {}
+  }
+
   Future scrollItem() async {
     final context = formKey.currentContext!;
     await Scrollable.ensureVisible(
@@ -109,7 +124,6 @@ class FormValidationState extends State<FormValidation> {
     addressController.dispose();
   }
 
-  //key for form
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -134,11 +148,9 @@ class FormValidationState extends State<FormValidation> {
                 //allow upper and lower case alphabets and space
                 scrollItem();
                 setCheckFirstNameNull(true, value);
-
                 return "Enter Correct Name";
               } else {
                 setCheckFirstNameNull(false, value);
-
                 return null;
               }
             },
