@@ -208,10 +208,12 @@ class PaymentPageState extends State<PaymentPage> {
               nation: '$nation2',
               city: '$city2',
             ),
-            CardAccompaniedService(
-              header: 'Dịch vụ đính kèm',
-              listBottomSheetDetail: widget.listBottomSheetDetail,
-            ),
+            (widget.listBottomSheetDetail).isNotEmpty
+                ? CardAccompaniedService(
+                    header: 'Dịch vụ đính kèm',
+                    listBottomSheetDetail: widget.listBottomSheetDetail,
+                  )
+                : const SizedBox(),
           ],
         ),
       ),

@@ -445,8 +445,6 @@ class _BookTourPageBodyState extends State<BookTourPageBody> {
   @override
   void initState() {
     super.initState();
-    // updateListChange();
-    scrollItem();
     context
         .read<AccompaniedServiceBloc>()
         .add(AccompaniedServiceCompareSelected());

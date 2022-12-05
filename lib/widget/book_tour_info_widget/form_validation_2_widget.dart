@@ -188,6 +188,7 @@ class FormValidation2State extends State<FormValidation2> {
     addressController2.text = '';
     nationTextEditingController.text = '';
     cityTextEditingController.text = '';
+    formKey2.currentState!.validate();
   }
 
   void getCheckUse() async {
@@ -875,7 +876,6 @@ class FormValidation2State extends State<FormValidation2> {
             hint: 'Quốc tịch',
             isCitySelected: true,
             cities: _listOfNation,
-            isValidateActive: widget.isValidateActive ?? false,
             onChanged: (value) {
               setState(() {});
               isActiveCheckBox = value;
@@ -892,7 +892,6 @@ class FormValidation2State extends State<FormValidation2> {
             hint: 'Thành phố',
             isCitySelected: true,
             cities: _listOfCities,
-            isValidateActive: widget.isValidateActive ?? false,
             onChanged: (value) {
               setState(() {});
               isActiveCheckBox = value;
@@ -927,7 +926,7 @@ class AppTextField extends StatefulWidget {
   final String title;
   final String hint;
   final bool isCitySelected;
-  final bool isValidateActive;
+
   final List<SelectedListItem>? cities;
   final ValueChanged<bool> onChanged;
   AppTextField({
@@ -936,7 +935,6 @@ class AppTextField extends StatefulWidget {
     required this.hint,
     required this.isCitySelected,
     this.cities,
-    required this.isValidateActive,
     Key? key,
     required this.onChanged,
   }) : super(key: key);
@@ -948,6 +946,7 @@ class AppTextField extends StatefulWidget {
 class AppTextFieldState extends State<AppTextField> {
   TextEditingController searchTextEditingController = TextEditingController();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  bool isValidateActive = false;
 
   /// This is on text changed method which will display on city text field on changed.
   void onTextFieldTap() {
@@ -962,7 +961,7 @@ class AppTextFieldState extends State<AppTextField> {
         selectedItem: (String selected) async {
           final SharedPreferences prefs = await _prefs;
           setState(() {
-            widget.isValidateActive == false;
+            // isValidateActive = true;
             widget.onChanged.call(false);
             widget.textEditingController.text = selected;
             prefs.setString('nation2', selected);
@@ -981,7 +980,7 @@ class AppTextFieldState extends State<AppTextField> {
       children: [
         TextFormField(
           autovalidateMode:
-              widget.isValidateActive == false ? null : AutovalidateMode.always,
+              isValidateActive == false ? null : AutovalidateMode.always,
           controller: widget.textEditingController,
           decoration: InputDecoration(
             labelText: widget.title,
@@ -1006,6 +1005,7 @@ class AppTextFieldState extends State<AppTextField> {
           onChanged: (value) async {
             final SharedPreferences prefs = await _prefs;
             setState(() {
+              isValidateActive = true;
               prefs.setString(
                   'nation2', widget.textEditingController.text ?? '');
             });
@@ -1016,6 +1016,7 @@ class AppTextFieldState extends State<AppTextField> {
                   onTextFieldTap();
                   final SharedPreferences prefs = await _prefs;
                   setState(() {
+                    isValidateActive = true;
                     widget.onChanged.call(false);
                     prefs.setString(
                         'nation2', widget.textEditingController.text ?? '');
@@ -1035,7 +1036,6 @@ class AppTextCityField extends StatefulWidget {
   final String hint;
   final bool isCitySelected;
 
-  final bool isValidateActive;
   final List<SelectedListItem>? cities;
   final ValueChanged<bool> onChanged;
   AppTextCityField({
@@ -1044,7 +1044,6 @@ class AppTextCityField extends StatefulWidget {
     required this.hint,
     required this.isCitySelected,
     this.cities,
-    required this.isValidateActive,
     Key? key,
     required this.onChanged,
   }) : super(key: key);
@@ -1056,6 +1055,7 @@ class AppTextCityField extends StatefulWidget {
 class AppTextCityFieldState extends State<AppTextCityField> {
   TextEditingController searchTextEditingController = TextEditingController();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  bool isValidateActive = false;
 
   /// This is on text changed method which will display on city text field on changed.
   void onTextFieldTap() {
@@ -1088,7 +1088,7 @@ class AppTextCityFieldState extends State<AppTextCityField> {
       children: [
         TextFormField(
           autovalidateMode:
-              widget.isValidateActive == false ? null : AutovalidateMode.always,
+              isValidateActive == false ? null : AutovalidateMode.always,
           controller: widget.textEditingController,
           decoration: InputDecoration(
             labelText: widget.title,
@@ -1122,6 +1122,7 @@ class AppTextCityFieldState extends State<AppTextCityField> {
                   onTextFieldTap();
                   final SharedPreferences prefs = await _prefs;
                   setState(() {
+                    isValidateActive = true;
                     widget.onChanged.call(false);
                     prefs.setString(
                         'nation2', widget.textEditingController.text ?? '');

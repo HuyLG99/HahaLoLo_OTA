@@ -335,7 +335,7 @@ class _AmountCounterWidgetState extends State<AmountCounterWidget> {
                 onTapDown: (TapDownDetails details) {
                   timer =
                       Timer.periodic(const Duration(milliseconds: 200), (t) {
-                    widget.count > 98 ? null : widget.onTapIncrement();
+                    widget.count > 19 ? null : widget.onTapIncrement();
                   });
                 },
                 onTapUp: (TapUpDetails details) {
@@ -345,11 +345,11 @@ class _AmountCounterWidgetState extends State<AmountCounterWidget> {
                   timer.cancel();
                 },
                 onTap: () {
-                  widget.count > 98 ? null : widget.onTapIncrement();
+                  widget.count > 19 ? null : widget.onTapIncrement();
                 },
                 child: Icon(
                   Icons.add_circle_outline,
-                  color: widget.count < 99 ? Colors.blue : Colors.grey,
+                  color: widget.count < 20 ? Colors.blue : Colors.grey,
                   size: 30,
                 ),
               ),
