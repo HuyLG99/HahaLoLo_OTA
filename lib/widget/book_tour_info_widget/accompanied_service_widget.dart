@@ -121,9 +121,6 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                                 widget.currentID?.call(widget.name);
                                 widget.onDeleted?.call(selectedMenuItem);
 
-                                // state.counter = widget.qty ?? 0;
-
-                                // widget.amountCount?.call(state.counter);
                                 selectedMenuItem = null;
                               });
                             },
@@ -148,73 +145,21 @@ class _AccompaniedServiceState extends State<AccompaniedService> {
                       qualityChange: widget.qty,
                       onTapIncrement: () {
                         context.read<CounterAccompaniedCubit>().increment();
-
-                        if ((widget.qty ?? 0) <= state.counter &&
-                            widget.qty != 0) {
-                          setState(() {
-                            state.counter = widget.qty ?? 0;
-                          });
-                        }
-                        widget.amountCount?.call(state.counter + 1);
+                        setState(() {
+                          state.counter = widget.qty ?? 0;
+                          widget.qty = state.counter + 1;
+                          widget.amountCount?.call(widget.qty);
+                        });
                       },
                       onTapDecrement: () {
                         context.read<CounterAccompaniedCubit>().decrement();
-                        if ((state.counter) > (widget.maxCount ?? 1) &&
-                            state.counter > 1) {
-                          setState(() {
-                            state.counter = widget.maxCount ?? 0;
-                          });
-                          if (((widget.maxCount ?? 1)) == 0) {
-                            cubit.clean();
-                          }
-                          if (((widget.maxCount ?? 1)) == 1) {
-                            cubit.clean();
-                          }
-                          if (((widget.maxCount ?? 1)) == 2) {
-                            cubit.clean1();
-                          }
-                          if (((widget.maxCount ?? 1)) == 3) {
-                            cubit.clean2();
-                          }
-                          if (((widget.maxCount ?? 1)) == 4) {
-                            cubit.clean3();
-                          }
-                          if (((widget.maxCount ?? 1)) == 5) {
-                            cubit.clean4();
-                          }
-                          if (((widget.maxCount ?? 1)) == 6) {
-                            cubit.clean5();
-                          }
-                          if (((widget.maxCount ?? 1)) == 7) {
-                            cubit.clean6();
-                          }
-                          if (((widget.maxCount ?? 1)) == 8) {
-                            cubit.clean7();
-                          }
-
-                          context.read<CounterAccompaniedCubit>().decrement();
-                          // print('state count clean: ${state.counter}');
-                        }
-                        if ((widget.qty ?? 0) <= state.counter) {
-                          setState(() {
-                            state.counter = widget.qty ?? 0;
-                          });
-                        }
-                        widget.amountCount?.call((state.counter < 1)
-                            ? (state.counter)
-                            : (state.counter - 1));
+                        setState(() {
+                          state.counter = widget.qty ?? 0;
+                          widget.qty = state.counter - 1;
+                          widget.amountCount?.call(widget.qty);
+                        });
                       },
-                      count: ((widget.maxCount ?? 1)) >= (state.counter)
-                          ? ((widget.qty ?? 0) == (state.counter)
-                              ? (state.counter)
-                              : (widget.qty == 0)
-                                  ? (state.counter = 0)
-                                  : (widget.qty ?? 0))
-                          : (state.counter == 1)
-                              ? (state.counter - 1)
-                              : ((widget.qty ?? 0) < (widget.maxCount ?? 1)
-                                  ? (widget.qty ?? 0)
-                                  : (widget.maxCount ?? 1)),
+                      count: widget.qty ?? 0,
                     ),
                   ],
                 ),

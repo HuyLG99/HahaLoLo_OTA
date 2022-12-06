@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+//ignore: must_be_immutable
 class CounterAccompaniedWidget extends StatefulWidget {
-  const CounterAccompaniedWidget({
+  CounterAccompaniedWidget({
     Key? key,
     this.typePeople,
     this.typeAge,
@@ -22,7 +23,7 @@ class CounterAccompaniedWidget extends StatefulWidget {
   final num maxCount;
   final VoidCallback onTapIncrement;
   final VoidCallback onTapDecrement;
-  final int count;
+  int count;
   @override
   State<CounterAccompaniedWidget> createState() =>
       _CounterAccompaniedWidgetState();
@@ -87,7 +88,7 @@ class _CounterAccompaniedWidgetState extends State<CounterAccompaniedWidget> {
               ),
               GestureDetector(
                 onTap: () {
-                  widget.count > 98 ||
+                  widget.count > 20 ||
                           widget.count >= widget.maxCount ||
                           widget.count == widget.maxCount
                       ? null

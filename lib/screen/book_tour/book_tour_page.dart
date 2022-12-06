@@ -135,7 +135,7 @@ class BookTourPageState extends State<BookTourPage> {
             context,
             MaterialPageRoute(
                 builder: (context) => PaymentPage(
-                      listBottomSheetDetail: listBottomSheetDetail,
+                      listBottomSheetDetail: listShowMoreServiceDetail,
                     )),
           );
         }
@@ -177,7 +177,7 @@ class BookTourPageState extends State<BookTourPage> {
             context,
             MaterialPageRoute(
                 builder: (context) => PaymentPage(
-                      listBottomSheetDetail: listBottomSheetDetail,
+                      listBottomSheetDetail: listShowMoreServiceDetail,
                     )),
           );
         }
@@ -280,17 +280,23 @@ class BookTourPageState extends State<BookTourPage> {
                 sum = valueSum ?? 0;
               });
             },
+            showListMoreService: (valueMoreSelected) {
+              setState(() {
+                listShowMoreServiceDetail = valueMoreSelected;
+              });
+            },
             showListBottomSheetDetail: (valueSelected) {
               setState(() {
                 listBottomSheetDetail = valueSelected;
               });
             },
+            getListMoreServiceDetail: listShowMoreServiceDetail,
             getListBottomSheetDetail: listBottomSheetDetail,
             listInformationCustomer: listInformationCustomer,
           ),
           bottomNavigationBar: GestureDetector(
             onTap: () {
-              listBottomSheetDetail.isNotEmpty
+              listShowMoreServiceDetail.isNotEmpty
                   ? showModalBottomSheet(
                       context: context,
                       useRootNavigator: true,
@@ -312,7 +318,7 @@ class BookTourPageState extends State<BookTourPage> {
                                       MaterialPageRoute(
                                           builder: (context) => PaymentPage(
                                                 listBottomSheetDetail:
-                                                    listBottomSheetDetail,
+                                                    listShowMoreServiceDetail,
                                               )),
                                     );
                                   },
@@ -340,27 +346,18 @@ class BookTourPageState extends State<BookTourPage> {
                                     physics:
                                         const NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
-                                    itemCount: listBottomSheetDetail.length,
+                                    itemCount: listShowMoreServiceDetail.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       return BottomSheetDetail(
-                                        name: listBottomSheetDetail[index]
-                                                ?.t250
-                                                .t251
-                                                .tv251 ??
+                                        name: listShowMoreServiceDetail[index]
+                                                ?.name ??
                                             '',
-                                        qty: (stateAmount.amountCustomer
-                                                    .totalCustomer) >
-                                                (listBottomSheetDetail[index]
-                                                        ?.qty ??
-                                                    0)
-                                            ? (listBottomSheetDetail[index]
-                                                    ?.qty ??
-                                                0)
-                                            : (stateAmount
-                                                .amountCustomer.totalCustomer),
-                                        price:
-                                            listBottomSheetDetail[index]?.tn452,
+                                        qty: (listShowMoreServiceDetail[index]
+                                                ?.qty ??
+                                            0),
+                                        price: listShowMoreServiceDetail[index]
+                                            ?.price,
                                         maxCount: stateAmount
                                             .amountCustomer.totalCustomer,
                                       );
@@ -487,7 +484,7 @@ class _BookTourPageBodyState extends State<BookTourPageBody> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: AmountBookTourWidget(
-                listBottomSheetDetail: widget.getListBottomSheetDetail,
+                listMoreServiceDetail: widget.getListMoreServiceDetail,
                 maxCount: stateAmount.amountCustomer.totalCustomer,
                 getSum: (value) {
                   setState(() {
@@ -516,16 +513,13 @@ class _BookTourPageBodyState extends State<BookTourPageBody> {
               return AccompaniedServiceView(
                 maxCount: stateAmount.amountCustomer.totalCustomer,
                 accompaniedList: accompaniedListGet,
-                getSelectedList: (value) {
+                getMoreServiceList: (listMoreServiceList) {
                   setState(() {
-                    widget.showListBottomSheetDetail?.call(value);
-                    final totalPrice = value.fold(
+                    widget.showListMoreService?.call(listMoreServiceList);
+                    final totalPrice = listMoreServiceList.fold(
                         0,
-                        (int sum, element) => (stateAmount
-                                    .amountCustomer.totalCustomer) <
-                                (element?.qty ?? 0)
-                            ? (sum + ((element!.qty ?? 0) - 1) * element.tn452)
-                            : (sum + (element!.qty ?? 0) * element.tn452));
+                        (int sum, element) => ((sum +
+                            (element!.qty ?? 0) * (element.price ?? 0))));
 
                     widget.getSum?.call(totalPrice);
                   });

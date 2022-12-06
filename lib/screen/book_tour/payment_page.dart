@@ -4,12 +4,14 @@ import 'package:hahaloloapp/screen/detail_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/accompanied_service_model.dart';
+import '../../models/more_service_model.dart';
 import '../../widget/payment/card_info_widget.dart';
 
 class PaymentPage extends StatefulWidget {
   const PaymentPage({Key? key, required this.listBottomSheetDetail})
       : super(key: key);
-  final List<AccompaniedServiceData?> listBottomSheetDetail;
+
+  final List<MoreServiceModel?> listBottomSheetDetail;
   @override
   PaymentPageState createState() => PaymentPageState();
 }
