@@ -379,16 +379,16 @@ class DetailPageState extends State<DetailPage> {
               endIndent: 20,
             ),
             const ServiceTour(),
-            const Divider(
-              indent: 20,
-              endIndent: 20,
-            ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(18, 8, 18, 8),
-              child: Text(
-                  //
-                  '25'),
-            ),
+            // const Divider(
+            //   indent: 20,
+            //   endIndent: 20,
+            // ),
+            // const Padding(
+            //   padding: EdgeInsets.fromLTRB(18, 8, 18, 8),
+            //   child: Text(
+            //       //
+            //       '25'),
+            // ),
             const Divider(
               thickness: 8,
             ),

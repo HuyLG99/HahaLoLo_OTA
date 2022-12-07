@@ -116,17 +116,26 @@ class BookTourPageState extends State<BookTourPage> {
         isValidatePhoneNull2 = prefs.getBool('checkPhoneValidate2_key')!;
         isValidateAddressNameNull2 =
             prefs.getBool('checkAddressValidate2_key')!;
+        firstName2 = prefs.getString('firstName2');
+        lastName2 = prefs.getString('lastName2');
+        email2 = prefs.getString('email2');
+        phone2 = prefs.getString('phone2');
+        address2 = prefs.getString('address2');
+        nation2 = prefs.getString('nation2');
+        city2 = prefs.getString('city2');
         if (isValidateFirstNameNull == false &&
             isValidateLastNameNull == false &&
             isValidateEmailNameNull == false &&
             isValidatePhoneNull == false &&
             isValidateAddressNameNull == false &&
             isValidateFirstNameNull2 == false &&
-            firstName2!.isEmpty &&
-            lastName2!.isEmpty &&
-            email2!.isEmpty &&
-            address2!.isEmpty &&
-            phone2!.isEmpty &&
+            firstName2!.isNotEmpty &&
+            lastName2!.isNotEmpty &&
+            email2!.isNotEmpty &&
+            address2!.isNotEmpty &&
+            phone2!.isNotEmpty &&
+            nation2!.isNotEmpty &&
+            city2!.isNotEmpty &&
             isValidateLastNameNull2 == false &&
             isValidateEmailNameNull2 == false &&
             isValidatePhoneNull2 == false &&
@@ -135,7 +144,7 @@ class BookTourPageState extends State<BookTourPage> {
             context,
             MaterialPageRoute(
                 builder: (context) => PaymentPage(
-                      listBottomSheetDetail: listBottomSheetDetail,
+                      listBottomSheetDetail: listShowMoreServiceDetail,
                     )),
           );
         }
@@ -177,7 +186,7 @@ class BookTourPageState extends State<BookTourPage> {
             context,
             MaterialPageRoute(
                 builder: (context) => PaymentPage(
-                      listBottomSheetDetail: listBottomSheetDetail,
+                      listBottomSheetDetail: listShowMoreServiceDetail,
                     )),
           );
         }
@@ -280,17 +289,23 @@ class BookTourPageState extends State<BookTourPage> {
                 sum = valueSum ?? 0;
               });
             },
+            showListMoreService: (valueMoreSelected) {
+              setState(() {
+                listShowMoreServiceDetail = valueMoreSelected;
+              });
+            },
             showListBottomSheetDetail: (valueSelected) {
               setState(() {
                 listBottomSheetDetail = valueSelected;
               });
             },
+            getListMoreServiceDetail: listShowMoreServiceDetail,
             getListBottomSheetDetail: listBottomSheetDetail,
             listInformationCustomer: listInformationCustomer,
           ),
           bottomNavigationBar: GestureDetector(
             onTap: () {
-              listBottomSheetDetail.isNotEmpty
+              listShowMoreServiceDetail.isNotEmpty
                   ? showModalBottomSheet(
                       context: context,
                       useRootNavigator: true,
@@ -312,7 +327,7 @@ class BookTourPageState extends State<BookTourPage> {
                                       MaterialPageRoute(
                                           builder: (context) => PaymentPage(
                                                 listBottomSheetDetail:
-                                                    listBottomSheetDetail,
+                                                    listShowMoreServiceDetail,
                                               )),
                                     );
                                   },
@@ -340,27 +355,18 @@ class BookTourPageState extends State<BookTourPage> {
                                     physics:
                                         const NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
-                                    itemCount: listBottomSheetDetail.length,
+                                    itemCount: listShowMoreServiceDetail.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       return BottomSheetDetail(
-                                        name: listBottomSheetDetail[index]
-                                                ?.t250
-                                                .t251
-                                                .tv251 ??
+                                        name: listShowMoreServiceDetail[index]
+                                                ?.name ??
                                             '',
-                                        qty: (stateAmount.amountCustomer
-                                                    .totalCustomer) >
-                                                (listBottomSheetDetail[index]
-                                                        ?.qty ??
-                                                    0)
-                                            ? (listBottomSheetDetail[index]
-                                                    ?.qty ??
-                                                0)
-                                            : (stateAmount
-                                                .amountCustomer.totalCustomer),
-                                        price:
-                                            listBottomSheetDetail[index]?.tn452,
+                                        qty: (listShowMoreServiceDetail[index]
+                                                ?.qty ??
+                                            0),
+                                        price: listShowMoreServiceDetail[index]
+                                            ?.price,
                                         maxCount: stateAmount
                                             .amountCustomer.totalCustomer,
                                       );
@@ -487,7 +493,7 @@ class _BookTourPageBodyState extends State<BookTourPageBody> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: AmountBookTourWidget(
-                listBottomSheetDetail: widget.getListBottomSheetDetail,
+                listMoreServiceDetail: widget.getListMoreServiceDetail,
                 maxCount: stateAmount.amountCustomer.totalCustomer,
                 getSum: (value) {
                   setState(() {
@@ -516,16 +522,13 @@ class _BookTourPageBodyState extends State<BookTourPageBody> {
               return AccompaniedServiceView(
                 maxCount: stateAmount.amountCustomer.totalCustomer,
                 accompaniedList: accompaniedListGet,
-                getSelectedList: (value) {
+                getMoreServiceList: (listMoreServiceList) {
                   setState(() {
-                    widget.showListBottomSheetDetail?.call(value);
-                    final totalPrice = value.fold(
+                    widget.showListMoreService?.call(listMoreServiceList);
+                    final totalPrice = listMoreServiceList.fold(
                         0,
-                        (int sum, element) => (stateAmount
-                                    .amountCustomer.totalCustomer) <
-                                (element?.qty ?? 0)
-                            ? (sum + ((element!.qty ?? 0) - 1) * element.tn452)
-                            : (sum + (element!.qty ?? 0) * element.tn452));
+                        (int sum, element) => ((sum +
+                            (element!.qty ?? 0) * (element.price ?? 0))));
 
                     widget.getSum?.call(totalPrice);
                   });

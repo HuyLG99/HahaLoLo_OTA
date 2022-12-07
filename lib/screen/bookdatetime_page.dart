@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -75,7 +78,7 @@ class BookDatetimeBodyState extends State<BookDatetimeBody> {
   bool isSelected = true;
   int selectedIndex = 0;
   bool activeConnection = true;
-  String T = "";
+  // String T = "";
   // Future checkUserConnection() async {
   //   try {
   //     final result = await InternetAddress.lookup('google.com');

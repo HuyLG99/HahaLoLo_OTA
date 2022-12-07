@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+//ignore: must_be_immutable
 class CounterAccompaniedWidget extends StatefulWidget {
-  const CounterAccompaniedWidget({
+  CounterAccompaniedWidget({
     Key? key,
     this.typePeople,
     this.typeAge,
@@ -22,7 +23,7 @@ class CounterAccompaniedWidget extends StatefulWidget {
   final num maxCount;
   final VoidCallback onTapIncrement;
   final VoidCallback onTapDecrement;
-  final int count;
+  int count;
   @override
   State<CounterAccompaniedWidget> createState() =>
       _CounterAccompaniedWidgetState();
@@ -66,6 +67,18 @@ class _CounterAccompaniedWidgetState extends State<CounterAccompaniedWidget> {
           Row(
             children: [
               GestureDetector(
+                onTapDown: (TapDownDetails details) {
+                  timer =
+                      Timer.periodic(const Duration(milliseconds: 300), (t) {
+                    widget.count <= 1 ? null : widget.onTapDecrement();
+                  });
+                },
+                onTapUp: (TapUpDetails details) {
+                  timer.cancel();
+                },
+                onTapCancel: () {
+                  timer.cancel();
+                },
                 onTap: () {
                   widget.count < 1 ? null : widget.onTapDecrement();
                 },
@@ -86,10 +99,22 @@ class _CounterAccompaniedWidgetState extends State<CounterAccompaniedWidget> {
                 ),
               ),
               GestureDetector(
+                onTapDown: (TapDownDetails details) {
+                  timer =
+                      Timer.periodic(const Duration(milliseconds: 200), (t) {
+                    widget.count == widget.maxCount
+                        ? null
+                        : widget.onTapIncrement();
+                  });
+                },
+                onTapUp: (TapUpDetails details) {
+                  timer.cancel();
+                },
+                onTapCancel: () {
+                  timer.cancel();
+                },
                 onTap: () {
-                  widget.count > 98 ||
-                          widget.count >= widget.maxCount ||
-                          widget.count == widget.maxCount
+                  widget.count == widget.maxCount
                       ? null
                       : widget.onTapIncrement();
                 },

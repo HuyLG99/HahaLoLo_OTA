@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hahaloloapp/models/more_service_model.dart';
 import 'package:hahaloloapp/widget/payment/text_info_widget.dart';
 
 import '../../bloc/counter_cubit/counter_cubit.dart';
@@ -367,7 +368,7 @@ class CardAccompaniedService extends StatelessWidget {
   final String? title;
   final String? qty;
   final String? price;
-  final List<AccompaniedServiceData?> listBottomSheetDetail;
+  final List<MoreServiceModel?> listBottomSheetDetail;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CounterCubit, CounterState>(
@@ -409,9 +410,9 @@ class CardAccompaniedService extends StatelessWidget {
               itemCount: listBottomSheetDetail.length,
               itemBuilder: (BuildContext context, int index) {
                 return BottomSheetDetail(
-                  name: listBottomSheetDetail[index]?.t250.t251.tv251 ?? '',
+                  name: listBottomSheetDetail[index]?.name ?? '',
                   qty: (listBottomSheetDetail[index]?.qty ?? 0),
-                  price: listBottomSheetDetail[index]?.tn452,
+                  price: listBottomSheetDetail[index]?.price,
                   maxCount: stateAmount.amountCustomer.totalCustomer,
                 );
               }),

@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../bloc/counter_accompanied_cubit/counter_accompanied_cubit.dart';
 import '../../bloc/counter_cubit/counter_cubit.dart';
 import '../../models/accompanied_service_model.dart';
+import '../../models/more_service_model.dart';
 
 //ignore: must_be_immutable
 class AmountBookTourWidget extends StatefulWidget {
@@ -15,11 +16,13 @@ class AmountBookTourWidget extends StatefulWidget {
     this.getSum,
     this.listBottomSheetDetail,
     this.maxCount,
+    this.listMoreServiceDetail,
   }) : super(key: key);
 
   final ValueChanged<int?>? getSum;
   final int? maxCount;
   List<AccompaniedServiceData?>? listBottomSheetDetail;
+  List<MoreServiceModel?>? listMoreServiceDetail;
   @override
   State<AmountBookTourWidget> createState() => _AmountBookTourWidgetState();
 }
@@ -64,14 +67,19 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
                         .decrementAdult(state.amountCustomer.adult - 1);
                 setQtyAdult(state.amountCustomer.adult - 1);
                 setState(() {
-                  final totalPrice = widget.listBottomSheetDetail!.fold(
+                  final totalPrice = widget.listMoreServiceDetail!.fold(
                       0,
                       (int sum, element) => (widget.maxCount ?? 1) <
                               (element!.qty ?? 0)
-                          ? sum + ((widget.maxCount ?? 1) - 1) * element.tn452
-                          : (element.qty == 1)
-                              ? sum + ((element.qty ?? 1) * element.tn452)
-                              : sum + ((element.qty ?? 1) - 1) * element.tn452);
+                          ? sum +
+                              ((widget.maxCount ?? 1) - 1) *
+                                  (element.price ?? 0)
+                          : ((element.qty ?? 0) == 1)
+                              ? sum +
+                                  ((element.qty ?? 1) * (element.price ?? 0))
+                              : sum +
+                                  ((element.qty ?? 1) - 1) *
+                                      (element.price ?? 0));
 
                   widget.getSum?.call(totalPrice);
                   if (((widget.maxCount ?? 1) - 1) == 1) {
@@ -84,16 +92,20 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
                     .read<CounterCubit>()
                     .incrementAdult(state.amountCustomer.adult + 1);
                 setState(() {
-                  final totalPrice = widget.listBottomSheetDetail!.fold(
+                  final totalPrice = widget.listMoreServiceDetail!.fold(
                       0,
                       (int sum, element) => (widget.maxCount ?? 1) ==
                                   (element!.qty ?? 0) &&
                               (element.qty ?? 0) != 0 &&
-                              (element.t250.t251.tv251).isNotEmpty
-                          ? sum + ((widget.maxCount ?? 1)) * element.tn452
+                              (element.name ?? '').isNotEmpty
+                          ? sum +
+                              ((widget.maxCount ?? 1)) * (element.price ?? 0)
                           : ((element.qty ?? 0) >= 1 || (element.qty ?? 0) == 0)
-                              ? sum + ((element.qty ?? 0)) * element.tn452
-                              : sum + ((element.qty ?? 0) + 1) * element.tn452);
+                              ? sum +
+                                  ((element.qty ?? 0)) * (element.price ?? 0)
+                              : sum +
+                                  ((element.qty ?? 0) + 1) *
+                                      (element.price ?? 0));
 
                   widget.getSum?.call(totalPrice);
                 });
@@ -108,16 +120,18 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
                   .incrementChild(state.amountCustomer.child + 1);
               setQtyChild(state.amountCustomer.child + 1);
               setState(() {
-                final totalPrice = widget.listBottomSheetDetail!.fold(
+                final totalPrice = widget.listMoreServiceDetail!.fold(
                     0,
                     (int sum, element) => (widget.maxCount ?? 1) ==
                                 (element!.qty ?? 0) &&
                             (element.qty ?? 0) != 0 &&
-                            (element.t250.t251.tv251).isNotEmpty
-                        ? sum + ((widget.maxCount ?? 1)) * element.tn452
+                            (element.name ?? '').isNotEmpty
+                        ? sum + ((widget.maxCount ?? 1)) * (element.price ?? 0)
                         : ((element.qty ?? 0) >= 1 || (element.qty ?? 0) == 0)
-                            ? sum + ((element.qty ?? 0)) * element.tn452
-                            : sum + ((element.qty ?? 0) + 1) * element.tn452);
+                            ? sum + ((element.qty ?? 0)) * (element.price ?? 0)
+                            : sum +
+                                ((element.qty ?? 0) + 1) *
+                                    (element.price ?? 0));
 
                 widget.getSum?.call(totalPrice);
               });
@@ -128,14 +142,17 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
                   .decrementChild(state.amountCustomer.child - 1);
               setQtyChild(state.amountCustomer.child - 1);
               setState(() {
-                final totalPrice = widget.listBottomSheetDetail!.fold(
+                final totalPrice = widget.listMoreServiceDetail!.fold(
                     0,
                     (int sum, element) => (widget.maxCount ?? 1) <
                             (element!.qty ?? 0)
-                        ? sum + ((widget.maxCount ?? 1) - 1) * element.tn452
-                        : ((element.qty ?? 0) == 1 || (element.qty ?? 0) == 0)
-                            ? sum + ((element.qty ?? 0) * element.tn452)
-                            : sum + ((element.qty ?? 0) - 1) * element.tn452);
+                        ? sum +
+                            ((widget.maxCount ?? 1) - 1) * (element.price ?? 0)
+                        : ((element.qty ?? 0) == 1)
+                            ? sum + ((element.qty ?? 1) * (element.price ?? 0))
+                            : sum +
+                                ((element.qty ?? 1) - 1) *
+                                    (element.price ?? 0));
 
                 widget.getSum?.call(totalPrice);
                 if (((widget.maxCount ?? 1) - 1) == 1) {
@@ -154,16 +171,18 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
                   .incrementLittleChild(state.amountCustomer.littleChild + 1);
               setQtyLittleChild(state.amountCustomer.littleChild + 1);
               setState(() {
-                final totalPrice = widget.listBottomSheetDetail!.fold(
+                final totalPrice = widget.listMoreServiceDetail!.fold(
                     0,
                     (int sum, element) => (widget.maxCount ?? 1) ==
                                 (element!.qty ?? 0) &&
                             (element.qty ?? 0) != 0 &&
-                            (element.t250.t251.tv251).isNotEmpty
-                        ? sum + ((widget.maxCount ?? 1)) * element.tn452
+                            (element.name ?? '').isNotEmpty
+                        ? sum + ((widget.maxCount ?? 1)) * (element.price ?? 0)
                         : ((element.qty ?? 0) >= 1 || (element.qty ?? 0) == 0)
-                            ? sum + ((element.qty ?? 0)) * element.tn452
-                            : sum + ((element.qty ?? 0) + 1) * element.tn452);
+                            ? sum + ((element.qty ?? 0)) * (element.price ?? 0)
+                            : sum +
+                                ((element.qty ?? 0) + 1) *
+                                    (element.price ?? 0));
 
                 widget.getSum?.call(totalPrice);
               });
@@ -174,14 +193,17 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
                   .decrementLittleChild(state.amountCustomer.littleChild - 1);
               setQtyLittleChild(state.amountCustomer.littleChild - 1);
               setState(() {
-                final totalPrice = widget.listBottomSheetDetail!.fold(
+                final totalPrice = widget.listMoreServiceDetail!.fold(
                     0,
                     (int sum, element) => (widget.maxCount ?? 1) <
                             (element!.qty ?? 0)
-                        ? sum + ((widget.maxCount ?? 1) - 1) * element.tn452
-                        : ((element.qty ?? 0) >= 1 || (element.qty ?? 0) == 0)
-                            ? sum + ((element.qty ?? 0) * element.tn452)
-                            : sum + ((element.qty ?? 0) - 1) * element.tn452);
+                        ? sum +
+                            ((widget.maxCount ?? 1) - 1) * (element.price ?? 0)
+                        : ((element.qty ?? 0) == 1)
+                            ? sum + ((element.qty ?? 1) * (element.price ?? 0))
+                            : sum +
+                                ((element.qty ?? 1) - 1) *
+                                    (element.price ?? 0));
 
                 widget.getSum?.call(totalPrice);
                 if (((widget.maxCount ?? 1) - 1) == 1) {
@@ -200,16 +222,18 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
                   .incrementBaby(state.amountCustomer.baby + 1);
               setQtyBaby(state.amountCustomer.baby + 1);
               setState(() {
-                final totalPrice = widget.listBottomSheetDetail!.fold(
+                final totalPrice = widget.listMoreServiceDetail!.fold(
                     0,
                     (int sum, element) => (widget.maxCount ?? 1) ==
                                 (element!.qty ?? 0) &&
                             (element.qty ?? 0) != 0 &&
-                            (element.t250.t251.tv251).isNotEmpty
-                        ? sum + ((widget.maxCount ?? 1)) * element.tn452
+                            (element.name ?? '').isNotEmpty
+                        ? sum + ((widget.maxCount ?? 1)) * (element.price ?? 0)
                         : ((element.qty ?? 0) >= 1 || (element.qty ?? 0) == 0)
-                            ? sum + ((element.qty ?? 0)) * element.tn452
-                            : sum + ((element.qty ?? 0) + 1) * element.tn452);
+                            ? sum + ((element.qty ?? 0)) * (element.price ?? 0)
+                            : sum +
+                                ((element.qty ?? 0) + 1) *
+                                    (element.price ?? 0));
 
                 widget.getSum?.call(totalPrice);
               });
@@ -220,14 +244,17 @@ class _AmountBookTourWidgetState extends State<AmountBookTourWidget> {
                   .decrementBaby(state.amountCustomer.baby - 1);
               setQtyBaby(state.amountCustomer.baby - 1);
               setState(() {
-                final totalPrice = widget.listBottomSheetDetail!.fold(
+                final totalPrice = widget.listMoreServiceDetail!.fold(
                     0,
-                    (int sum, element) => (widget.maxCount ?? 1) <=
+                    (int sum, element) => (widget.maxCount ?? 1) <
                             (element!.qty ?? 0)
-                        ? sum + ((widget.maxCount ?? 1) - 1) * element.tn452
-                        : ((element.qty ?? 0) >= 1 || (element.qty ?? 0) == 0)
-                            ? sum + ((element.qty ?? 0)) * element.tn452
-                            : sum + ((element.qty ?? 0) - 1) * element.tn452);
+                        ? sum +
+                            ((widget.maxCount ?? 1) - 1) * (element.price ?? 0)
+                        : ((element.qty ?? 0) == 1)
+                            ? sum + ((element.qty ?? 1) * (element.price ?? 0))
+                            : sum +
+                                ((element.qty ?? 1) - 1) *
+                                    (element.price ?? 0));
 
                 widget.getSum?.call(totalPrice);
                 if (((widget.maxCount ?? 1) - 1) == 1) {

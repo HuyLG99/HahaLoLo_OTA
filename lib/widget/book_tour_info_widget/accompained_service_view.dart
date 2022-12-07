@@ -29,10 +29,35 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
   List<MoreServiceModel> moreServiceList = [];
   bool check = true;
   int? dattaQty = 0;
+  int? qtyChange;
   @override
   void initState() {
     super.initState();
     moreServiceList = List.generate(1, (index) => MoreServiceModel());
+  }
+
+  @override
+  void didUpdateWidget(covariant AccompaniedServiceView oldWidget) {
+    // TODO: implement didUpdateWidget
+    if ((oldWidget.maxCount ?? 0) > (widget.maxCount ?? 0)) {
+      setState(() {
+        for (int i = 0; i < moreServiceList.length; i++) {
+          if ((widget.maxCount ?? 0) < (moreServiceList[i].qty ?? 0)) {
+            dattaQty = widget.maxCount;
+            (moreServiceList[i].qty ?? 0);
+            moreServiceList[i].qty = dattaQty;
+          }
+        }
+        for (int i = 0; i < selectedList.length; i++) {
+          if ((widget.maxCount ?? 0) < (selectedList[i].qty ?? 0)) {
+            dattaQty = widget.maxCount;
+            (selectedList[i].qty ?? 0);
+            selectedList[i].qty = dattaQty;
+          }
+        }
+      });
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -60,23 +85,13 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                   if (valueQty != null && moreServiceList.isNotEmpty) {
                     setState(() {
                       dattaQty = valueQty;
-
-                      // moreServiceList[index].qty = valueQty;
                       widget.getSelectedList?.call(selectedList);
                       if (moreServiceList[index].name != null ||
                           moreServiceList[index].name == null ||
                           valueQty == 0 && moreServiceList[index].qty == null ||
                           valueQty == 0 && selectedList[index].qty == null) {
                         moreServiceList[index].qty = valueQty;
-                        if (moreServiceList[index].name ==
-                            selectedList[index].t250.t251.tv251) {
-                          if (moreServiceList[index].name != null) {
-                            selectedList[index].qty =
-                                moreServiceList[index].qty;
-                          }
-                          moreServiceList[index].qty = valueQty;
-                          selectedList[index].qty = valueQty;
-                        }
+                        moreServiceList[index].qty = valueQty;
                         widget.getSelectedList?.call(selectedList);
                         widget.getMoreServiceList?.call(moreServiceList);
                       }
@@ -103,18 +118,10 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                     widget.getSelectedList?.call(selectedList);
                     widget.getMoreServiceList?.call(moreServiceList);
                     if (moreServiceList.isNotEmpty) {
-                      if (moreServiceList[index].name ==
-                          selectedList[index].t250.t251.tv251) {
-                        moreServiceList[index].qty = dattaQty;
-                        widget.getMoreServiceList?.call(moreServiceList);
-                        if (moreServiceList[index].name != null) {
-                          selectedList[index].qty = moreServiceList[index].qty;
-                          moreServiceList[index].maxCount = widget.maxCount;
-                        }
-                        // selectedList[index].qty = dattaQty;
-                        widget.getSelectedList?.call(selectedList);
-                        widget.getMoreServiceList?.call(moreServiceList);
-                      }
+                      moreServiceList[index].qty = dattaQty;
+                      moreServiceList[index].maxCount = widget.maxCount;
+                      widget.getSelectedList?.call(selectedList);
+                      widget.getMoreServiceList?.call(moreServiceList);
                     }
                     accompaniedList = widget.accompaniedList
                         .toSet()
@@ -123,12 +130,14 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                     widget.getMoreServiceList?.call(moreServiceList);
                     widget.getSelectedList?.call(selectedList);
                   }
-
                   selectedList.removeWhere((element) =>
                       element.id == moreServiceList[index].idSelectedMenuItem);
                   selectedList.add(value!);
+                  moreServiceList[index].name = value.t250.t251.tv251;
+                  moreServiceList[index].idSelectedMenuItem = value.id;
+                  moreServiceList[index].maxCount = widget.maxCount;
+                  moreServiceList[index].price = value.tn452;
                   if (moreServiceList[index].name != null) {
-                    selectedList[index].qty = moreServiceList[index].qty;
                     moreServiceList[index].maxCount = widget.maxCount;
                     widget.getMoreServiceList?.call(moreServiceList);
                     widget.getSelectedList?.call(selectedList);
@@ -141,7 +150,6 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                     selectedList.removeWhere(
                         (element) => element.t250.t251.tv251 == currentID);
                     if (moreServiceList[index].name != null) {
-                      selectedList[index].qty = moreServiceList[index].qty;
                       moreServiceList[index].maxCount = widget.maxCount;
                       widget.getMoreServiceList?.call(moreServiceList);
                       widget.getSelectedList?.call(selectedList);
@@ -149,6 +157,8 @@ class AccompaniedServiceViewState extends State<AccompaniedServiceView> {
                   }
                   moreServiceList[index].name = value.t250.t251.tv251;
                   moreServiceList[index].idSelectedMenuItem = value.id;
+                  widget.getMoreServiceList?.call(moreServiceList);
+                  widget.getSelectedList?.call(selectedList);
                 },
 
                 name: moreServiceList[index].name,
