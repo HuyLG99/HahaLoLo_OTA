@@ -116,17 +116,26 @@ class BookTourPageState extends State<BookTourPage> {
         isValidatePhoneNull2 = prefs.getBool('checkPhoneValidate2_key')!;
         isValidateAddressNameNull2 =
             prefs.getBool('checkAddressValidate2_key')!;
+        firstName2 = prefs.getString('firstName2');
+        lastName2 = prefs.getString('lastName2');
+        email2 = prefs.getString('email2');
+        phone2 = prefs.getString('phone2');
+        address2 = prefs.getString('address2');
+        nation2 = prefs.getString('nation2');
+        city2 = prefs.getString('city2');
         if (isValidateFirstNameNull == false &&
             isValidateLastNameNull == false &&
             isValidateEmailNameNull == false &&
             isValidatePhoneNull == false &&
             isValidateAddressNameNull == false &&
             isValidateFirstNameNull2 == false &&
-            firstName2!.isEmpty &&
-            lastName2!.isEmpty &&
-            email2!.isEmpty &&
-            address2!.isEmpty &&
-            phone2!.isEmpty &&
+            firstName2!.isNotEmpty &&
+            lastName2!.isNotEmpty &&
+            email2!.isNotEmpty &&
+            address2!.isNotEmpty &&
+            phone2!.isNotEmpty &&
+            nation2!.isNotEmpty &&
+            city2!.isNotEmpty &&
             isValidateLastNameNull2 == false &&
             isValidateEmailNameNull2 == false &&
             isValidatePhoneNull2 == false &&

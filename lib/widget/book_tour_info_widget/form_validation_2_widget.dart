@@ -143,17 +143,12 @@ class FormValidation2State extends State<FormValidation2> {
         nation: nationTextEditingController.text,
         city: cityTextEditingController.text,
       );
-      // listValueUpdate?.add(textInputValue);
+
       final resultsJson = textInputValue.toJson();
       final resultsString = jsonEncode(resultsJson);
       prefs.setString('textInput', resultsString);
       prefs.setString('nation2', nationTextEditingController.text);
       prefs.setString('city2', cityTextEditingController.text);
-
-      // final resultDataString = prefs.getString('textInput') ?? '';
-      // final resultEndCode = jsonDecode(resultDataString);
-      // final resutlObject = CustomerInformationModel.fromJson(resultEndCode);
-      // listInformation.add(firstNameController2.text + lastNameController2.text);
     }
   }
 
@@ -273,7 +268,7 @@ class FormValidation2State extends State<FormValidation2> {
   void initState() {
     super.initState();
     getCheckNull();
-    addDataToList();
+    // addDataToList();
     setNullData();
     setState(() {
       check = false;
@@ -731,6 +726,7 @@ class FormValidation2State extends State<FormValidation2> {
               final SharedPreferences prefs = await _prefs;
               setState(() {
                 isActiveCheckBox = false;
+                setCheckEmailNull2(false, value);
                 prefs.setString('email2', emailController2.text ?? '');
               });
             },
@@ -818,6 +814,37 @@ class FormValidation2State extends State<FormValidation2> {
               ),
             ],
           ),
+          // Row(
+          //   children: [
+          //     const Expanded(
+          //       flex: 1,
+          //       child: Center(
+          //         child: Text(
+          //           '+84',
+          //           style: TextStyle(
+          //             fontSize: 22,
+          //             fontWeight: FontWeight.w500,
+          //             color: Colors.blue,
+          //           ),
+          //         ),
+          //       ),
+          //     ),
+          //     Expanded(
+          //       flex: 3,
+          //       child: AppTextField(
+          //         textEditingController: phoneController2,
+          //         title: 'Số điện thoại *',
+          //         hint: 'Số điện thoại',
+          //         isCitySelected: true,
+          //         cities: _listOfNation,
+          //         onChanged: (value) {
+          //           setState(() {});
+          //           isActiveCheckBox = value;
+          //         },
+          //       ),
+          //     ),
+          //   ],
+          // ),
           const DotWidget(
             dashColor: Colors.grey,
             dashHeight: 1,
@@ -979,6 +1006,7 @@ class AppTextFieldState extends State<AppTextField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextFormField(
+          readOnly: true,
           autovalidateMode:
               isValidateActive == false ? null : AutovalidateMode.always,
           controller: widget.textEditingController,
@@ -1087,6 +1115,7 @@ class AppTextCityFieldState extends State<AppTextCityField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextFormField(
+          readOnly: true,
           autovalidateMode:
               isValidateActive == false ? null : AutovalidateMode.always,
           controller: widget.textEditingController,
@@ -1125,7 +1154,7 @@ class AppTextCityFieldState extends State<AppTextCityField> {
                     isValidateActive = true;
                     widget.onChanged.call(false);
                     prefs.setString(
-                        'nation2', widget.textEditingController.text ?? '');
+                        'city2', widget.textEditingController.text ?? '');
                   });
                 }
               : null,

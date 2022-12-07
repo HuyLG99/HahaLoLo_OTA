@@ -251,9 +251,9 @@ class TextInfoWidget extends StatelessWidget {
                 ),
                 Text(
                   ' Chặng $way',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ],

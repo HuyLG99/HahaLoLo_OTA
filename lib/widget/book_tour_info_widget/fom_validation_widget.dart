@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/customer_information_model.dart';
@@ -16,7 +17,8 @@ class FormValidation extends StatefulWidget {
 class FormValidationState extends State<FormValidation> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final formKey = GlobalKey<FormState>();
-  final firstNameController = TextEditingController(text: 'LE');
+
+  final firstNameController = TextEditingController(text: 'Le');
 
   final lastNameController = TextEditingController(text: 'HUY');
 
@@ -30,19 +32,20 @@ class FormValidationState extends State<FormValidation> {
   CustomerInformationModel textInputValue = CustomerInformationModel();
   void loadDataForm() async {
     final SharedPreferences prefs = await _prefs;
+
     setState(() {
       if (formKey.currentState!.validate()) {
         formKey.currentState?.save();
+        firstNameController.text = prefs.getString('firstName') ?? '';
         prefs.setString('firstName', firstNameController.text ?? '');
-        // prefs.getString('firstName') ?? '';
+        lastNameController.text = prefs.getString('lastName') ?? '';
         prefs.setString('lastName', lastNameController.text ?? '');
-        // prefs.getString('lastName') ?? '';
+        emailController.text = prefs.getString('email') ?? '';
         prefs.setString('email', emailController.text ?? '');
-        // prefs.getString('email') ?? '';
+        phoneController.text = prefs.getString('phone') ?? '';
         prefs.setString('phone', phoneController.text ?? '');
-        // prefs.getString('phone') ?? '';
+        addressController.text = prefs.getString('address') ?? '';
         prefs.setString('address', addressController.text ?? '');
-        // prefs.getString('address') ?? '';
       }
     });
   }
@@ -153,6 +156,9 @@ class FormValidationState extends State<FormValidation> {
                 setCheckFirstNameNull(false, value);
                 return null;
               }
+            },
+            onChanged: (value) {
+              setCheckFirstNameNull(false, value);
             },
             onSaved: (value) async {
               // textInputValue.firstName = value;

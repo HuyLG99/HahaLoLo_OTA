@@ -77,34 +77,34 @@ class BookDatetimeBodyState extends State<BookDatetimeBody> {
   late final ScrollController controller;
   bool isSelected = true;
   int selectedIndex = 0;
-  bool activeConnection = false;
-  String T = "";
-  Future checkUserConnection() async {
-    try {
-      final result = await InternetAddress.lookup('google.com');
-      // print(result);
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        setState(() {
-          activeConnection = true;
-          // T = "Turn off the data and repress again";
-        });
-      }
-    } on SocketException catch (_) {
-      setState(() {
-        activeConnection = false;
-        // T = "Turn On the data and repress again";
-      });
-    }
-  }
+  bool activeConnection = true;
+  // String T = "";
+  // Future checkUserConnection() async {
+  //   try {
+  //     final result = await InternetAddress.lookup('google.com');
+  //     // print(result);
+  //     if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+  //       setState(() {
+  //         activeConnection = true;
+  //         // T = "Turn off the data and repress again";
+  //       });
+  //     }
+  //   } on SocketException catch (_) {
+  //     setState(() {
+  //       activeConnection = false;
+  //       // T = "Turn On the data and repress again";
+  //     });
+  //   }
+  // }
 
   @override
   void initState() {
     super.initState();
 
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      checkUserConnection();
-      // print('Check2');
-    });
+    // Timer.periodic(const Duration(seconds: 1), (timer) {
+    //   checkUserConnection();
+    //   // print('Check2');
+    // });
     widget.checkActive == true
         ? context.read<DatetimeBloc>().add(DatetimeFetch())
         : const SizedBox();
@@ -121,7 +121,7 @@ class BookDatetimeBodyState extends State<BookDatetimeBody> {
   void scrollListener() async {
     if (controller.position.pixels == controller.position.maxScrollExtent) {
       ///  call loadMore
-      checkUserConnection();
+      // checkUserConnection();
       activeConnection == true
           ? context.read<DatetimeBloc>().add(DatetimeLoadMore())
           : const SizedBox();
@@ -259,13 +259,13 @@ class BookDatetimeBodyState extends State<BookDatetimeBody> {
                                   selectedIndex = index;
                                   if (selectedIndex != 0 &&
                                       selectedIndex != 2) {
-                                    checkUserConnection();
+                                    // checkUserConnection();
                                     context
                                         .read<CalendarBloc>()
                                         .add(CalendarFetch2());
                                   } else if (selectedIndex == 0 ||
                                       selectedIndex == 2) {
-                                    checkUserConnection();
+                                    // checkUserConnection();
                                     context
                                         .read<CalendarBloc>()
                                         .add(CalendarFetch());
